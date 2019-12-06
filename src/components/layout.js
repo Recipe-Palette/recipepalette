@@ -1,9 +1,9 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui"
-import { Link } from "gatsby"
-import { Container } from "@theme-ui/components"
+import { jsx } from 'theme-ui'
+import { Link } from 'gatsby'
+import { Container } from '@theme-ui/components'
 
-import Header from "./header"
+import Header from './header'
 
 const Layout = ({ children }) => (
   <div
@@ -26,7 +26,7 @@ const Layout = ({ children }) => (
         borderTopColor: `border`,
       }}
     >
-      <Container sx={{variant: `layout.container.footer`}}>
+      <Container sx={{ variant: `layout.container.footer` }}>
         <Link to="/">Recipe Palette</Link>
       </Container>
     </footer>

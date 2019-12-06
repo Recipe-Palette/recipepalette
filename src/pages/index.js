@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
+/* eslint-disable react/display-name */
 /** @jsx jsx */
-import { jsx } from "theme-ui"
-import { useQuery } from "@apollo/react-hooks"
-import gql from "graphql-tag"
+import { jsx } from 'theme-ui'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
-import Title from "../components/title"
-import Layout from "../components/layout"
-import { GenericCard } from "../components/cards"
+import Title from '../components/title'
+import Layout from '../components/layout'
+import { GenericCard } from '../components/cards'
 
 const UsersQuery = gql`
   query {
@@ -16,7 +18,7 @@ const UsersQuery = gql`
   }
 `
 
-export default ({ data }) => {
+export default () => {
   const { data: usersData, loading } = useQuery(UsersQuery)
   console.log(usersData)
   console.log(loading)

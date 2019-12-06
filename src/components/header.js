@@ -1,12 +1,12 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui"
-import { lighten } from "@theme-ui/color"
-import { Link } from "gatsby"
-import { Container } from "@theme-ui/components"
-import { MdAccountBox } from "react-icons/md"
-import { useAuth } from "react-use-auth"
+import { jsx } from 'theme-ui'
+import { lighten } from '@theme-ui/color'
+import { Link } from 'gatsby'
+import { Container } from '@theme-ui/components'
+import { MdAccountBox } from 'react-icons/md'
+import { useAuth } from 'react-use-auth'
 
-import { useCustomAuth } from "../hooks/useCustomAuth"
+import { useCustomAuth } from '../hooks/useCustomAuth'
 
 const Header = () => {
   const { isAuthenticated, login } = useAuth()
@@ -21,11 +21,16 @@ const Header = () => {
     >
       <Container sx={{ variant: `layout.container.header` }}>
         <div>
-          <Link to="/">Recipe Palette 🎨</Link>
+          <Link to="/">
+            Recipe Palette{' '}
+            <span role="img" aria-label="palette">
+              🎨
+            </span>
+          </Link>
         </div>
         <div
           sx={{
-            "*+*": { marginLeft: `3` },
+            '*+*': { marginLeft: `3` },
             display: `flex`,
             alignItems: `center`,
           }}
@@ -39,7 +44,7 @@ const Header = () => {
               display: `inline-flex`,
               cursor: `pointer`,
               color: lighten(`primary`, 0.25),
-              "&:hover": { color: lighten(`primary`, 0.1) },
+              '&:hover': { color: lighten(`primary`, 0.1) },
             }}
             onClick={() => (isAuthenticated() ? customLogout() : login())}
           />

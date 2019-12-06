@@ -1,8 +1,8 @@
-import React from "react"
-import { useAuth } from "react-use-auth"
-import { useCustomAuth } from "../hooks/useCustomAuth"
+import React from 'react'
+import { useAuth } from 'react-use-auth'
+import { useCustomAuth } from '../hooks/useCustomAuth'
 
-export default () => {
+const Login = () => {
   const { isAuthenticated, login } = useAuth()
   const { customLogout } = useCustomAuth()
 
@@ -16,3 +16,5 @@ export default () => {
     </>
   )
 }
+
+export default Login
