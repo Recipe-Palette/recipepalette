@@ -2,12 +2,14 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
+import { Link, graphql, useStaticQuery } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { useAuth } from 'react-use-auth'
 
 import Title from '../components/title'
 import Layout from '../components/layout'
-import { GenericCard } from '../components/cards'
+import { CategoryCard } from '../components/cards'
 
 const UsersQuery = gql`
   query {
@@ -18,8 +20,60 @@ const UsersQuery = gql`
   }
 `
 
+const imageQuery = graphql`
+  {
+    appetizer: file(relativePath: { eq: "appetizer.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    bread: file(relativePath: { eq: "bread.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    dessert: file(relativePath: { eq: "dessert.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    breakfast: file(relativePath: { eq: "breakfast.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    pasta: file(relativePath: { eq: "pasta.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    soup: file(relativePath: { eq: "soup.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+  }
+`
+
 export default () => {
   const { data: usersData, loading } = useQuery(UsersQuery)
+  const { appetizer, bread, dessert, breakfast, pasta } = useStaticQuery(
+    imageQuery
+  )
+  const { isAuthenticated } = useAuth()
+
   console.log(usersData)
   console.log(loading)
 
@@ -29,13 +83,27 @@ export default () => {
         sx={{
           textAlign: `center`,
           mt: `6`,
+          mb: `6`,
         }}
       >
         <Title>The best way to keep track of recipes</Title>
         <input
-          sx={{ px: `3`, py: `2`, mb: `6`, fontSize: `3`, minWidth: `75%` }}
+          sx={{
+            px: `3`,
+            py: `2`,
+            mx: `auto`,
+            mb: `3`,
+            fontSize: `3`,
+            minWidth: `75%`,
+            display: `block`,
+          }}
           placeholder="Find a recipe..."
         />
+        {!isAuthenticated() && (
+          <Link sx={{ variant: `button.link`, display: `inline-block` }} to="/">
+            Join for free!
+          </Link>
+        )}
       </div>
       <h2>Explore Recipes</h2>
       <div
@@ -47,11 +115,11 @@ export default () => {
           mb: `4`,
         }}
       >
-        <GenericCard name="Appetizers" />
-        <GenericCard name="Bread" />
-        <GenericCard name="Desserts" />
-        <GenericCard name="Breakfast" />
-        <GenericCard name="Pasta" />
+        <CategoryCard name="Appetizers" image={appetizer} />
+        <CategoryCard name="Bread" image={bread} />
+        <CategoryCard name="Desserts" image={dessert} />
+        <CategoryCard name="Breakfast" image={breakfast} />
+        <CategoryCard name="Pasta" image={pasta} />
       </div>
     </Layout>
   )

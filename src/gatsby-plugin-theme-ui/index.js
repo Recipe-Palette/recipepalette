@@ -40,6 +40,7 @@ export default {
       borderStyle: `solid`,
       color: `text`,
       boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      fontWeight: `bold`,
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
       },
@@ -54,18 +55,19 @@ export default {
   layout: {
     container: {
       maxWidth: `960px`,
+      px: `3`,
       header: {
         display: `flex`,
         flexDirection: `row`,
         justifyContent: `space-between`,
         alignItems: `center`,
-        py: `4`,
+        py: `3`,
       },
       footer: {
         display: `flex`,
         flexDirection: `row`,
-        justifyContent: `space-between`,
-        py: `4`,
+        justifyContent: `center`,
+        py: `3`,
       },
     },
   },
