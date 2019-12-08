@@ -13,7 +13,8 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",

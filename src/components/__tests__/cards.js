@@ -1,7 +1,5 @@
 import React from 'react'
 import { render } from 'rp-test-utils'
-// import { ThemeProvider } from 'theme-ui'
-// import Theme from '../../gatsby-plugin-theme-ui'
 import { RecipeCard } from '../cards'
 
 test('temp', () => {
