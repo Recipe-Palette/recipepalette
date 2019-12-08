@@ -1,5 +1,5 @@
 {
-  "name": "Recipe Palette",
+  "name": "recipe-palette",
   "private": true,
   "description": "The best way to track your favorite recipes",
   "version": "0.1.0",
@@ -11,7 +11,9 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "cy:open": "cypress open",
-    "test": "jest"
+    "cy:run": "cypress run",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
