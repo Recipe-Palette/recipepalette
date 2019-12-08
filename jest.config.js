@@ -21,4 +21,5 @@ module.exports = {
   testURL: `http://localhost`,
   setupFiles: [`<rootDir>/tests/loadershim.js`],
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'], //add jest-dom extensions to all of our jest tests
+  collectCoverageFrom: ['**/src/**/*.js'],
 }
