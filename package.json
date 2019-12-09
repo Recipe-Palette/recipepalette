@@ -1,7 +1,7 @@
 {
-  "name": "gatsby-starter-hello-world",
+  "name": "recipe-palette",
   "private": true,
-  "description": "A simplified bare-bones starter for Gatsby",
+  "description": "The best way to track your favorite recipes",
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,11 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing \""
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
@@ -25,6 +29,7 @@
     "gatsby-background-image": "^0.9.11",
     "gatsby-plugin-sharp": "^2.3.5",
     "gatsby-plugin-theme-ui": "^0.2.43",
+    "graphql-tag": "^2.10.1",
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-transformer-sharp": "^2.3.6",
     "intersection-observer": "^0.7.0",
@@ -39,7 +44,16 @@
     "@testing-library/cypress": "^5.0.2",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
+    "babel-jest": "^24.9.0",
+    "babel-preset-gatsby": "^0.2.23",
     "cypress": "^3.6.1",
+    "eslint": "^6.7.2",
+    "eslint-config-kentcdodds": "^14.6.1",
+    "eslint-plugin-cypress": "^2.7.0",
+    "husky": "^3.1.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.5.0",
     "prettier": "^1.18.2"
   },
   "repository": {
@@ -48,5 +62,20 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ],
+    "*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)": [
+      "prettier --write",
+      "jest --findRelatedTests",
+      "git add"
+    ]
   }
 }

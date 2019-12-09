@@ -1,11 +1,11 @@
-import { lighten } from "@theme-ui/color"
+import { lighten } from '@theme-ui/color'
 
 export default {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: "system-ui, sans-serif",
-    heading: "inherit",
-    monospace: "Menlo, monospace",
+    body: 'system-ui, sans-serif',
+    heading: 'inherit',
+    monospace: 'Menlo, monospace',
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   fontWeights: {
@@ -16,15 +16,15 @@ export default {
   },
   radii: [2, 4, 8],
   colors: {
-    text: "#222",
-    background: "#FFF",
-    border: "#DDD",
-    primary: "#eb7b15",
-    secondary: "#e4ab15",
-    accent: "#F8C99E",
-    hearted: "#FFB7E2",
-    copied: "#B1E5F3",
-    bookmarked: "#C1E1AE",
+    text: '#222',
+    background: '#FFF',
+    border: '#DDD',
+    primary: '#eb7b15',
+    secondary: '#e4ab15',
+    accent: '#F8C99E',
+    hearted: '#FFB7E2',
+    copied: '#B1E5F3',
+    bookmarked: '#C1E1AE',
   },
   button: {
     link: {
@@ -41,13 +41,12 @@ export default {
       color: `text`,
       boxShadow: `0px 0px 4px 0px #a4a4a4`,
       fontWeight: `bold`,
-      "&:hover": {
+      '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
       },
     },
   },
   cards: {
-    
     primary: {
       cursor: `pointer`,
       borderRadius: `1`,

@@ -1,11 +1,11 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui"
-import { darken } from "@theme-ui/color"
-import { FiClock } from "react-icons/fi"
-import { Heart, Bookmark, Copy } from "./icons"
-import { Card } from "@theme-ui/components"
+import { jsx } from 'theme-ui'
+import { darken } from '@theme-ui/color'
+import { FiClock } from 'react-icons/fi'
+import { Heart, Bookmark, Copy } from './icons'
+import { Card } from '@theme-ui/components'
 
-import BackgroundImage from "gatsby-background-image"
+import BackgroundImage from 'gatsby-background-image'
 
 const CardSkeleton = ({ children, ...props }) => {
   return (
@@ -22,8 +22,8 @@ const CardSkeleton = ({ children, ...props }) => {
 
 const convertTime = time => {
   if (time > 60) {
-    let hours = Math.floor(time / 60)
-    let minutes = time % 60
+    const hours = Math.floor(time / 60)
+    const minutes = time % 60
     time = `${hours}h ${minutes}m`
   } else {
     time = `${time}m`
@@ -79,7 +79,7 @@ const RecipeCard = ({
         backgroundColor: darken(`background`, 0.01),
         transition: `0.3s all`,
         boxShadow: `0px 2px 4px 0px rgba(225, 227, 229, 0.75)`,
-        "&:hover": {
+        '&:hover': {
           boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
           backgroundColor: darken(`background`, 0.035),
         },
@@ -180,7 +180,7 @@ const GenericCard = ({ name = `Recipe Name` }) => (
       backgroundColor: `background`,
       transition: `0.3s all`,
       boxShadow: `0px 1.5px 3px 0px rgba(225, 227, 229, 0.6)`,
-      "&:hover": {
+      '&:hover': {
         boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.6)`,
       },
     }}
@@ -201,11 +201,11 @@ const NewCard = () => (
       px: `4`,
       borderRadius: `1`,
       textAlign: `center`,
-      border: theme => `1px dashed rgba(202, 204, 206, 0.6)`,
+      border: `1px dashed rgba(202, 204, 206, 0.6)`,
       backgroundColor: `background`,
       transition: `0.3s all`,
       boxShadow: `0px 0 0 0px rgba(225, 227, 229, 0.6)`,
-      "&:hover": {
+      '&:hover': {
         boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.6)`,
       },
     }}

@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui"
-import { Container } from "@theme-ui/components"
-import { Link } from "gatsby"
+import { jsx } from 'theme-ui'
+import { Container } from '@theme-ui/components'
+import { Link } from 'gatsby'
 
 const Footer = () => (
   <footer
@@ -11,7 +11,9 @@ const Footer = () => (
     }}
   >
     <Container sx={{ variant: `layout.container.footer` }}>
-      <span><Link to="/">Recipe Palette</Link> made with 🧡</span>
+      <span>
+        <Link to="/">Recipe Palette</Link> made with 🧡
+      </span>
     </Container>
   </footer>
 )

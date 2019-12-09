@@ -1,19 +1,68 @@
+/* eslint-disable no-console */
+/* eslint-disable react/display-name */
 /** @jsx jsx */
-import { jsx } from "theme-ui"
-import { Link, graphql, useStaticQuery } from "gatsby"
-import { useQuery } from "@apollo/react-hooks"
-import gql from "graphql-tag"
-import { useAuth } from "react-use-auth"
+import { jsx } from 'theme-ui'
+import { Link, graphql, useStaticQuery } from 'gatsby'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import { useAuth } from 'react-use-auth'
 
-import Title from "../components/title"
-import Layout from "../components/layout"
-import { CategoryCard } from "../components/cards"
+import Title from '../components/title'
+import Layout from '../components/layout'
+import { CategoryCard } from '../components/cards'
 
 const UsersQuery = gql`
   query {
     users {
       id
       name
+    }
+  }
+`
+
+const imageQuery = graphql`
+  {
+    appetizer: file(relativePath: { eq: "appetizer.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    bread: file(relativePath: { eq: "bread.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    dessert: file(relativePath: { eq: "dessert.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    breakfast: file(relativePath: { eq: "breakfast.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    pasta: file(relativePath: { eq: "pasta.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
+    soup: file(relativePath: { eq: "soup.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 300) {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
     }
   }
 `
@@ -75,50 +124,3 @@ export default () => {
     </Layout>
   )
 }
-
-const imageQuery = graphql`
-  {
-    appetizer: file(relativePath: { eq: "appetizer.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 300) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
-      }
-    }
-    bread: file(relativePath: { eq: "bread.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 300) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
-      }
-    }
-    dessert: file(relativePath: { eq: "dessert.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 300) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
-      }
-    }
-    breakfast: file(relativePath: { eq: "breakfast.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 300) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
-      }
-    }
-    pasta: file(relativePath: { eq: "pasta.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 300) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
-      }
-    }
-    soup: file(relativePath: { eq: "soup.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 300) {
-          ...GatsbyImageSharpFluid_withWebp
-        }
-      }
-    }
-  }
-`
