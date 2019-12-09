@@ -22,6 +22,9 @@ export default {
     primary: "#eb7b15",
     secondary: "#e4ab15",
     accent: "#F8C99E",
+    hearted: "#FFB7E2",
+    copied: "#B1E5F3",
+    bookmarked: "#C1E1AE",
   },
   button: {
     link: {
@@ -41,6 +44,13 @@ export default {
       "&:hover": {
         backgroundColor: lighten(`primary`, 0.1),
       },
+    },
+  },
+  cards: {
+    
+    primary: {
+      cursor: `pointer`,
+      borderRadius: `1`,
     },
   },
   layout: {
