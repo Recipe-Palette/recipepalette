@@ -7,18 +7,18 @@ import { Card } from '@theme-ui/components'
 
 import BackgroundImage from 'gatsby-background-image'
 
-const CardSkeleton = ({ children, ...props }) => {
-  return (
-    <div
-      sx={{
-        cursor: `pointer`,
-      }}
-      {...props}
-    >
-      {children}
-    </div>
-  )
-}
+// const CardSkeleton = ({ children, ...props }) => {
+//   return (
+//     <div
+//       sx={{
+//         cursor: `pointer`,
+//       }}
+//       {...props}
+//     >
+//       {children}
+//     </div>
+//   )
+// }
 
 const convertTime = time => {
   if (time > 60) {
@@ -169,28 +169,8 @@ const RecipeCard = ({
   )
 }
 
-const GenericCard = ({ name = `Recipe Name` }) => (
-  <CardSkeleton
-    sx={{
-      py: `4`,
-      px: `4`,
-      borderRadius: `1`,
-      textAlign: `center`,
-      border: `border`,
-      backgroundColor: `background`,
-      transition: `0.3s all`,
-      boxShadow: `0px 1.5px 3px 0px rgba(225, 227, 229, 0.6)`,
-      '&:hover': {
-        boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.6)`,
-      },
-    }}
-  >
-    {name}
-  </CardSkeleton>
-)
-
 const NewCard = () => (
-  <CardSkeleton
+  <Card
     sx={{
       display: `flex`,
       alignItems: `center`,
@@ -211,7 +191,7 @@ const NewCard = () => (
     }}
   >
     + Add New
-  </CardSkeleton>
+  </Card>
 )
 
-export { NewCard, GenericCard, RecipeCard, CategoryCard }
+export { NewCard, RecipeCard, CategoryCard }
