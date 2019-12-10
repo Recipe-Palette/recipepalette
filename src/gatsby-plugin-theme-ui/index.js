@@ -50,6 +50,10 @@ export default {
     primary: {
       cursor: `pointer`,
       borderRadius: `1`,
+      boxShadow: `0px 2px 4px 0px rgba(225, 227, 229, 0.75)`,
+      '&:hover': {
+        boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
+      },
     },
   },
   layout: {

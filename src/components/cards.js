@@ -7,19 +7,6 @@ import { Card } from '@theme-ui/components'
 
 import BackgroundImage from 'gatsby-background-image'
 
-// const CardSkeleton = ({ children, ...props }) => {
-//   return (
-//     <div
-//       sx={{
-//         cursor: `pointer`,
-//       }}
-//       {...props}
-//     >
-//       {children}
-//     </div>
-//   )
-// }
-
 const convertTime = time => {
   if (time > 60) {
     const hours = Math.floor(time / 60)
@@ -78,9 +65,7 @@ const RecipeCard = ({
         p: `3`,
         backgroundColor: darken(`background`, 0.01),
         transition: `0.3s all`,
-        boxShadow: `0px 2px 4px 0px rgba(225, 227, 229, 0.75)`,
         '&:hover': {
-          boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
           backgroundColor: darken(`background`, 0.035),
         },
       }}
@@ -184,10 +169,6 @@ const NewCard = () => (
       border: `1px dashed rgba(202, 204, 206, 0.6)`,
       backgroundColor: `background`,
       transition: `0.3s all`,
-      boxShadow: `0px 0 0 0px rgba(225, 227, 229, 0.6)`,
-      '&:hover': {
-        boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.6)`,
-      },
     }}
   >
     + Add New
