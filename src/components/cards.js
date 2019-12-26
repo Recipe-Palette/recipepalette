@@ -4,20 +4,9 @@ import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Heart, Bookmark, Copy } from './icons'
 import { Card } from '@theme-ui/components'
+import { convertTime } from '../utils/convertTime'
 
 import BackgroundImage from 'gatsby-background-image'
-
-const convertTime = time => {
-  if (time > 60) {
-    const hours = Math.floor(time / 60)
-    const minutes = time % 60
-    time = `${hours}h ${minutes}m`
-  } else {
-    time = `${time}m`
-  }
-
-  return time
-}
 
 const CategoryCard = ({ image, name }) => {
   return (
