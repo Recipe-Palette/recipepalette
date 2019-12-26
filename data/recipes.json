@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Peanut Butter Cookies",
+    "hearts": 234,
+    "copies": 56,
+    "time": 75,
+    "hearted": true,
+    "copied": true,
+    "bookmarked": true
+  },
+  {
+    "name": "Pancakes",
+    "hearts": 2039,
+    "copies": 120,
+    "time": 15,
+    "hearted": true,
+    "copied": false,
+    "bookmarked": true,
+    "img": "https://images.unsplash.com/photo-1541288097308-7b8e3f58c4c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80"
+  },
+  {
+    "name": "Desserts",
+    "hearts": 30,
+    "copies": 1,
+    "time": 175,
+    "hearted": true,
+    "copied": false,
+    "bookmarked": false
+  },
+  {
+    "name": "Breakfast",
+    "hearts": 2,
+    "copies": 120,
+    "time": 70,
+    "hearted": false,
+    "copied": false,
+    "bookmarked": true
+  },
+  {
+    "name": "Pasta",
+    "hearts": 5400,
+    "copies": 23,
+    "time": 25,
+    "hearted": false,
+    "copied": true,
+    "bookmarked": false
+  }
+]

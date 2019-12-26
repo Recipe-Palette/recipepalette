@@ -1,24 +1,12 @@
-/* eslint-disable no-console */
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Link, graphql, useStaticQuery } from 'gatsby'
-import { useQuery } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 
 import Title from '../components/title'
 import Layout from '../components/layout'
 import { CategoryCard } from '../components/cards'
-
-const UsersQuery = gql`
-  query {
-    users {
-      id
-      name
-    }
-  }
-`
 
 const imageQuery = graphql`
   {
@@ -68,14 +56,10 @@ const imageQuery = graphql`
 `
 
 export default () => {
-  const { data: usersData, loading } = useQuery(UsersQuery)
   const { appetizer, bread, dessert, breakfast, pasta } = useStaticQuery(
     imageQuery
   )
   const { isAuthenticated } = useAuth()
-
-  console.log(usersData)
-  console.log(loading)
 
   return (
     <Layout>

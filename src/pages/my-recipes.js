@@ -6,6 +6,8 @@ import Title from '../components/title'
 import Layout from '../components/layout'
 import { NewCard, RecipeCard } from '../components/cards'
 
+import recipes from '../../data/recipes'
+
 export default () => (
   <Layout>
     <div>
@@ -20,26 +22,9 @@ export default () => (
         }}
       >
         <NewCard />
-        <RecipeCard
-          name="Hammy's Delightful Chocolate Chip Cookies"
-          hearts={234}
-          copies={56}
-          time={75}
-          hearted
-          copied
-          bookmarked
-        />
-        <RecipeCard
-          name="Pancakes"
-          img="https://images.unsplash.com/photo-1541288097308-7b8e3f58c4c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80"
-          hearts={2039}
-          copies={120}
-          hearted
-          bookmarked
-        />
-        <RecipeCard name="Desserts" bookmarked />
-        <RecipeCard name="Breakfast" hearted />
-        <RecipeCard name="Pasta" copied />
+        {recipes.map((recipe, index) => (
+          <RecipeCard key={index} {...recipe} />
+        ))}
       </div>
     </div>
   </Layout>
