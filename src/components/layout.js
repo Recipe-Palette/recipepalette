@@ -16,9 +16,14 @@ const Layout = ({ children }) => (
     <main
       sx={{
         position: `relative`,
+        backgroundColor: `#eee`,
+        pt: `3`,
+        pb: `3`,
       }}
     >
-      <Container>{children}</Container>
+      <Container sx={{ backgroundColor: `#fff`, borderRadius: `2` }}>
+        {children}
+      </Container>
     </main>
     <Footer />
   </div>

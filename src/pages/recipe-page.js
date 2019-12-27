@@ -9,6 +9,7 @@ import Fraction from 'fraction.js'
 import { convertTime } from '../utils/convertTime'
 import Layout from '../components/layout'
 import { Heart, Copy, Bookmark } from '../components/icons'
+import { RecipeCard } from '../components/cards'
 
 import recipes from '../../data/recipes'
 
@@ -228,7 +229,7 @@ const RecipePage = () => {
           sx={{
             display: [`flex`, `grid`],
             gridGap: `3`,
-            gridTemplateColumns: `repeat(2, 1fr)`,
+            gridTemplateColumns: `50% 1fr`,
             flexDirection: `column`,
           }}
         >
@@ -253,6 +254,10 @@ const RecipePage = () => {
             sx={{
               order: 3,
               mt: [`3`, 0],
+              overflow: `hidden`,
+              display: `flex`,
+              flexDirection: `column`,
+              justifyContent: `space-between`,
             }}
           >
             <Flex sx={{ justifyContent: `space-between` }}>
@@ -269,13 +274,27 @@ const RecipePage = () => {
                 Edit recipe
               </Link>
             </Flex>
+            {/* <p sx={{ my: `2` }}>{recipe.description}</p> */}
+            <div>
+              <h2 sx={{ mb: `0` }}>Popular Versions</h2>
+              <Flex
+                sx={{
+                  overflow: `scroll`,
+                  width: `100%`,
+                }}
+              >
+                {recipes.map((recipeVersion, index) => (
+                  <RecipeCard key={index} {...recipeVersion} mini={true} />
+                ))}
+              </Flex>
+            </div>
             {/* <Timing recipe={recipe} /> */}
             {/* <div sx={{ display: [`none`, `flex`] }}>
               <Icons recipe={recipe} />
             </div> */}
           </div>
         </div>
-        {/* <Divider /> */}
+        <Divider />
         <div>
           <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
           <h3

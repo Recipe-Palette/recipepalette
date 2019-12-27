@@ -56,6 +56,11 @@ export default {
         boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
       },
     },
+    recipeMini: {
+      my: `1`,
+      mr: `3`,
+      height: `calc(100% - 16px)`,
+    },
   },
   layout: {
     container: {

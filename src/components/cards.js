@@ -42,6 +42,7 @@ const RecipeCard = ({
   hearted = false,
   bookmarked = false,
   copied = false,
+  mini = false,
 }) => {
   time = convertTime(time)
   return (
@@ -49,13 +50,14 @@ const RecipeCard = ({
       <Card
         sx={{
           display: `grid`,
-          gridTemplateRows: `125px auto 32px`,
+          gridTemplateRows: `125px 60px auto`,
           gridRowGap: `1`,
           position: `relative`,
           minHeight: 150,
           p: `3`,
           backgroundColor: darken(`background`, 0.01),
           transition: `0.3s all`,
+          variant: mini ? `cards.recipeMini` : `cards.primary`,
           '&:hover': {
             backgroundColor: darken(`background`, 0.035),
           },
