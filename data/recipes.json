@@ -3,14 +3,14 @@
     "name": "Homemade Peanut Butter Cookies",
     "hearts": 234,
     "copies": 56,
-    "time": 30,
+    "time": 175,
     "hearted": true,
     "copied": true,
     "bookmarked": true,
     "author": "Peter Garrow",
     "servings": 20,
-    "prep_time": 20,
-    "cook_time": 10,
+    "prep_time": 75,
+    "cook_time": 100,
     "ingredients": [
       {
         "name": "Peanut Butter",
@@ -63,7 +63,7 @@
       "Cream together the peanut butter and the butter.",
       "Beat in the white sugar and the brown sugar.",
       "Stir in the egg, vanilla, salt, baking soda, and flour.",
-      "Arrange by teaspoon on ungreased cookiesheet. Press flat with floured fork. Bake until firm (about 10 minutes)."
+      "Arrange by teaspoon on ungreased cookie sheets. Press flat with floured fork. Bake until firm (about 10 minutes)."
     ]
   },
   {
