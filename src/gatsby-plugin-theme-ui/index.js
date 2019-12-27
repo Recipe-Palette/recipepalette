@@ -41,6 +41,7 @@ export default {
       color: `text`,
       boxShadow: `0px 0px 4px 0px #a4a4a4`,
       fontWeight: `bold`,
+      textAlign: `center`,
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
       },

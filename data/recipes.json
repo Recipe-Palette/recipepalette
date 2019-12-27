@@ -1,12 +1,43 @@
 [
   {
-    "name": "Peanut Butter Cookies",
+    "name": "Homemade Peanut Butter Cookies",
     "hearts": 234,
     "copies": 56,
-    "time": 75,
+    "time": 30,
     "hearted": true,
     "copied": true,
-    "bookmarked": true
+    "bookmarked": true,
+    "author": "Peter Garrow",
+    "servings": 20,
+    "prep_time": 20,
+    "cook_time": 10,
+    "ingredients": [
+      {
+        "name": "Peanut Butter",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "Butter",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "Sugar",
+        "amount": 1,
+        "unit": "cup"
+      },
+      {
+        "name": "Eggs",
+        "amount": 2,
+        "unit": "whole"
+      },
+      {
+        "name": "Vanilla",
+        "amount": 1,
+        "unit": "tsp"
+      }
+    ]
   },
   {
     "name": "Pancakes",
