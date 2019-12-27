@@ -23,20 +23,47 @@
         "unit": "cup"
       },
       {
-        "name": "Sugar",
-        "amount": 1,
+        "name": "White Sugar",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "Brown Sugar",
+        "amount": 0.5,
         "unit": "cup"
       },
       {
         "name": "Eggs",
         "amount": 2,
-        "unit": "whole"
+        "unit": ""
       },
       {
         "name": "Vanilla",
-        "amount": 1,
+        "amount": 0.5,
         "unit": "tsp"
+      },
+      {
+        "name": "Salt",
+        "amount": 0.5,
+        "unit": "tsp"
+      },
+      {
+        "name": "Baking Soda",
+        "amount": 0.5,
+        "unit": "tsp"
+      },
+      {
+        "name": "Flour",
+        "amount": 1,
+        "unit": "cup"
       }
+    ],
+    "instructions": [
+      "Preheat oven to 350°.",
+      "Cream together the peanut butter and the butter.",
+      "Beat in the white sugar and the brown sugar.",
+      "Stir in the egg, vanilla, salt, baking soda, and flour.",
+      "Arrange by teaspoon on ungreased cookiesheet. Press flat with floured fork. Bake until firm (about 10 minutes)."
     ]
   },
   {

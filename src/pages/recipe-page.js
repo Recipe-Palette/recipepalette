@@ -3,6 +3,7 @@ import { jsx } from 'theme-ui'
 import { Link } from 'gatsby'
 import { Flex } from '@theme-ui/components'
 import { FiClock } from 'react-icons/fi'
+import Fraction from 'fraction.js'
 
 import { convertTime } from '../utils/convertTime'
 import Layout from '../components/layout'
@@ -167,12 +168,39 @@ const RecipePage = () => {
           </div>
         </div>
         <div>
-          <h2>Ingredients</h2>
-          {recipe.ingredients.map((ingredient, index) => (
-            <li key={index}>
-              {ingredient.amount} {ingredient.unit} {ingredient.name}
-            </li>
-          ))}
+          <Flex>
+            <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
+            <h2
+              sx={{
+                display: [null, `none`],
+                width: `100%`,
+                textAlign: `right`,
+                my: `2`,
+              }}
+            >
+              Servings: {recipe.servings}
+            </h2>
+          </Flex>
+
+          <ul sx={{ columnCount: 2, listStyle: `none`, pl: `0` }}>
+            {recipe.ingredients.map((ingredient, index) => {
+              let amount = new Fraction(ingredient.amount)
+              amount = amount.toFraction(true)
+              return (
+                <li key={index}>
+                  {amount} {ingredient.unit} {ingredient.name}
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        <div>
+          <h2>Instructions</h2>
+          <ol>
+            {recipe.instructions.map((instruction, index) => (
+              <li key={index}>{instruction}</li>
+            ))}
+          </ol>
         </div>
       </div>
     </Layout>
