@@ -42,65 +42,6 @@ const Icons = ({ recipe }) => (
   </div>
 )
 
-// const Timing = ({ recipe }) => (
-//   <Flex
-//     sx={{
-//       flexDirection: [`row`, `column`],
-//       mt: [`3`, `2`],
-//       // justifyContent: `space-evenly`,
-//       alignItems: [`center`, `initial`],
-//     }}
-//   >
-//     <FiClock
-//       size="2rem"
-//       sx={{ display: [`initial`, `none`], justifySelf: `flex-start`, mr: `2` }}
-//     />
-//     <Flex
-//       sx={{
-//         flexDirection: [`row`, `column`],
-//         justifyContent: [`space-evenly`, `initial`],
-//         width: `100%`,
-//       }}
-//     >
-//       <h2
-//         sx={{
-//           my: `2`,
-//           fontSize: [`2`, `4`],
-//           width: `100%`,
-//           textAlign: [`center`, `left`],
-//           borderRight: [`1px solid #999`, `none`],
-//         }}
-//       >
-//         Prep<span sx={{ display: [`none`, `initial`] }}> Time</span>:{' '}
-//         {convertTime(recipe.prep_time)}
-//       </h2>
-//       <h2
-//         sx={{
-//           my: `2`,
-//           fontSize: [`2`, `4`],
-//           width: `100%`,
-//           textAlign: [`center`, `left`],
-//           borderRight: [`1px solid #999`, `none`],
-//         }}
-//       >
-//         Cook<span sx={{ display: [`none`, `initial`] }}> Time</span>:{' '}
-//         {convertTime(recipe.cook_time)}
-//       </h2>
-//       <h2
-//         sx={{
-//           my: `2`,
-//           fontSize: [`2`, `4`],
-//           width: `100%`,
-//           textAlign: [`center`, `left`],
-//         }}
-//       >
-//         Total<span sx={{ display: [`none`, `initial`] }}> Time</span>:{' '}
-//         {convertTime(recipe.time)}
-//       </h2>
-//     </Flex>
-//   </Flex>
-// )
-
 const TimingSmall = ({ recipe }) => (
   <Flex
     sx={{
@@ -151,41 +92,6 @@ const TimingSmall = ({ recipe }) => (
         <h3 sx={{ textAlign: `center`, m: `0` }}>Total</h3>
         <p sx={{ textAlign: `center`, mb: `0` }}>{convertTime(recipe.time)}</p>
       </Flex>
-      {/* <h2
-        sx={{
-          my: `2`,
-          fontSize: `2`,
-          width: `100%`,
-          textAlign: `center`,
-          borderRight: `1px solid #999`,
-        }}
-      >
-        Prep<span sx={{ display: [`none`] }}> Time</span>:{' '}
-        {convertTime(recipe.prep_time)}
-      </h2> */}
-      {/* <h2
-        sx={{
-          my: `2`,
-          fontSize: `2`,
-          width: `100%`,
-          textAlign: `center`,
-          borderRight: `1px solid #999`,
-        }}
-      >
-        Cook<span sx={{ display: [`none`] }}> Time</span>:{' '}
-        {convertTime(recipe.cook_time)}
-      </h2> */}
-      {/* <h2
-        sx={{
-          my: `2`,
-          fontSize: `2`,
-          width: `100%`,
-          textAlign: `center`,
-        }}
-      >
-        Total<span sx={{ display: [`none`] }}> Time</span>:{' '}
-        {convertTime(recipe.time)}
-      </h2> */}
     </Flex>
   </Flex>
 )
@@ -197,8 +103,6 @@ const RecipePage = () => {
   const image =
     recipe.img ||
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
-
-  // const handleServingsChange = e => setServings(e.target.value)
 
   return (
     <Layout>
@@ -212,19 +116,8 @@ const RecipePage = () => {
             <h1 sx={{ mb: `1` }}>{recipe.name}</h1>
             <p>by {recipe.author}</p>
           </div>
-          {/* <div
-            sx={{
-              display: `flex`,
-              justifyContent: `flex-end`,
-              alignSelf: `flex-start`,
-              width: `50%`,
-            }}
-          > */}
           <Icons recipe={recipe} />
-          {/* </div> */}
         </Flex>
-        {/* <h1 sx={{ mb: `1` }}>{recipe.name}</h1> */}
-        {/* <p>by {recipe.author}</p> */}
         <div
           sx={{
             display: [`flex`, `grid`],
@@ -233,10 +126,6 @@ const RecipePage = () => {
             flexDirection: `column`,
           }}
         >
-          {/* <div sx={{ display: [`flex`, `none`] }}>
-            <Icons recipe={recipe} />
-          </div> */}
-
           <div>
             <div
               sx={{
@@ -274,7 +163,7 @@ const RecipePage = () => {
                 Edit recipe
               </Link>
             </Flex>
-            {/* <p sx={{ my: `2` }}>{recipe.description}</p> */}
+
             <div>
               <h2 sx={{ mb: `0` }}>Popular Versions</h2>
               <Flex
@@ -288,10 +177,6 @@ const RecipePage = () => {
                 ))}
               </Flex>
             </div>
-            {/* <Timing recipe={recipe} /> */}
-            {/* <div sx={{ display: [`none`, `flex`] }}>
-              <Icons recipe={recipe} />
-            </div> */}
           </div>
         </div>
         <Divider />
@@ -299,7 +184,6 @@ const RecipePage = () => {
           <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
           <h3
             sx={{
-              // display: [null, `none`],
               width: `100%`,
               mt: `0`,
               mb: `2`,
