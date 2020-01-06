@@ -31,7 +31,7 @@ const Header = () => {
         <div
           sx={{
             '*+*': { marginLeft: `3` },
-            display: `flex`,
+            display: [`none`, `flex`],
             alignItems: `center`,
           }}
         >

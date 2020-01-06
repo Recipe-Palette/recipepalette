@@ -4,6 +4,7 @@ import { Container } from '@theme-ui/components'
 
 import Header from './header'
 import Footer from './footer'
+import NavigationMobile from './navigation-mobile'
 
 const Layout = ({ home, children }) => (
   <div
@@ -17,14 +18,15 @@ const Layout = ({ home, children }) => (
       sx={{
         position: `relative`,
         backgroundColor: home ? `background` : `#eee`,
-        pt: `3`,
-        pb: `3`,
+        pt: [`0`, `3`],
+        pb: [`0`, `3`],
       }}
     >
       <Container sx={{ backgroundColor: `background`, borderRadius: `2` }}>
         {children}
       </Container>
     </main>
+    <NavigationMobile />
     <Footer />
   </div>
 )
