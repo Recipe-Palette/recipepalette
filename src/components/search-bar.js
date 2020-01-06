@@ -42,10 +42,6 @@ const SearchBar = () => {
         />
       </label>
     </form>
-    // <Flex sx={{ alignItems: `center` }}>
-    //   <input placeholder="Search for a recipe" />
-    //   this is a search bar <Search size="1rem" />
-    // </Flex>
   )
 }
 
