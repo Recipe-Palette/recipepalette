@@ -7,6 +7,7 @@ import { MdAccountBox } from 'react-icons/md'
 import { useAuth } from 'react-use-auth'
 
 import { useCustomAuth } from '../hooks/useCustomAuth'
+import SearchBar from './search-bar'
 
 const Header = () => {
   const { isAuthenticated, login } = useAuth()
@@ -20,19 +21,25 @@ const Header = () => {
       }}
     >
       <Container sx={{ variant: `layout.container.header` }}>
-        <div>
+        <div sx={{ width: `max-content`, whiteSpace: `nowrap`, mr: `2` }}>
           <Link to="/">
-            Recipe Palette{' '}
+            <span sx={{ display: [`none`, `initial`] }}>Recipe Palette </span>
             <span role="img" aria-label="palette">
               🎨
             </span>
           </Link>
+        </div>
+        <div sx={{ width: `100%`, ml: [`2`, `3`], mr: [`0`, `3`] }}>
+          <SearchBar />
         </div>
         <div
           sx={{
             '*+*': { marginLeft: `3` },
             display: [`none`, `flex`],
             alignItems: `center`,
+            width: `max-content`,
+            whiteSpace: `nowrap`,
+            ml: `2`,
           }}
         >
           <Link sx={{ variant: `button.link` }} to="/my-recipes">

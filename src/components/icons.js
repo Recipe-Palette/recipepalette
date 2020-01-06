@@ -1,7 +1,14 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { lighten } from '@theme-ui/color'
-import { FiBookmark, FiHeart, FiCopy, FiBookOpen, FiUser } from 'react-icons/fi'
+import {
+  FiBookmark,
+  FiHeart,
+  FiCopy,
+  FiBookOpen,
+  FiUser,
+  FiSearch,
+} from 'react-icons/fi'
 
 const Bookmark = ({ filled, size }) => (
   <FiBookmark size={size} sx={{ fill: filled ? `bookmarked` : `none` }} />
@@ -31,4 +38,13 @@ const Profile = ({ size, filled }) => (
   />
 )
 
-export { Bookmark, Heart, Copy, Book, Profile }
+const Search = ({ size, filled }) => (
+  <FiSearch
+    size={size}
+    sx={{
+      '& rect': { fill: filled ? `copied` : `none` },
+    }}
+  />
+)
+
+export { Bookmark, Heart, Copy, Book, Profile, Search }
