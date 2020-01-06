@@ -10,7 +10,11 @@ import recipes from '../../data/recipes'
 
 export default () => (
   <Layout>
-    <div>
+    <div
+      sx={{
+        py: `4`,
+      }}
+    >
       <Title>My Recipes</Title>
       <div
         sx={{

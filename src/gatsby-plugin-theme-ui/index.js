@@ -41,6 +41,7 @@ export default {
       color: `text`,
       boxShadow: `0px 0px 4px 0px #a4a4a4`,
       fontWeight: `bold`,
+      textAlign: `center`,
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
       },
@@ -54,6 +55,11 @@ export default {
       '&:hover': {
         boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
       },
+    },
+    recipeMini: {
+      my: `1`,
+      mr: `3`,
+      height: `calc(100% - 16px)`,
     },
   },
   layout: {

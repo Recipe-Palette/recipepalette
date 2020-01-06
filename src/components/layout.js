@@ -5,7 +5,7 @@ import { Container } from '@theme-ui/components'
 import Header from './header'
 import Footer from './footer'
 
-const Layout = ({ children }) => (
+const Layout = ({ home, children }) => (
   <div
     sx={{
       height: `100%`,
@@ -16,9 +16,14 @@ const Layout = ({ children }) => (
     <main
       sx={{
         position: `relative`,
+        backgroundColor: home ? `background` : `#eee`,
+        pt: `3`,
+        pb: `3`,
       }}
     >
-      <Container>{children}</Container>
+      <Container sx={{ backgroundColor: `background`, borderRadius: `2` }}>
+        {children}
+      </Container>
     </main>
     <Footer />
   </div>

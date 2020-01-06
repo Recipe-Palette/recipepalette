@@ -62,7 +62,7 @@ export default () => {
   const { isAuthenticated } = useAuth()
 
   return (
-    <Layout>
+    <Layout home={true}>
       <div
         sx={{
           textAlign: `center`,

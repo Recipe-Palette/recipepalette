@@ -1,12 +1,71 @@
 [
   {
-    "name": "Peanut Butter Cookies",
+    "name": "Homemade Peanut Butter Cookies",
     "hearts": 234,
     "copies": 56,
-    "time": 75,
+    "time": 175,
     "hearted": true,
     "copied": true,
-    "bookmarked": true
+    "bookmarked": true,
+    "author": "Peter Garrow",
+    "servings": 20,
+    "prep_time": 75,
+    "cook_time": 100,
+    "ingredients": [
+      {
+        "name": "Peanut Butter",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "Butter",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "White Sugar",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "Brown Sugar",
+        "amount": 0.5,
+        "unit": "cup"
+      },
+      {
+        "name": "Eggs",
+        "amount": 2,
+        "unit": ""
+      },
+      {
+        "name": "Vanilla",
+        "amount": 0.5,
+        "unit": "tsp"
+      },
+      {
+        "name": "Salt",
+        "amount": 0.5,
+        "unit": "tsp"
+      },
+      {
+        "name": "Baking Soda",
+        "amount": 0.5,
+        "unit": "tsp"
+      },
+      {
+        "name": "Flour",
+        "amount": 1,
+        "unit": "cup"
+      }
+    ],
+    "instructions": [
+      "Preheat oven to 350°.",
+      "Cream together the peanut butter and the butter.",
+      "Beat in the white sugar and the brown sugar.",
+      "Stir in the egg, vanilla, salt, baking soda, and flour.",
+      "Arrange by teaspoon on ungreased cookie sheets. Press flat with floured fork. Bake until firm (about 10 minutes)."
+    ],
+    "description": "These cookies are the best peanut butter cookies ever!"
   },
   {
     "name": "Pancakes",
