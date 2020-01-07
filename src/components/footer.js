@@ -8,6 +8,7 @@ const Footer = () => (
     sx={{
       borderTop: `1px solid`,
       borderTopColor: `border`,
+      pb: [`5`, `0`],
     }}
   >
     <Container sx={{ variant: `layout.container.footer` }}>
