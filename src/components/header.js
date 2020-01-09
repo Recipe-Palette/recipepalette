@@ -42,7 +42,7 @@ const Header = () => {
             ml: `2`,
           }}
         >
-          <Link sx={{ variant: `button.link` }} to="/my-recipes">
+          <Link sx={{ variant: `buttons.link` }} to="/my-recipes">
             My Recipes
           </Link>
           <MdAccountBox

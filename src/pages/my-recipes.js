@@ -11,9 +11,9 @@ import recipes from '../../data/recipes'
 export default () => (
   <Layout>
     <div
-      sx={{
-        py: `4`,
-      }}
+    // sx={{
+    //   py: `4`,
+    // }}
     >
       <Title>My Recipes</Title>
       <div

@@ -22,7 +22,9 @@ const Layout = ({ home, children }) => (
         pb: [`0`, `3`],
       }}
     >
-      <Container sx={{ backgroundColor: `background`, borderRadius: `2` }}>
+      <Container
+        sx={{ backgroundColor: `background`, borderRadius: `2`, py: `4` }}
+      >
         {children}
       </Container>
     </main>
