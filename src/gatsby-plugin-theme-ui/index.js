@@ -26,7 +26,8 @@ export default {
     copied: '#B1E5F3',
     bookmarked: '#C1E1AE',
   },
-  button: {
+  buttons: {
+    cursor: `pointer`,
     link: {
       textDecoration: `none`,
       fontSize: `2`,
@@ -42,6 +43,15 @@ export default {
       boxShadow: `0px 0px 4px 0px #a4a4a4`,
       fontWeight: `bold`,
       textAlign: `center`,
+      '&:hover': {
+        backgroundColor: lighten(`primary`, 0.1),
+      },
+    },
+    submit: {
+      color: `text`,
+      cursor: `pointer`,
+      bg: lighten(`primary`, 0.25),
+      boxShadow: `0px 0px 4px 0px #a4a4a4`,
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
       },
@@ -79,6 +89,19 @@ export default {
         justifyContent: `center`,
         py: `3`,
       },
+    },
+  },
+  forms: {
+    label: {
+      fontSize: `4`,
+      fontWeight: `heading`,
+      mt: `4`,
+    },
+    input: {
+      borderColor: `border`,
+    },
+    textarea: {
+      borderColor: `border`,
     },
   },
 }

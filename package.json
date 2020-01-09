@@ -25,6 +25,7 @@
     "@theme-ui/components": "^0.2.50",
     "apollo-boost": "^0.4.4",
     "emotion-theming": "^10.0.19",
+    "formik": "^2.1.1",
     "fraction.js": "^4.0.12",
     "gatsby": "^2.16.1",
     "gatsby-background-image": "^0.9.11",
