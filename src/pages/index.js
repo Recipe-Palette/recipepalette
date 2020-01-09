@@ -1,9 +1,11 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Link, graphql, useStaticQuery } from 'gatsby'
+import { graphql, useStaticQuery } from 'gatsby'
+import { Button } from '@theme-ui/components'
 import { useAuth } from 'react-use-auth'
 
+import SearchBar from '../components/search-bar'
 import Title from '../components/title'
 import Layout from '../components/layout'
 import { CategoryCard } from '../components/cards'
@@ -59,7 +61,7 @@ export default () => {
   const { appetizer, bread, dessert, breakfast, pasta } = useStaticQuery(
     imageQuery
   )
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, login } = useAuth()
 
   return (
     <Layout home={true}>
@@ -71,22 +73,23 @@ export default () => {
         }}
       >
         <Title>The best way to keep track of recipes</Title>
-        <input
+        <div
           sx={{
-            px: `3`,
-            py: `2`,
-            mx: `auto`,
-            mb: `3`,
+            display: `flex`,
+            justifyContent: 'center',
             fontSize: `3`,
-            minWidth: `75%`,
-            display: `block`,
+            mb: [`1`, `3`],
           }}
-          placeholder="Find a recipe..."
-        />
+        >
+          <SearchBar sx={{ width: '100%', maxWidth: '700px' }} />
+        </div>
         {!isAuthenticated() && (
-          <Link sx={{ variant: `button.link`, display: `inline-block` }} to="/">
+          <Button
+            sx={{ variant: `buttons.link`, display: `inline-block` }}
+            onClick={() => login()}
+          >
             Join for free!
-          </Link>
+          </Button>
         )}
       </div>
       <h2>Explore Recipes</h2>

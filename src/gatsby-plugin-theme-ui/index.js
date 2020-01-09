@@ -19,6 +19,7 @@ export default {
     text: '#222',
     background: '#FFF',
     border: '#DDD',
+    gray: '#8e8d8d',
     primary: '#eb7b15',
     secondary: '#e4ab15',
     accent: '#F8C99E',
@@ -26,7 +27,27 @@ export default {
     copied: '#B1E5F3',
     bookmarked: '#C1E1AE',
   },
-  button: {
+  buttons: {
+    primary: {
+      cursor: `pointer`,
+      textDecoration: `none`,
+      fontSize: `2`,
+      px: `3`,
+      py: `2`,
+      transition: `0.3s all`,
+      borderRadius: `1`,
+      backgroundColor: lighten(`primary`, 0.25),
+      borderWidth: `1px`,
+      borderColor: `primary`,
+      borderStyle: `solid`,
+      color: `text`,
+      boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      fontWeight: `bold`,
+      textAlign: `center`,
+      '&:hover': {
+        backgroundColor: lighten(`primary`, 0.1),
+      },
+    },
     link: {
       textDecoration: `none`,
       fontSize: `2`,
@@ -72,6 +93,7 @@ export default {
         justifyContent: `space-between`,
         alignItems: `center`,
         py: `3`,
+        '*+*': { marginLeft: `3` },
       },
       footer: {
         display: `flex`,

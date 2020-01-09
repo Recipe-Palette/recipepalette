@@ -5,11 +5,11 @@ import { useState } from 'react'
 import { Search } from './icons'
 import { lighten } from '@theme-ui/color'
 
-const SearchBar = () => {
+const SearchBar = ({ ...props }) => {
   const [isFocussed, setIsFocussed] = useState(false)
 
   return (
-    <form>
+    <form {...props}>
       <label
         sx={{
           display: `flex`,
@@ -17,12 +17,12 @@ const SearchBar = () => {
           boxShadow: theme =>
             isFocussed ? `0px 0px 2px 2px ${theme.colors.primary}` : `none`,
           bg: lighten(`border`, 0.075),
-          p: `1`,
+          p: `2`,
           borderRadius: `2`,
         }}
       >
-        <div sx={{ ml: `2`, display: `flex`, alignItems: `center` }}>
-          <Search size="1.5rem" />
+        <div sx={{ ml: `1`, display: `flex`, alignItems: `center` }}>
+          <Search size="1.5rem" sx={{ color: `gray` }} />
         </div>
         <input
           type="text"
@@ -35,6 +35,9 @@ const SearchBar = () => {
             bg: `inherit`,
             '&:focus': {
               outline: `none`,
+            },
+            '&::placeholder': {
+              color: `gray`,
             },
           }}
           onFocus={() => setIsFocussed(true)}
