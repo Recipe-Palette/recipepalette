@@ -1,13 +1,40 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
+import { Fragment } from 'react'
 import { Formik, Form, FieldArray } from 'formik'
-import { Label, Input, Textarea, Button } from '@theme-ui/components'
+import { Label, Input, Textarea, Button, Select } from '@theme-ui/components'
+import { FiTrash2, FiPlus } from 'react-icons/fi'
+
+const units = [
+  '---',
+  'tsp',
+  'tsbp',
+  'cup',
+  'oz',
+  'box',
+  'pinch',
+  'pint',
+  'quart',
+]
+
+const UnitDropdown = props => (
+  <Select {...props}>
+    {units.map((unit, index) => (
+      <option key={index}>{unit}</option>
+    ))}
+  </Select>
+)
 
 const RecipeForm = () => (
   <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>
     <Formik
       initialValues={{
         name: 'recipe title',
+        ingredients1: [
+          { name: '', unit: '', amount: '' },
+          { name: '', unit: '', amount: '' },
+          { name: '', unit: '', amount: '' },
+        ],
         ingredients: ['value 1', 'value 2'],
         instructions: '',
         prep_time: 0,
@@ -34,7 +61,7 @@ const RecipeForm = () => (
             value={values.name}
             onChange={handleChange}
           />
-          <FieldArray
+          {/* <FieldArray
             name="ingredients"
             render={arrayHelpers => (
               <div>
@@ -51,7 +78,7 @@ const RecipeForm = () => (
                       />
                       <button
                         type="button"
-                        onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                        onClick={() => arrayHelpers.remove(index)}
                       >
                         -
                       </button>
@@ -59,10 +86,78 @@ const RecipeForm = () => (
                   ))}
 
                 <button type="button" onClick={() => arrayHelpers.push('')}>
-                  {/* show this when user has removed all friends from the list */}
                   Add a ingredient
                 </button>
               </div>
+            )}
+          /> */}
+          <FieldArray
+            name="ingredients1"
+            render={arrayHelpers => (
+              <Fragment>
+                <Label>Ingredients</Label>
+                <div
+                  sx={{
+                    display: `grid`,
+                    gridTemplateColumns: `15% 20% 1fr 15px`,
+                    gridGap: `2`,
+                    alignItems: `center`,
+                  }}
+                >
+                  <small>Amount</small>
+                  <small>Unit</small>
+                  <small sx={{ gridColumn: `3 / 5` }}>Ingredient</small>
+                  {values.ingredients1 &&
+                    values.ingredients1.length > 0 &&
+                    values.ingredients1.map((ingredient, index) => (
+                      <Fragment key={index}>
+                        <Input
+                          type="number"
+                          step={0.01}
+                          min={0}
+                          name={`ingredients1.${index}.amount`}
+                          value={ingredient.amount}
+                          onChange={handleChange}
+                        />
+                        <UnitDropdown
+                          name={`ingredients1.${index}.unit`}
+                          value={ingredient.unit}
+                          onChange={handleChange}
+                        />
+                        {/* <Input
+                          name={`ingredients1.${index}.unit`}
+                          value={ingredient.unit}
+                          onChange={handleChange}
+                        /> */}
+                        <Input
+                          name={`ingredients1.${index}.name`}
+                          value={ingredient.name}
+                          onChange={handleChange}
+                        />
+                        <FiTrash2
+                          onClick={() => arrayHelpers.remove(index)}
+                          sx={{ cursor: `pointer` }}
+                        />
+                      </Fragment>
+                    ))}
+                </div>
+                <div
+                  sx={{ display: `flex`, justifyContent: `flex-end`, pt: `3` }}
+                >
+                  <Button
+                    type="button"
+                    onClick={() =>
+                      arrayHelpers.push({ name: '', amount: '', unit: '' })
+                    }
+                    sx={{
+                      variant: `buttons.icon`,
+                    }}
+                  >
+                    {/* show this when user has removed all friends from the list */}
+                    Add a ingredient <FiPlus sx={{ ml: `2` }} />
+                  </Button>
+                </div>
+              </Fragment>
             )}
           />
           <Label htmlFor="instructions">Instructions</Label>
@@ -71,6 +166,7 @@ const RecipeForm = () => (
             id="instructions"
             rows={6}
             onChange={handleChange}
+            placeholder="Place each step on a new line"
           />
           {/* TODO:
               On submit, we'll need to convert the time values into minutes before

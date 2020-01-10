@@ -27,7 +27,20 @@ export default {
     bookmarked: '#C1E1AE',
   },
   buttons: {
-    cursor: `pointer`,
+    primary: {
+      cursor: `pointer`,
+      color: `text`,
+      borderWidth: `1px`,
+      borderColor: `primary`,
+      borderStyle: `solid`,
+      boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      backgroundColor: lighten(`primary`, 0.25),
+      transition: `0.2s all`,
+      fontWeight: `bold`,
+      '&:hover': {
+        backgroundColor: lighten(`primary`, 0.1),
+      },
+    },
     link: {
       textDecoration: `none`,
       fontSize: `2`,
@@ -36,25 +49,17 @@ export default {
       transition: `0.3s all`,
       borderRadius: `1`,
       backgroundColor: lighten(`primary`, 0.25),
-      borderWidth: `1px`,
-      borderColor: `primary`,
-      borderStyle: `solid`,
       color: `text`,
-      boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      // boxShadow: `0px 0px 4px 0px #a4a4a4`,
       fontWeight: `bold`,
       textAlign: `center`,
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
       },
     },
-    submit: {
-      color: `text`,
-      cursor: `pointer`,
-      bg: lighten(`primary`, 0.25),
-      boxShadow: `0px 0px 4px 0px #a4a4a4`,
-      '&:hover': {
-        backgroundColor: lighten(`primary`, 0.1),
-      },
+    icon: {
+      display: `flex`,
+      alignItems: `center`,
     },
   },
   cards: {
@@ -93,14 +98,18 @@ export default {
   },
   forms: {
     label: {
-      fontSize: `4`,
+      fontSize: [`3`, `4`],
       fontWeight: `heading`,
       mt: `4`,
+      mb: `2`,
     },
     input: {
       borderColor: `border`,
     },
     textarea: {
+      borderColor: `border`,
+    },
+    select: {
       borderColor: `border`,
     },
   },
