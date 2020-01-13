@@ -38,23 +38,31 @@ const parseTime = rawTime => {
   return total
 }
 
-const RecipeForm = () => (
+const RecipeForm = ({
+  name = '',
+  ingredients = [
+    { name: '', unit: '', amount: '' },
+    { name: '', unit: '', amount: '' },
+    { name: '', unit: '', amount: '' },
+  ],
+  instructions = '',
+  prep_time = '',
+  cook_time = '',
+  servings = '',
+  image_url = '',
+  privateRecipe = false,
+}) => (
   <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>
     <Formik
       initialValues={{
-        name: 'recipe title',
-        ingredients1: [
-          { name: '', unit: '', amount: '' },
-          { name: '', unit: '', amount: '' },
-          { name: '', unit: '', amount: '' },
-        ],
-        ingredients: ['value 1', 'value 2'],
-        instructions: '',
-        prep_time: '',
-        cook_time: '',
-        servings: '',
-        image_url: '',
-        private: false,
+        name,
+        ingredients,
+        instructions,
+        prep_time,
+        cook_time,
+        servings,
+        image_url,
+        privateRecipe,
       }}
       onSubmit={values => {
         console.log(values)
@@ -78,7 +86,7 @@ const RecipeForm = () => (
             onChange={handleChange}
           />
           <FieldArray
-            name="ingredients1"
+            name="ingredients"
             render={arrayHelpers => (
               <Fragment>
                 <Label>Ingredients</Label>
@@ -93,26 +101,26 @@ const RecipeForm = () => (
                   <small>Amount</small>
                   <small>Unit</small>
                   <small sx={{ gridColumn: `3 / 5` }}>Ingredient</small>
-                  {values.ingredients1 &&
-                    values.ingredients1.length > 0 &&
-                    values.ingredients1.map((ingredient, index) => (
+                  {values.ingredients &&
+                    values.ingredients.length > 0 &&
+                    values.ingredients.map((ingredient, index) => (
                       <Fragment key={index}>
                         <Input
                           type="number"
                           inputMode="decimal"
                           step={0.01}
                           min={0}
-                          name={`ingredients1.${index}.amount`}
+                          name={`ingredients.${index}.amount`}
                           value={ingredient.amount}
                           onChange={handleChange}
                         />
                         <UnitDropdown
-                          name={`ingredients1.${index}.unit`}
+                          name={`ingredients.${index}.unit`}
                           value={ingredient.unit}
                           onChange={handleChange}
                         />
                         <Input
-                          name={`ingredients1.${index}.name`}
+                          name={`ingredients.${index}.name`}
                           value={ingredient.name}
                           onChange={handleChange}
                         />
