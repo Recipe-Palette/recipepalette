@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { Formik, Form, FieldArray } from 'formik'
 import { Label, Input, Textarea, Button, Select } from '@theme-ui/components'
 import { FiTrash2, FiPlus } from 'react-icons/fi'
+import Cleave from 'cleave.js/react'
 
 const units = [
   '---',
@@ -25,6 +26,18 @@ const UnitDropdown = props => (
   </Select>
 )
 
+const parseTime = rawTime => {
+  let total = 0
+  let [hours, minutes] = rawTime.split(':')
+  hours = parseInt(hours)
+  minutes = parseInt(minutes)
+  hours = hours * 60
+
+  total = hours + minutes
+
+  return total
+}
+
 const RecipeForm = () => (
   <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>
     <Formik
@@ -37,13 +50,17 @@ const RecipeForm = () => (
         ],
         ingredients: ['value 1', 'value 2'],
         instructions: '',
-        prep_time: 0,
-        cook_time: 0,
-        servings: 0,
+        prep_time: '',
+        cook_time: '',
+        servings: '',
         image_url: '',
         private: false,
       }}
       onSubmit={values => {
+        console.log(values)
+        console.log(parseTime(values.prep_time))
+        console.log(parseTime(values.cook_time))
+
         setTimeout(() => {
           // eslint-disable-next-line no-alert
           alert(JSON.stringify(values, null, 2))
@@ -52,7 +69,6 @@ const RecipeForm = () => (
     >
       {({ values, handleChange }) => (
         <Form>
-          {/* <Field name="name" label="Recipe Name" defaultValue={values.name} /> */}
           <Label htmlFor="name">Recipe name</Label>
           <Input
             name="name"
@@ -61,36 +77,6 @@ const RecipeForm = () => (
             value={values.name}
             onChange={handleChange}
           />
-          {/* <FieldArray
-            name="ingredients"
-            render={arrayHelpers => (
-              <div>
-                <Label>Ingredients</Label>
-                {values.ingredients &&
-                  values.ingredients.length > 0 &&
-                  values.ingredients.map((ingredient, index) => (
-                    <div key={index}>
-                      <Input
-                        name={`ingredients.${index}`}
-                        sx={{ width: `100%` }}
-                        value={ingredient}
-                        onChange={handleChange}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => arrayHelpers.remove(index)}
-                      >
-                        -
-                      </button>
-                    </div>
-                  ))}
-
-                <button type="button" onClick={() => arrayHelpers.push('')}>
-                  Add a ingredient
-                </button>
-              </div>
-            )}
-          /> */}
           <FieldArray
             name="ingredients1"
             render={arrayHelpers => (
@@ -113,6 +99,7 @@ const RecipeForm = () => (
                       <Fragment key={index}>
                         <Input
                           type="number"
+                          inputMode="decimal"
                           step={0.01}
                           min={0}
                           name={`ingredients1.${index}.amount`}
@@ -124,11 +111,6 @@ const RecipeForm = () => (
                           value={ingredient.unit}
                           onChange={handleChange}
                         />
-                        {/* <Input
-                          name={`ingredients1.${index}.unit`}
-                          value={ingredient.unit}
-                          onChange={handleChange}
-                        /> */}
                         <Input
                           name={`ingredients1.${index}.name`}
                           value={ingredient.name}
@@ -153,7 +135,6 @@ const RecipeForm = () => (
                       variant: `buttons.icon`,
                     }}
                   >
-                    {/* show this when user has removed all friends from the list */}
                     Add a ingredient <FiPlus sx={{ ml: `2` }} />
                   </Button>
                 </div>
@@ -174,26 +155,40 @@ const RecipeForm = () => (
           <div sx={{ display: `flex`, justifyContent: `space-between` }}>
             <div sx={{ display: `flex`, flexDirection: `column` }}>
               <Label htmlFor="prep_time">Prep Time</Label>
-              <Input
+              <Cleave
                 name="prep_time"
                 id="prep_time"
+                inputMode="numeric"
+                placeholder="hh:mm"
+                options={{ time: true, timePattern: ['h', 'm'] }}
                 value={values.prep_time}
                 onChange={handleChange}
+                sx={{
+                  variant: `forms.input`,
+                }}
               />
             </div>
             <div sx={{ display: `flex`, flexDirection: `column`, px: `3` }}>
               <Label htmlFor="cook_time">Cook Time</Label>
-              <Input
+              <Cleave
                 name="cook_time"
                 id="cook_time"
+                inputMode="numeric"
+                placeholder="hh:mm"
+                options={{ time: true, timePattern: ['h', 'm'] }}
                 value={values.cook_time}
                 onChange={handleChange}
+                sx={{
+                  variant: `forms.input`,
+                }}
               />
             </div>
             <div sx={{ display: `flex`, flexDirection: `column` }}>
               <Label htmlFor="servings">Servings</Label>
               <Input
                 name="servings"
+                inputMode="numeric"
+                type="number"
                 id="servings"
                 value={values.servings}
                 onChange={handleChange}

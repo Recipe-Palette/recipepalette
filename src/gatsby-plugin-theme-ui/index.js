@@ -104,6 +104,16 @@ export default {
       mb: `2`,
     },
     input: {
+      display: `block`,
+      width: `100%`,
+      p: 2,
+      appearance: `none`,
+      fontSize: `inherit`,
+      lineHeight: `inherit`,
+      border: `1px solid`,
+      borderRadius: 4,
+      color: `inherit`,
+      bg: `background`,
       borderColor: `border`,
     },
     textarea: {

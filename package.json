@@ -24,6 +24,7 @@
     "@theme-ui/color": "^0.2.49",
     "@theme-ui/components": "^0.2.50",
     "apollo-boost": "^0.4.4",
+    "cleave.js": "^1.5.3",
     "emotion-theming": "^10.0.19",
     "formik": "^2.1.1",
     "fraction.js": "^4.0.12",
