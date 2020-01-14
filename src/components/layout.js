@@ -6,7 +6,7 @@ import Header from './header'
 import Footer from './footer'
 import NavigationMobile from './navigation-mobile'
 
-const Layout = ({ home, children }) => (
+const Layout = ({ home, children, location }) => (
   <div
     sx={{
       height: `100%`,
@@ -28,7 +28,7 @@ const Layout = ({ home, children }) => (
         {children}
       </Container>
     </main>
-    <NavigationMobile />
+    <NavigationMobile location={location} />
     <Footer />
   </div>
 )
