@@ -8,8 +8,8 @@ import { NewCard, RecipeCard } from '../components/cards'
 
 import recipes from '../../data/recipes'
 
-export default () => (
-  <Layout>
+export default ({ location }) => (
+  <Layout location={location}>
     <div
       sx={{
         py: `4`,

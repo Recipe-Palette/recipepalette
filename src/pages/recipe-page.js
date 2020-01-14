@@ -96,7 +96,7 @@ const TimingSmall = ({ recipe }) => (
   </Flex>
 )
 
-const RecipePage = () => {
+const RecipePage = ({ location }) => {
   const recipe = recipes[0]
   const [servings] = useState(recipe.servings)
 
@@ -105,7 +105,7 @@ const RecipePage = () => {
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
   return (
-    <Layout>
+    <Layout location={location}>
       <div
         sx={{
           py: `4`,
@@ -152,13 +152,13 @@ const RecipePage = () => {
             <Flex sx={{ justifyContent: `space-between` }}>
               <Link
                 to="/recipe-page"
-                sx={{ variant: `button.link`, width: `48%` }}
+                sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Create new version
               </Link>
               <Link
                 to="/recipe-page"
-                sx={{ variant: `button.link`, width: `48%` }}
+                sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Edit recipe
               </Link>
