@@ -19,41 +19,63 @@ const IconContainer = styled.div`
   padding-bottom: ${({ theme }) => `${theme.space[3]}px`};
 `
 
-const NavigationMobile = () => (
-  <div
-    sx={{
-      position: `fixed`,
-      bottom: 0,
-      left: 0,
-      width: `100%`,
-      bg: `background`,
-      display: [null, `none`],
-    }}
-  >
-    <Flex
+const isActiveLink = (pathname, matchText) => pathname.includes(matchText)
+
+const NavigationMobile = ({ location }) => {
+  return (
+    <div
       sx={{
+        position: `fixed`,
+        bottom: 0,
+        left: 0,
         width: `100%`,
-        justifyContent: `space-around`,
-        alignItems: `center`,
-        height: `100%`,
+        bg: `background`,
+        display: [null, `none`],
       }}
     >
-      <Link to="/my-recipes" sx={{ color: `initial`, width: `100%` }}>
-        <IconContainer>
-          <Book filled size="2rem" />
-        </IconContainer>
-      </Link>
-      <IconContainer>
-        <Heart filled size="2rem" />
-      </IconContainer>
-      <IconContainer>
-        <Bookmark filled size="2rem" />
-      </IconContainer>
-      <IconContainer>
-        <Profile filled size="2rem" />
-      </IconContainer>
-    </Flex>
-  </div>
-)
+      <Flex
+        sx={{
+          width: `100%`,
+          justifyContent: `space-around`,
+          alignItems: `center`,
+          height: `100%`,
+        }}
+      >
+        <Link to="/my-recipes" sx={{ color: `initial`, width: `100%` }}>
+          <IconContainer>
+            <Book
+              filled={isActiveLink(location.pathname, `my-recipes`)}
+              size="1.5rem"
+            />
+          </IconContainer>
+        </Link>
+        <Link to="/favorites" sx={{ color: `initial`, width: `100%` }}>
+          <IconContainer>
+            <Heart
+              filled={isActiveLink(location.pathname, `favorites`)}
+              size="1.5rem"
+            />
+          </IconContainer>
+        </Link>
+        <Link to="/bookmarks" sx={{ color: `initial`, width: `100%` }}>
+          <IconContainer>
+            <Bookmark
+              filled={isActiveLink(location.pathname, `bookmarks`)}
+              size="1.5rem"
+            />
+          </IconContainer>
+        </Link>
+        <Link to="/account" sx={{ color: `initial`, width: `100%` }}>
+          <IconContainer>
+            <Profile
+              filled={isActiveLink(location.pathname, `account`)}
+              size="1.5rem"
+            />
+          </IconContainer>
+        </Link>
+      </Flex>
+    </div>
+  )
+}
 
 export default NavigationMobile
