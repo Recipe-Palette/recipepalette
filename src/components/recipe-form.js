@@ -5,6 +5,7 @@ import { Formik, Form, FieldArray } from 'formik'
 import { Label, Input, Textarea, Button, Select } from '@theme-ui/components'
 import { FiTrash2, FiPlus } from 'react-icons/fi'
 import Cleave from 'cleave.js/react'
+import { useDropzone } from 'react-dropzone'
 
 const units = [
   '---',
@@ -36,6 +37,63 @@ const parseTime = rawTime => {
   total = hours + minutes
 
   return total
+}
+
+function ImageDropzone() {
+  const { getRootProps, getInputProps } = useDropzone()
+
+  // const files = acceptedFiles.map(file => (
+  //   <li key={file.path}>
+  //     {file.path} - {file.size} bytes
+  //   </li>
+  // ))
+
+  return (
+    <section
+      sx={{
+        display: `flex`,
+        flexDirection: `column`,
+        mt: `4`,
+        '& > p': {
+          fontSize: `1rem`,
+        },
+
+        '& > em': {
+          fontSize: `.8rem`,
+        },
+      }}
+    >
+      <div
+        {...getRootProps({ className: 'dropzone' })}
+        sx={{
+          flex: 1,
+          display: `flex`,
+          flexDirection: `column`,
+          alignItems: `center`,
+          padding: `20px`,
+          borderWidth: `2px`,
+          borderRadius: `2px`,
+          borderColor: `#eeeeee`,
+          borderStyle: `dashed`,
+          backgroundColor: `#fafafa`,
+          color: `#bdbdbd`,
+          outline: `none`,
+          transition: `border .24s ease-in-out`,
+
+          '&:focus': {
+            borderColor: `#2196f3`,
+          },
+        }}
+      >
+        <input {...getInputProps()} />
+        <p>Drag 'n' drop some images here, or click to select images</p>
+      </div>
+      {/* <aside>
+        <h4>Images</h4>
+        <ul>{files}</ul>
+      </aside> */}
+    </section>
+  )
 }
 
 const RecipeForm = ({
@@ -203,6 +261,7 @@ const RecipeForm = ({
               />
             </div>
           </div>
+          <ImageDropzone />
           {/* TODO:
               - Add tags
               - Add image input */}

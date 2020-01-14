@@ -39,6 +39,7 @@
     "isomorphic-fetch": "^2.2.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-dropzone": "^10.2.1",
     "react-icons": "^3.7.0",
     "react-use-auth": "^0.5.1",
     "theme-ui": "^0.2.44"
