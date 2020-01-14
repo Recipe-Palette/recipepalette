@@ -107,9 +107,9 @@ const RecipePage = ({ location }) => {
   return (
     <Layout location={location}>
       <div
-        sx={{
-          py: `4`,
-        }}
+      // sx={{
+      //   py: `4`,
+      // }}
       >
         <Flex sx={{ flexDirection: [`column`, `row`] }}>
           <div sx={{ width: `100%` }}>
