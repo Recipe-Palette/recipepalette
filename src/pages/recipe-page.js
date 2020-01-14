@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { useState } from 'react'
-import { Link } from 'gatsby'
-import { Flex, Divider } from '@theme-ui/components'
+import { navigate } from 'gatsby'
+import { Flex, Divider, Button } from '@theme-ui/components'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 
@@ -150,18 +150,18 @@ const RecipePage = ({ location }) => {
             }}
           >
             <Flex sx={{ justifyContent: `space-between` }}>
-              <Link
-                to="/recipe-page"
+              <Button
+                onClick={() => navigate('/recipe-page')}
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Create new version
-              </Link>
-              <Link
-                to="/recipe-page"
+              </Button>
+              <Button
+                onClick={() => navigate('/recipe-page')}
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Edit recipe
-              </Link>
+              </Button>
             </Flex>
 
             <div>

@@ -75,9 +75,14 @@ const Header = () => {
             whiteSpace: `nowrap`,
           }}
         >
-          <Link sx={{ variant: `buttons.link` }} to="/my-recipes">
-            My Recipes
-          </Link>
+          <Button
+            sx={{ variant: `buttons.link` }}
+            onClick={() =>
+              isAuthenticated() ? navigate('/my-recipes') : login()
+            }
+          >
+            My Palette
+          </Button>
         </div>
         <div sx={{ display: [`none`, `flex`] }}>
           <Button sx={{ px: `10px` }}>
