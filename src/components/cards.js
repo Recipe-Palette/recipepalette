@@ -34,17 +34,20 @@ const CategoryCard = ({ image, name }) => {
 }
 
 const RecipeCard = ({
-  name = `Recipe Name`,
-  hearts = 5,
-  copies = 5,
-  time = 15,
-  img = `https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80`,
+  time = 0,
+  mini = false,
   hearted = false,
   bookmarked = false,
   copied = false,
-  mini = false,
+  recipe: {
+    //id,
+    image_url,
+    upvotes,
+    variation_count,
+    current: { name, cook_time_minutes, prep_time_minutes },
+  },
 }) => {
-  time = convertTime(time)
+  time = convertTime(cook_time_minutes + prep_time_minutes)
   return (
     <Link to="/recipe-page" sx={{ color: `text`, textDecoration: `none` }}>
       <Card
@@ -68,7 +71,7 @@ const RecipeCard = ({
             height: 125,
             borderRadius: `1`,
             backgroundColor: `#DDD`,
-            backgroundImage: `url(${img})`,
+            backgroundImage: `url(${image_url})`,
             backgroundSize: `cover`,
           }}
         />
@@ -100,7 +103,7 @@ const RecipeCard = ({
                 ml: `2`,
               }}
             >
-              {hearts}
+              {upvotes}
             </span>
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
@@ -111,7 +114,7 @@ const RecipeCard = ({
                 ml: `2`,
               }}
             >
-              {copies}
+              {variation_count}
             </span>
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
