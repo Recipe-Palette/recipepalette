@@ -5,6 +5,7 @@ import { Link, navigate } from 'gatsby'
 import { useAuth } from 'react-use-auth'
 
 import { Profile } from '../components/icons'
+import Logo from '../components/logo'
 import SearchBar from './search-bar'
 
 const Header = () => {
@@ -20,10 +21,7 @@ const Header = () => {
       <Container sx={{ variant: `layout.container.header` }}>
         <div sx={{ width: `max-content`, whiteSpace: `nowrap` }}>
           <Link to="/">
-            <span sx={{ display: [`none`, `initial`] }}>Recipe Palette </span>
-            <span role="img" aria-label="palette">
-              🎨
-            </span>
+            <Logo sx={{ width: 150, height: 50 }} />
           </Link>
         </div>
         <div sx={{ width: `100%` }}>
