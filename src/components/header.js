@@ -1,17 +1,15 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { lighten } from '@theme-ui/color'
-import { Link } from 'gatsby'
-import { Container } from '@theme-ui/components'
-import { MdAccountBox } from 'react-icons/md'
+import { Button, Container } from '@theme-ui/components'
+import { Link, navigate } from 'gatsby'
 import { useAuth } from 'react-use-auth'
 
-import { useCustomAuth } from '../hooks/useCustomAuth'
+import { Profile } from '../components/icons'
+import Logo from '../components/logo'
 import SearchBar from './search-bar'
 
 const Header = () => {
   const { isAuthenticated, login } = useAuth()
-  const { customLogout } = useCustomAuth()
 
   return (
     <header
@@ -21,40 +19,36 @@ const Header = () => {
       }}
     >
       <Container sx={{ variant: `layout.container.header` }}>
-        <div sx={{ width: `max-content`, whiteSpace: `nowrap`, mr: `2` }}>
+        <div sx={{ width: `max-content`, whiteSpace: `nowrap` }}>
           <Link to="/">
-            <span sx={{ display: [`none`, `initial`] }}>Recipe Palette </span>
-            <span role="img" aria-label="palette">
-              🎨
-            </span>
+            <Logo sx={{ width: 150, height: 50 }} />
           </Link>
         </div>
-        <div sx={{ width: `100%`, ml: [`2`, `3`], mr: [`0`, `3`] }}>
+        <div sx={{ width: `100%` }}>
           <SearchBar />
         </div>
         <div
           sx={{
-            '*+*': { marginLeft: `3` },
             display: [`none`, `flex`],
             alignItems: `center`,
             width: `max-content`,
             whiteSpace: `nowrap`,
-            ml: `2`,
           }}
         >
-          <Link sx={{ variant: `button.link` }} to="/my-recipes">
+          <Link sx={{ variant: `buttons.link` }} to="/my-recipes">
             My Recipes
           </Link>
-          <MdAccountBox
-            size={50}
-            sx={{
-              display: `inline-flex`,
-              cursor: `pointer`,
-              color: lighten(`primary`, 0.25),
-              '&:hover': { color: lighten(`primary`, 0.1) },
-            }}
-            onClick={() => (isAuthenticated() ? customLogout() : login())}
-          />
+        </div>
+        <div>
+          <Button sx={{ display: [`none`, `flex`], px: `10px` }}>
+            <Profile
+              size={17}
+              sx={{ stroke: 3 }}
+              onClick={() =>
+                isAuthenticated() ? navigate('/account') : login()
+              }
+            />
+          </Button>
         </div>
       </Container>
     </header>

@@ -33,7 +33,7 @@ const recipeQuery = gql`
   }
 `
 
-export default () => {
+export default ({ location }) => {
   const { userId } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: { user_id: userId },
@@ -43,7 +43,7 @@ export default () => {
   }
 
   return (
-    <Layout>
+    <Layout location={location}>
       <div
         sx={{
           py: `4`,

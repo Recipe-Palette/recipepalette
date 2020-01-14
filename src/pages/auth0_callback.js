@@ -1,10 +1,11 @@
 // src/pages/auth0_callback
 import React, { useEffect } from 'react'
+import { Link } from 'gatsby'
 
 import { useAuth } from 'react-use-auth'
 import Layout from '../components/layout'
 
-const Auth0CallbackPage = () => {
+const Auth0CallbackPage = ({ location }) => {
   const { handleAuthentication, authResult } = useAuth()
   useEffect(() => {
     handleAuthentication({ postLoginRoute: '/' })
@@ -16,10 +17,12 @@ const Auth0CallbackPage = () => {
   }
 
   return (
-    <Layout>
-      <h1>
-        This is the auth callback page, you should be redirected immediately.
-      </h1>
+    <Layout location={location}>
+      <h1>Welcome!</h1>
+      <p>
+        You've been logged in, you should be redirected to the page you came
+        from. If not, you can navigate <Link to="/">home</Link>.
+      </p>
     </Layout>
   )
 }
