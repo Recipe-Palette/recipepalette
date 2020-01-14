@@ -8,12 +8,12 @@ import Title from '../components/title'
 import Layout from '../components/layout'
 import { useCustomAuth } from '../hooks/useCustomAuth'
 
-export default function Account() {
+export default function Account({ location }) {
   const { customLogout } = useCustomAuth()
   const { user, isAuthenticated, login } = useAuth()
 
   return (
-    <Layout>
+    <Layout location={location}>
       {isAuthenticated() ? (
         <div sx={{ p: `2` }}>
           <Title>Account</Title>

@@ -57,14 +57,14 @@ const imageQuery = graphql`
   }
 `
 
-export default () => {
+export default ({ location }) => {
   const { appetizer, bread, dessert, breakfast, pasta } = useStaticQuery(
     imageQuery
   )
   const { isAuthenticated, login } = useAuth()
 
   return (
-    <Layout home={true}>
+    <Layout location={location} home={true}>
       <div
         sx={{
           textAlign: `center`,

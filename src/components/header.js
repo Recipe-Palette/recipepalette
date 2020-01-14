@@ -42,7 +42,7 @@ const Header = () => {
           </Link>
         </div>
         <div>
-          <Button sx={{ px: `10px` }}>
+          <Button sx={{ display: [`none`, `flex`], px: `10px` }}>
             <Profile
               size={17}
               sx={{ stroke: 3 }}
