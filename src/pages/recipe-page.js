@@ -9,7 +9,7 @@ import Fraction from 'fraction.js'
 import { convertTime } from '../utils/convertTime'
 import Layout from '../components/layout'
 import { Heart, Copy, Bookmark } from '../components/icons'
-import { RecipeCard } from '../components/cards'
+// import { RecipeCard } from '../components/cards'
 
 import recipes from '../../data/recipes'
 
@@ -172,9 +172,9 @@ const RecipePage = ({ location }) => {
                   width: `100%`,
                 }}
               >
-                {recipes.map((recipeVersion, index) => (
+                {/* {recipes.map((recipeVersion, index) => (
                   <RecipeCard key={index} {...recipeVersion} mini={true} />
-                ))}
+                ))} */}
               </Flex>
             </div>
           </div>
