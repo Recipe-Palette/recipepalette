@@ -85,14 +85,11 @@ const Header = () => {
           </Button>
         </div>
         <div sx={{ display: [`none`, `flex`] }}>
-          <Button sx={{ px: `10px` }}>
-            <Profile
-              size={17}
-              sx={{ stroke: 3 }}
-              onClick={() =>
-                isAuthenticated() ? navigate('/account') : login()
-              }
-            />
+          <Button
+            sx={{ px: `10px` }}
+            onClick={() => (isAuthenticated() ? navigate('/account') : login())}
+          >
+            <Profile size={17} sx={{ stroke: 3 }} />
           </Button>
         </div>
       </Container>
