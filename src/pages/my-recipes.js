@@ -14,15 +14,15 @@ import { useAuth } from 'react-use-auth'
 const recipeQuery = gql`
   query MyQuery($user_id: String!) {
     recipes: recipe(
-      order_by: { current: { created_at: desc } }
+      order_by: { latest: { created_at: desc } }
       where: { user_id: { _eq: $user_id } }
     ) {
       id
       image_url
       upvotes
       variation_count
-      current_version
-      current {
+      latest_version
+      latest {
         cook_time_minutes
         prep_time_minutes
         name

@@ -1,5 +1,6 @@
 module.exports = {
   plugins: [
+    // image optimization
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -9,9 +10,17 @@ module.exports = {
     },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
+    // Theme-UI support
     `gatsby-plugin-theme-ui`,
+    // local plugins to wrapRootElement
     `gatsby-plugin-auth`,
     `gatsby-plugin-apollo`,
+    // create routes for client side routing
+    {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/recipe/*`, `/palette/*`, `/search/*`] },
+    },
+    // PWA support
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
