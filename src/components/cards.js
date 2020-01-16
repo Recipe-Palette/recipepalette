@@ -44,7 +44,7 @@ const RecipeCard = ({
     image_url,
     upvotes,
     variation_count,
-    current: { name, cook_time_minutes, prep_time_minutes },
+    latest: { name, cook_time_minutes, prep_time_minutes },
   },
 }) => {
   time = convertTime(cook_time_minutes + prep_time_minutes)

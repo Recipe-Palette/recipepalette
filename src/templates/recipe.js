@@ -1,55 +1,74 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useState } from 'react'
 import { navigate } from 'gatsby'
 import { Flex, Divider, Button } from '@theme-ui/components'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import { isEmpty } from 'lodash'
 
 import { convertTime } from '../utils/convertTime'
 import Layout from '../components/layout'
 import { Heart, Copy, Bookmark } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 
+const versionInfoFragmnt = gql`
+  fragment VersionInformation on recipe_version {
+    id
+    name
+    prep_time_minutes
+    cook_time_minutes
+    servings
+    instructions
+    version
+    ingredients {
+      name
+      amount
+      unit
+    }
+  }
+`
+
+const recipeFragment = gql`
+  fragment RecipeInformation on recipe {
+    id
+    image_url
+    upvotes
+    private
+    variation_count
+    latest_version
+    latest {
+      ...VersionInformation
+    }
+    versions {
+      ...VersionInformation
+    }
+    user {
+      name
+    }
+  }
+  ${versionInfoFragmnt}
+`
+
 const recipeQuery = gql`
   query($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
-      id
-      image_url
-      upvotes
-      private
-      variation_count
-      current_version
-      current {
-        name
-        prep_time_minutes
-        cook_time_minutes
-        servings
-        instructions
-        ingredients {
-          name
-          amount
-          unit
-        }
-      }
-      user {
-        name
-      }
+      ...RecipeInformation
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
       id
       image_url
       upvotes
       variation_count
-      current {
+      latest {
         name
         cook_time_minutes
         prep_time_minutes
       }
     }
   }
+  ${recipeFragment}
 `
 
 const Icons = ({ recipe }) => (
@@ -137,17 +156,32 @@ const TimingSmall = ({ recipe }) => (
   </Flex>
 )
 
-const RecipePage = ({ location }) => {
+// used for all /recipe/* routes
+const Recipe = ({ location, recipeId, versionNumber }) => {
   const { data: recipeData, loading } = useQuery(recipeQuery, {
-    variables: { id: 1 },
+    variables: {
+      id: recipeId,
+    },
   })
   const recipe = loading ? null : recipeData.recipe
   const variants = loading ? null : recipeData.variants
-  const [servings] = useState(loading ? 0 : recipe.current.servings)
 
+  // stop gap loading solution
   if (loading) {
     return null
   }
+
+  // intelligently assign the recipe.version
+  if (versionNumber) {
+    recipe.version = {
+      ...recipe.versions.find(v => v.version == versionNumber),
+    }
+  } else {
+    recipe.version = { ...recipe.latest }
+  }
+
+  // stop gap solution to display error if no version is found
+  if (isEmpty(recipe.version)) return 'Version not found'
 
   const image =
     recipe.image_url ||
@@ -158,7 +192,7 @@ const RecipePage = ({ location }) => {
       <div>
         <Flex sx={{ flexDirection: [`column`, `row`] }}>
           <div sx={{ width: `100%` }}>
-            <h1 sx={{ mb: `1` }}>{recipe.current.name}</h1>
+            <h1 sx={{ mb: `1` }}>{recipe.version.name}</h1>
             <p>by {recipe.user.name}</p>
           </div>
           <Icons recipe={recipe} />
@@ -182,7 +216,7 @@ const RecipePage = ({ location }) => {
                 order: 2,
               }}
             />
-            <TimingSmall recipe={recipe.current} />
+            <TimingSmall recipe={recipe.version} />
           </div>
           <div
             sx={{
@@ -234,11 +268,11 @@ const RecipePage = ({ location }) => {
               mb: `2`,
             }}
           >
-            Servings: {servings}
+            Servings: {recipe.version && recipe.version.servings}
           </h3>
 
           <ul sx={{ columnCount: 2, listStyle: `none`, pl: `0` }}>
-            {recipe.current.ingredients.map((ingredient, index) => {
+            {recipe.version.ingredients.map((ingredient, index) => {
               let amount = new Fraction(ingredient.amount)
               amount = amount.toFraction(true)
               return (
@@ -256,11 +290,12 @@ const RecipePage = ({ location }) => {
         <div>
           <h2>Instructions</h2>
           <ol sx={{ pl: `3` }}>
-            {recipe.current.instructions.map((instruction, index) => (
-              <li key={index} sx={{ mb: `3` }}>
-                {instruction}
-              </li>
-            ))}
+            {recipe.version.instructions &&
+              recipe.version.instructions.map((instruction, index) => (
+                <li key={index} sx={{ mb: `3` }}>
+                  {instruction}
+                </li>
+              ))}
           </ol>
         </div>
       </div>
@@ -268,4 +303,4 @@ const RecipePage = ({ location }) => {
   )
 }
 
-export default RecipePage
+export default Recipe
