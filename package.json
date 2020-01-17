@@ -33,6 +33,7 @@
     "gatsby-background-image": "^0.9.11",
     "gatsby-plugin-create-client-paths": "^2.1.21",
     "gatsby-plugin-manifest": "^2.2.37",
+    "gatsby-plugin-netlify": "^2.1.31",
     "gatsby-plugin-sharp": "^2.3.5",
     "gatsby-plugin-theme-ui": "^0.2.43",
     "gatsby-source-filesystem": "^2.1.40",
