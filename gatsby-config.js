@@ -20,6 +20,7 @@ module.exports = {
       resolve: `gatsby-plugin-create-client-paths`,
       options: { prefixes: [`/recipe/*`, `/palette/*`, `/search/*`] },
     },
+    `gatsby-plugin-netlify`,
     // PWA support
     {
       resolve: `gatsby-plugin-manifest`,
