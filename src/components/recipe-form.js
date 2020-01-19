@@ -1,11 +1,59 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Fragment, useState, useEffect } from 'react'
+import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray } from 'formik'
-import { Label, Input, Textarea, Button, Select } from '@theme-ui/components'
+import {
+  Label,
+  Input,
+  Textarea,
+  Button,
+  Select,
+  Spinner,
+} from '@theme-ui/components'
 import { FiTrash2, FiPlus } from 'react-icons/fi'
 import Cleave from 'cleave.js/react'
 import { useDropzone } from 'react-dropzone'
+import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import { useAuth } from 'react-use-auth'
+
+import { parseTime } from '../utils/parseTime'
+
+const INSERT_RECIPE = gql`
+  mutation InsertRecipe($objects: [recipe_version_insert_input!]!) {
+    insert_recipe_version(objects: $objects) {
+      returning {
+        name
+        id
+        version
+        recipe {
+          id
+        }
+      }
+    }
+  }
+`
+
+// const UPDATE_RECIPE = gql`
+//   mutation UpdateRecipe(
+//     $version: [recipe_version_insert_input!]!
+//     $recipe_id: Int!
+//     $recipe: recipe_set_input
+//   ) {
+//     insert_recipe_version(objects: $version) {
+//       returning {
+//         name
+//         id
+//         version
+//         recipe {
+//           id
+//         }
+//       }
+//     }
+//     update_recipe(where: { id: { _eq: $recipe_id } }, _set: $recipe)
+//   }
+// `
 
 const UNITS = [
   '---',
@@ -19,31 +67,12 @@ const UNITS = [
   'quart',
 ]
 
-const UnitDropdown = props => (
-  <Select {...props}>
-    {UNITS.map((unit, index) => (
-      <option key={index}>{unit}</option>
-    ))}
-  </Select>
-)
-
-const parseTime = rawTime => {
-  let total = 0
-  let [hours, minutes] = rawTime.split(':')
-  hours = parseInt(hours)
-  minutes = parseInt(minutes)
-  hours = hours * 60
-
-  total = hours + minutes
-
-  return total
-}
-
-const Previews = () => {
+const ImageDropZone = () => {
   const [files, setFiles] = useState([])
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: acceptedFiles => {
+      console.log(acceptedFiles)
       setFiles(
         acceptedFiles.map(file => ({
           ...file,
@@ -53,6 +82,8 @@ const Previews = () => {
     },
     multiple: false,
   })
+
+  console.log(files)
 
   const thumbs = files.map((file, index) => (
     <div
@@ -64,7 +95,6 @@ const Previews = () => {
         maxHeight: ``,
       }}
     >
-      =
       <img
         src={file.preview}
         alt={file.name}
@@ -142,6 +172,14 @@ const Previews = () => {
   )
 }
 
+const UnitDropdown = props => (
+  <Select {...props}>
+    {UNITS.map((unit, index) => (
+      <option key={index}>{unit}</option>
+    ))}
+  </Select>
+)
+
 const RecipeForm = ({
   name = '',
   ingredients = [
@@ -156,9 +194,48 @@ const RecipeForm = ({
   image_url = '',
   privateRecipe = false,
 }) => {
-  // const { userId } = useAuth()
+  const { userId } = useAuth()
+  const [insertRecipe, { loading }] = useMutation(INSERT_RECIPE, {
+    onCompleted({ insert_recipe_version: result }) {
+      navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
+    },
+  })
+
+  const handleSubmit = values => {
+    const submitInstructions = values.instructions.split('\n')
+    const prep_time_minutes = parseTime(values.prep_time)
+    const cook_time_minutes = parseTime(values.cook_time)
+
+    const recipe = {
+      data: {
+        latest_version: 1,
+        user_id: userId,
+      },
+    }
+
+    const submitIngredients = {
+      data: values.ingredients,
+    }
+
+    const recipeVersion = {
+      recipe,
+      prep_time_minutes,
+      cook_time_minutes,
+      name: values.name,
+      servings: values.servings,
+      ingredients: submitIngredients,
+      instructions: submitInstructions,
+    }
+
+    // console.log(recipeVersion)
+    insertRecipe({
+      variables: { objects: recipeVersion },
+    })
+  }
+
   return (
     <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>
+      {/* TODO: Add validation */}
       <Formik
         initialValues={{
           name,
@@ -170,16 +247,7 @@ const RecipeForm = ({
           image_url,
           privateRecipe,
         }}
-        onSubmit={values => {
-          console.log(values)
-          console.log(parseTime(values.prep_time))
-          console.log(parseTime(values.cook_time))
-
-          setTimeout(() => {
-            // eslint-disable-next-line no-alert
-            alert(JSON.stringify(values, null, 2))
-          }, 500)
-        }}
+        onSubmit={handleSubmit}
       >
         {({ values, handleChange }) => (
           <Form>
@@ -267,9 +335,6 @@ const RecipeForm = ({
               onChange={handleChange}
               placeholder="Place each step on a new line"
             />
-            {/* TODO:
-              On submit, we'll need to convert the time values into minutes before
-          */}
             <div sx={{ display: `flex`, justifyContent: `space-between` }}>
               <div sx={{ display: `flex`, flexDirection: `column` }}>
                 <Label htmlFor="prep_time">Prep Time</Label>
@@ -313,12 +378,25 @@ const RecipeForm = ({
                 />
               </div>
             </div>
-            {/* <ImageDropzone /> */}
-            <Previews />
+
+            <ImageDropZone />
             {/* TODO:
-              - Add tags
-              - Add image input */}
-            <div sx={{ display: `flex`, justifyContent: `flex-end`, py: `3` }}>
+              - Add tags */}
+            <div
+              sx={{
+                display: `flex`,
+                justifyContent: `flex-end`,
+                py: `3`,
+                alignItems: `center`,
+              }}
+            >
+              <Spinner
+                size="30"
+                sx={{
+                  display: loading ? `initial` : `none`,
+                  mr: `4`,
+                }}
+              />
               <Button type="submit" sx={{ variant: `buttons.submit` }}>
                 Submit
               </Button>
