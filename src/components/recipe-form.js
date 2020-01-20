@@ -17,8 +17,12 @@ import { useDropzone } from 'react-dropzone'
 import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
+import axios from 'axios'
 
 import { parseTime } from '../utils/parseTime'
+
+const API_ENDPOINT =
+  'https://0qup50mcf6.execute-api.us-west-2.amazonaws.com/Prod'
 
 const INSERT_RECIPE = gql`
   mutation InsertRecipe($objects: [recipe_version_insert_input!]!) {
@@ -67,12 +71,47 @@ const UNITS = [
   'quart',
 ]
 
-const ImageDropZone = () => {
+const uploadImageToS3 = async (file, submitMutation) => {
+  const reader = new FileReader()
+
+  reader.onabort = () => console.log('file reading was aborted')
+  reader.onerror = () => console.log('file reading has failed')
+  reader.onload = async () => {
+    const { path } = file
+    // eslint-disable-next-line no-bitwise
+    const ext = path.slice(((path.lastIndexOf('.') - 1) >>> 0) + 2)
+    // TODO: Change from axios to fetch or vice versa
+    const response = await axios({
+      method: 'GET',
+      url: API_ENDPOINT,
+      params: {
+        ext,
+      },
+    })
+
+    const binaryStr = reader.result
+    const blobData = new Blob([binaryStr], { type: `image/${ext}` })
+    const result = await fetch(response.data.uploadURL, {
+      method: 'PUT',
+      body: blobData,
+    })
+
+    let { url } = result
+    url = url.split('?')[0]
+    submitMutation(url)
+  }
+  await reader.readAsArrayBuffer(file)
+
+  return URL
+}
+
+const ImageDropZone = ({ handleImageDrop }) => {
   const [files, setFiles] = useState([])
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: acceptedFiles => {
-      console.log(acceptedFiles)
+      const acceptedFile = acceptedFiles[0]
+      handleImageDrop(acceptedFile)
       setFiles(
         acceptedFiles.map(file => ({
           ...file,
@@ -82,8 +121,6 @@ const ImageDropZone = () => {
     },
     multiple: false,
   })
-
-  console.log(files)
 
   const thumbs = files.map((file, index) => (
     <div
@@ -195,42 +232,51 @@ const RecipeForm = ({
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
+  const [image, setImage] = useState(null)
   const [insertRecipe, { loading }] = useMutation(INSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
 
-  const handleSubmit = values => {
-    const submitInstructions = values.instructions.split('\n')
-    const prep_time_minutes = parseTime(values.prep_time)
-    const cook_time_minutes = parseTime(values.cook_time)
+  const handleImageDrop = imageFile => {
+    setImage(imageFile)
+  }
 
-    const recipe = {
-      data: {
-        latest_version: 1,
-        user_id: userId,
-      },
+  const handleSubmit = async values => {
+    const submitMutation = imageUrl => {
+      const submitInstructions = values.instructions.split('\n')
+      const prep_time_minutes = parseTime(values.prep_time)
+      const cook_time_minutes = parseTime(values.cook_time)
+
+      const recipe = {
+        data: {
+          image_url: imageUrl,
+          latest_version: 1,
+          user_id: userId,
+        },
+      }
+
+      const submitIngredients = {
+        data: values.ingredients,
+      }
+
+      const recipeVersion = {
+        recipe,
+        prep_time_minutes,
+        cook_time_minutes,
+        name: values.name,
+        servings: values.servings,
+        ingredients: submitIngredients,
+        instructions: submitInstructions,
+      }
+
+      insertRecipe({
+        variables: { objects: recipeVersion },
+      })
     }
 
-    const submitIngredients = {
-      data: values.ingredients,
-    }
-
-    const recipeVersion = {
-      recipe,
-      prep_time_minutes,
-      cook_time_minutes,
-      name: values.name,
-      servings: values.servings,
-      ingredients: submitIngredients,
-      instructions: submitInstructions,
-    }
-
-    // console.log(recipeVersion)
-    insertRecipe({
-      variables: { objects: recipeVersion },
-    })
+    await uploadImageToS3(image, submitMutation)
   }
 
   return (
@@ -379,7 +425,7 @@ const RecipeForm = ({
               </div>
             </div>
 
-            <ImageDropZone />
+            <ImageDropZone handleImageDrop={handleImageDrop} />
             {/* TODO:
               - Add tags */}
             <div
