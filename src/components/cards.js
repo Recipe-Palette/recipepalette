@@ -40,7 +40,7 @@ const RecipeCard = ({
   bookmarked = false,
   copied = false,
   recipe: {
-    //id,
+    id,
     image_url,
     upvotes,
     variation_count,
@@ -49,7 +49,10 @@ const RecipeCard = ({
 }) => {
   time = convertTime(cook_time_minutes + prep_time_minutes)
   return (
-    <Link to="/recipe-page" sx={{ color: `text`, textDecoration: `none` }}>
+    <Link
+      to={`/recipe/${id}/latest`}
+      sx={{ color: `text`, textDecoration: `none` }}
+    >
       <Card
         sx={{
           display: `grid`,
