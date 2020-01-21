@@ -37,7 +37,6 @@ const RecipeCard = ({
   time = 0,
   mini = false,
   hearted = false,
-  bookmarked = false,
   copied = false,
   recipe: {
     id,
@@ -45,6 +44,7 @@ const RecipeCard = ({
     upvotes,
     variation_count,
     latest: { name, cook_time_minutes, prep_time_minutes },
+    bookmarks: [bookmark],
   },
 }) => {
   time = convertTime(cook_time_minutes + prep_time_minutes)
@@ -147,7 +147,7 @@ const RecipeCard = ({
             justifyContent: `center`,
           }}
         >
-          <Bookmark size={24} filled={bookmarked} />
+          <Bookmark size={24} filled={bookmark && bookmark.bookmarked} />
         </div>
       </Card>
     </Link>

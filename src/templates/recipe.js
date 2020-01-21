@@ -7,6 +7,7 @@ import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
+import { useAuth } from 'react-use-auth'
 
 import { convertTime } from '../utils/convertTime'
 import Layout from '../components/layout'
@@ -47,12 +48,15 @@ const recipeFragment = gql`
     user {
       name
     }
+    bookmarks(where: { user_id: { _eq: $userId } }) {
+      bookmarked
+    }
   }
   ${versionInfoFragmnt}
 `
 
 const recipeQuery = gql`
-  query($id: Int!) {
+  query($id: Int!, $userId: String!) {
     recipe: recipe_by_pk(id: $id) {
       ...RecipeInformation
     }
@@ -65,6 +69,9 @@ const recipeQuery = gql`
         name
         cook_time_minutes
         prep_time_minutes
+      }
+      bookmarks(where: { user_id: { _eq: $userId } }) {
+        bookmarked
       }
     }
   }
@@ -95,7 +102,7 @@ const Icons = ({ recipe }) => (
       <h2 sx={{ my: `0`, ml: `1` }}>{recipe.copies}</h2>
     </Flex>
     <Flex sx={{ justifyContent: `center` }}>
-      <Bookmark filled={recipe.bookmarked} size="2em" />
+      <Bookmark filled={recipe.bookmark} size="2em" />
     </Flex>
   </div>
 )
@@ -158,9 +165,11 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
+  const { userId } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
+      userId,
     },
   })
   const recipe = loading ? null : recipeData.recipe
@@ -170,6 +179,8 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
   if (loading) {
     return null
   }
+
+  recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
 
   // intelligently assign the recipe.version
   if (versionNumber) {

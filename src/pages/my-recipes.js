@@ -29,6 +29,9 @@ const recipeQuery = gql`
         created_at
         version
       }
+      bookmarks(where: { user_id: { _eq: $user_id } }) {
+        bookmarked
+      }
     }
   }
 `
