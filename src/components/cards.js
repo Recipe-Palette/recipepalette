@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Link, navigate } from 'gatsby'
+import { Link } from 'gatsby'
 import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Heart, Bookmark, Copy } from './icons'
@@ -155,25 +155,27 @@ const RecipeCard = ({
 }
 
 const NewCard = () => (
-  <Card
-    sx={{
-      display: `flex`,
-      alignItems: `center`,
-      justifyContent: `center`,
-      color: `border`,
-      fontSize: `3`,
-      py: `4`,
-      px: `4`,
-      borderRadius: `1`,
-      textAlign: `center`,
-      border: theme => `1px dashed ${theme.colors.border}`,
-      backgroundColor: `background`,
-      transition: `0.3s all`,
-    }}
-    onClick={() => navigate(`/recipe/new`)}
-  >
-    + Add New
-  </Card>
+  <Link to="/recipe/new" sx={{ textDecoration: `none` }}>
+    <Card
+      sx={{
+        display: `flex`,
+        alignItems: `center`,
+        justifyContent: `center`,
+        color: `border`,
+        fontSize: `3`,
+        py: `4`,
+        px: `4`,
+        borderRadius: `1`,
+        textAlign: `center`,
+        border: theme => `1px dashed ${theme.colors.border}`,
+        backgroundColor: `background`,
+        transition: `0.3s all`,
+        height: `100%`,
+      }}
+    >
+      + Add New
+    </Card>
+  </Link>
 )
 
 export { NewCard, RecipeCard, CategoryCard }
