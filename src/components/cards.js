@@ -25,7 +25,6 @@ const CategoryCard = ({ image, name }) => {
           color: `background`,
           fontSize: `5`,
           cursor: `pointer`,
-          border: theme => `1px solid ${theme.colors.border}`,
         }}
       >
         {name}
