@@ -230,13 +230,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
           >
             <Flex sx={{ justifyContent: `space-between` }}>
               <Button
-                onClick={() => navigate('/recipe-page')}
+                onClick={() => navigate(`/recipe/${recipe.id}/variant`)}
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Create new version
               </Button>
               <Button
-                onClick={() => navigate('/recipe-page')}
+                onClick={() => navigate(`/recipe/${recipe.id}/edit`)}
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Edit recipe
