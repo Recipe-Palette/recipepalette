@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Heart, Bookmark, Copy } from './icons'
@@ -25,6 +25,7 @@ const CategoryCard = ({ image, name }) => {
           color: `background`,
           fontSize: `5`,
           cursor: `pointer`,
+          border: theme => `1px solid ${theme.colors.border}`,
         }}
       >
         {name}
@@ -166,10 +167,11 @@ const NewCard = () => (
       px: `4`,
       borderRadius: `1`,
       textAlign: `center`,
-      border: `1px dashed rgba(202, 204, 206, 0.6)`,
+      border: theme => `1px dashed ${theme.colors.border}`,
       backgroundColor: `background`,
       transition: `0.3s all`,
     }}
+    onClick={() => navigate(`/recipe/new`)}
   >
     + Add New
   </Card>
