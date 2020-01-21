@@ -233,8 +233,10 @@ const RecipeForm = ({
 }) => {
   const { userId } = useAuth()
   const [image, setImage] = useState(null)
-  const [insertRecipe, { loading }] = useMutation(INSERT_RECIPE, {
+  const [saving, setSaving] = useState(false)
+  const [insertRecipe] = useMutation(INSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
+      setSaving(false)
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
@@ -244,6 +246,7 @@ const RecipeForm = ({
   }
 
   const handleSubmit = async values => {
+    setSaving(true)
     const submitMutation = imageUrl => {
       const submitInstructions = values.instructions.split('\n')
       const prep_time_minutes = parseTime(values.prep_time)
@@ -439,7 +442,7 @@ const RecipeForm = ({
               <Spinner
                 size="30"
                 sx={{
-                  display: loading ? `initial` : `none`,
+                  display: saving ? `initial` : `none`,
                   mr: `4`,
                 }}
               />
