@@ -2,7 +2,7 @@
 import { jsx } from 'theme-ui'
 import { Fragment, useState, useEffect } from 'react'
 import { navigate } from 'gatsby'
-import { Formik, Form, FieldArray } from 'formik'
+import { Formik, Form, FieldArray, useField } from 'formik'
 import {
   Label,
   Input,
@@ -18,9 +18,11 @@ import { useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 import axios from 'axios'
+import * as Yup from 'yup'
 
 import { parseTime } from '../utils/parseTime'
 
+//Should move this to a environmental variable
 const API_ENDPOINT =
   'https://0qup50mcf6.execute-api.us-west-2.amazonaws.com/Prod'
 
@@ -70,6 +72,33 @@ const UNITS = [
   'pint',
   'quart',
 ]
+
+const RecipeSchema = Yup.object().shape({
+  name: Yup.string().required('Recipe name is required'),
+  ingredients: Yup.array()
+    .of(
+      Yup.object().shape({
+        amount: Yup.number().required('Required'),
+        unit: Yup.string().required('Required'),
+        name: Yup.string().required('Required'),
+      })
+    )
+    .required('Ingredients are required')
+    .min(1, 'Minimum one ingredient'),
+  instructions: Yup.string().required('Instructions are required'),
+  servings: Yup.number()
+    .positive('Enter a positive number')
+    .required('Servings are required'),
+  prep_time: Yup.string().required('Required'),
+  cook_time: Yup.string().required('Required'),
+})
+
+const ErrorMessage = props => {
+  // eslint-disable-next-line no-unused-vars
+  const [field, meta] = useField(props)
+  const { error, touched } = meta
+  return error && touched ? <div sx={{ color: `error` }}>{error}</div> : null
+}
 
 const uploadImageToS3 = async (file, submitMutation) => {
   const reader = new FileReader()
@@ -219,11 +248,7 @@ const UnitDropdown = props => (
 
 const RecipeForm = ({
   name = '',
-  ingredients = [
-    { name: '', unit: '', amount: '' },
-    { name: '', unit: '', amount: '' },
-    { name: '', unit: '', amount: '' },
-  ],
+  ingredients = [{ name: '', unit: '', amount: '' }],
   instructions = '',
   prep_time = '',
   cook_time = '',
@@ -296,9 +321,10 @@ const RecipeForm = ({
           image_url,
           privateRecipe,
         }}
+        validationSchema={RecipeSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange }) => (
+        {({ values, handleChange, errors, touched }) => (
           <Form>
             <Label htmlFor="name">Recipe name</Label>
             <Input
@@ -308,6 +334,9 @@ const RecipeForm = ({
               value={values.name}
               onChange={handleChange}
             />
+            {errors.name && touched.name ? (
+              <div sx={{ color: `error` }}>{errors.name}</div>
+            ) : null}
             <FieldArray
               name="ingredients"
               render={arrayHelpers => (
@@ -318,7 +347,7 @@ const RecipeForm = ({
                       display: `grid`,
                       gridTemplateColumns: `15% 20% 1fr 15px`,
                       gridGap: `2`,
-                      alignItems: `center`,
+                      alignItems: `baseline`,
                     }}
                   >
                     <small>Amount</small>
@@ -328,25 +357,36 @@ const RecipeForm = ({
                       values.ingredients.length > 0 &&
                       values.ingredients.map((ingredient, index) => (
                         <Fragment key={index}>
-                          <Input
-                            type="number"
-                            inputMode="decimal"
-                            step={0.01}
-                            min={0}
-                            name={`ingredients.${index}.amount`}
-                            value={ingredient.amount}
-                            onChange={handleChange}
-                          />
-                          <UnitDropdown
-                            name={`ingredients.${index}.unit`}
-                            value={ingredient.unit}
-                            onChange={handleChange}
-                          />
-                          <Input
-                            name={`ingredients.${index}.name`}
-                            value={ingredient.name}
-                            onChange={handleChange}
-                          />
+                          <div>
+                            <Input
+                              type="number"
+                              inputMode="decimal"
+                              step={0.01}
+                              min={0}
+                              name={`ingredients.${index}.amount`}
+                              value={ingredient.amount}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage
+                              name={`ingredients[${index}].amount`}
+                            />
+                          </div>
+                          <div>
+                            <UnitDropdown
+                              name={`ingredients.${index}.unit`}
+                              value={ingredient.unit}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage name={`ingredients[${index}].unit`} />
+                          </div>
+                          <div>
+                            <Input
+                              name={`ingredients.${index}.name`}
+                              value={ingredient.name}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage name={`ingredients[${index}].name`} />
+                          </div>
                           <FiTrash2
                             onClick={() => arrayHelpers.remove(index)}
                             sx={{ cursor: `pointer` }}
@@ -384,6 +424,9 @@ const RecipeForm = ({
               onChange={handleChange}
               placeholder="Place each step on a new line"
             />
+            {errors.instructions && touched.instructions ? (
+              <div sx={{ color: `error` }}>{errors.instructions}</div>
+            ) : null}
             <div sx={{ display: `flex`, justifyContent: `space-between` }}>
               <div sx={{ display: `flex`, flexDirection: `column` }}>
                 <Label htmlFor="prep_time">Prep Time</Label>
@@ -399,6 +442,9 @@ const RecipeForm = ({
                     variant: `forms.input`,
                   }}
                 />
+                {errors.prep_time && touched.prep_time ? (
+                  <div sx={{ color: `error` }}>{errors.prep_time}</div>
+                ) : null}
               </div>
               <div sx={{ display: `flex`, flexDirection: `column`, px: `3` }}>
                 <Label htmlFor="cook_time">Cook Time</Label>
@@ -414,6 +460,9 @@ const RecipeForm = ({
                     variant: `forms.input`,
                   }}
                 />
+                {errors.cook_time && touched.cook_time ? (
+                  <div sx={{ color: `error` }}>{errors.cook_time}</div>
+                ) : null}
               </div>
               <div sx={{ display: `flex`, flexDirection: `column` }}>
                 <Label htmlFor="servings">Servings</Label>
@@ -425,6 +474,9 @@ const RecipeForm = ({
                   value={values.servings}
                   onChange={handleChange}
                 />
+                {errors.servings && touched.servings ? (
+                  <div sx={{ color: `error` }}>{errors.servings}</div>
+                ) : null}
               </div>
             </div>
 

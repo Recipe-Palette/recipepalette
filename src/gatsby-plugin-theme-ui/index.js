@@ -26,6 +26,7 @@ export default {
     hearted: '#FFB7E2',
     copied: '#B1E5F3',
     bookmarked: '#C1E1AE',
+    error: '#C00',
   },
   buttons: {
     primary: {
@@ -116,9 +117,15 @@ export default {
       color: `inherit`,
       bg: `background`,
       borderColor: `border`,
+      error: {
+        borderColor: `error`,
+      },
     },
     textarea: {
       borderColor: `border`,
+      error: {
+        borderColor: `error`,
+      },
     },
     select: {
       borderColor: `border`,
