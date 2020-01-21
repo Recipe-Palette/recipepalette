@@ -23,7 +23,11 @@ const Layout = ({ home, children, location }) => (
       }}
     >
       <Container
-        sx={{ backgroundColor: `background`, borderRadius: `2`, py: `4` }}
+        sx={{
+          backgroundColor: `background`,
+          borderRadius: `2`,
+          py: `4`,
+        }}
       >
         {children}
       </Container>

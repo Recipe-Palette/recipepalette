@@ -40,7 +40,7 @@ const RecipeCard = ({
   bookmarked = false,
   copied = false,
   recipe: {
-    //id,
+    id,
     image_url,
     upvotes,
     variation_count,
@@ -49,7 +49,10 @@ const RecipeCard = ({
 }) => {
   time = convertTime(cook_time_minutes + prep_time_minutes)
   return (
-    <Link to="/recipe-page" sx={{ color: `text`, textDecoration: `none` }}>
+    <Link
+      to={`/recipe/${id}/latest`}
+      sx={{ color: `text`, textDecoration: `none` }}
+    >
       <Card
         sx={{
           display: `grid`,
@@ -152,24 +155,27 @@ const RecipeCard = ({
 }
 
 const NewCard = () => (
-  <Card
-    sx={{
-      display: `flex`,
-      alignItems: `center`,
-      justifyContent: `center`,
-      color: `border`,
-      fontSize: `3`,
-      py: `4`,
-      px: `4`,
-      borderRadius: `1`,
-      textAlign: `center`,
-      border: `1px dashed rgba(202, 204, 206, 0.6)`,
-      backgroundColor: `background`,
-      transition: `0.3s all`,
-    }}
-  >
-    + Add New
-  </Card>
+  <Link to="/recipe/new" sx={{ textDecoration: `none` }}>
+    <Card
+      sx={{
+        display: `flex`,
+        alignItems: `center`,
+        justifyContent: `center`,
+        color: `border`,
+        fontSize: `3`,
+        py: `4`,
+        px: `4`,
+        borderRadius: `1`,
+        textAlign: `center`,
+        border: theme => `1px dashed ${theme.colors.border}`,
+        backgroundColor: `background`,
+        transition: `0.3s all`,
+        height: `100%`,
+      }}
+    >
+      + Add New
+    </Card>
+  </Link>
 )
 
 export { NewCard, RecipeCard, CategoryCard }
