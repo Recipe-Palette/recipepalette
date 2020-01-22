@@ -44,6 +44,7 @@
     "intersection-observer": "^0.7.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
+    "query-string": "^6.10.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-dropzone": "^10.2.1",
