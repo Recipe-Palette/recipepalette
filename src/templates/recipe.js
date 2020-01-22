@@ -45,34 +45,6 @@ const recipeQuery = gql`
   ${bookmarkInformationFragment}
 `
 
-// const UPSERT_BOOKMARK = gql`
-//   mutation UpsertBookmark(
-//     $user_id: String!
-//     $recipe_id: Int!
-//     $bookmarked: Boolean!
-//   ) {
-//     insert_bookmark(
-//       objects: {
-//         recipe_id: $recipe_id
-//         user_id: $user_id
-//         bookmarked: $bookmarked
-//       }
-//       on_conflict: {
-//         constraint: bookmark_recipe_id_user_id_key
-//         update_columns: bookmarked
-//       }
-//     ) {
-//       affected_rows
-//       returning {
-//         id
-//         bookmarked
-//         recipe_id
-//         user_id
-//       }
-//     }
-//   }
-// `
-
 const Icons = ({ recipe, toggleBookmark }) => {
   const [bookmarked, setBookmarked] = useState(recipe.bookmark)
   return (
@@ -174,11 +146,7 @@ const TimingSmall = ({ recipe }) => (
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId } = useAuth()
-  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK, {
-    onCompleted({ insert_bookmark: result }) {
-      console.log(result)
-    },
-  })
+  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK)
 
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {

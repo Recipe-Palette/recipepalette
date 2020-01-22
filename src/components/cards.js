@@ -52,11 +52,7 @@ const RecipeCard = ({
   },
 }) => {
   const [bookmarked, setBookmarked] = useState(bookmark && bookmark.bookmarked)
-  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK, {
-    onCompleted({ insert_bookmark: result }) {
-      console.log(result)
-    },
-  })
+  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK)
   const { userId } = useAuth()
 
   const toggleBookmark = e => {
