@@ -38,4 +38,15 @@ const recipeInformationFragment = gql`
   ${versionInfoFragment}
 `
 
-export { versionInfoFragment, recipeInformationFragment }
+const bookmarkInformationFragment = gql`
+  fragment BookmarkInformation on bookmark {
+    id
+    bookmarked
+  }
+`
+
+export {
+  versionInfoFragment,
+  recipeInformationFragment,
+  bookmarkInformationFragment,
+}

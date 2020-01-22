@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-
 import Title from '../components/title'
 import Layout from '../components/layout'
 import { NewCard, RecipeCard } from '../components/cards'
@@ -9,7 +8,7 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 
-//import recipes from '../../data/recipes'
+import { bookmarkInformationFragment } from '../graphql/fragments'
 
 const recipeQuery = gql`
   query MyQuery($user_id: String!) {
@@ -29,8 +28,12 @@ const recipeQuery = gql`
         created_at
         version
       }
+      bookmarks(where: { user_id: { _eq: $user_id } }) {
+        ...BookmarkInformation
+      }
     }
   }
+  ${bookmarkInformationFragment}
 `
 
 export default ({ location }) => {
