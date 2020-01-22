@@ -1,13 +1,17 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
+import { useState } from 'react'
 import { Link } from 'gatsby'
 import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Heart, Bookmark, Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
+import { useMutation } from '@apollo/react-hooks'
 
 import BackgroundImage from 'gatsby-background-image'
+import { UPSERT_BOOKMARK } from '../graphql/mutations'
+import { useAuth } from 'react-use-auth'
 
 const CategoryCard = ({ image, name }) => {
   return (
@@ -47,6 +51,26 @@ const RecipeCard = ({
     bookmarks: [bookmark],
   },
 }) => {
+  const [bookmarked, setBookmarked] = useState(bookmark && bookmark.bookmarked)
+  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK, {
+    onCompleted({ insert_bookmark: result }) {
+      console.log(result)
+    },
+  })
+  const { userId } = useAuth()
+
+  const toggleBookmark = e => {
+    e.preventDefault()
+    setBookmarked(!bookmarked)
+    upsertBookmark({
+      variables: {
+        user_id: userId,
+        recipe_id: id,
+        bookmarked: !bookmarked,
+      },
+    })
+  }
+
   time = convertTime(cook_time_minutes + prep_time_minutes)
   return (
     <Link
@@ -147,7 +171,7 @@ const RecipeCard = ({
             justifyContent: `center`,
           }}
         >
-          <Bookmark size={24} filled={bookmark && bookmark.bookmarked} />
+          <Bookmark size={24} filled={bookmarked} onClick={toggleBookmark} />
         </div>
       </Card>
     </Link>

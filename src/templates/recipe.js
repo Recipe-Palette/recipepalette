@@ -15,12 +15,19 @@ import { findRecipeVersion } from '../utils/findRecipeVersion'
 import Layout from '../components/layout'
 import { Heart, Copy, Bookmark } from '../components/icons'
 import { RecipeCard } from '../components/cards'
-import { recipeInformationFragment } from '../graphql/fragments'
+import {
+  recipeInformationFragment,
+  bookmarkInformationFragment,
+} from '../graphql/fragments'
+import { UPSERT_BOOKMARK } from '../graphql/mutations'
 
 const recipeQuery = gql`
   query($id: Int!, $userId: String!) {
     recipe: recipe_by_pk(id: $id) {
       ...RecipeInformation
+      bookmarks(where: { user_id: { _eq: $userId } }) {
+        ...BookmarkInformation
+      }
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
       id
@@ -32,42 +39,39 @@ const recipeQuery = gql`
         cook_time_minutes
         prep_time_minutes
       }
-      bookmarks(where: { user_id: { _eq: $userId } }) {
-        bookmarked
-        id
-      }
     }
   }
   ${recipeInformationFragment}
+  ${bookmarkInformationFragment}
 `
 
-const UPSERT_BOOKMARK = gql`
-  mutation UpsertBookmark(
-    $user_id: String!
-    $recipe_id: Int!
-    $bookmarked: Boolean!
-  ) {
-    insert_bookmark(
-      objects: {
-        recipe_id: $recipe_id
-        user_id: $user_id
-        bookmarked: $bookmarked
-      }
-      on_conflict: {
-        constraint: bookmark_recipe_id_user_id_key
-        update_columns: bookmarked
-      }
-    ) {
-      affected_rows
-      returning {
-        id
-        bookmarked
-        recipe_id
-        user_id
-      }
-    }
-  }
-`
+// const UPSERT_BOOKMARK = gql`
+//   mutation UpsertBookmark(
+//     $user_id: String!
+//     $recipe_id: Int!
+//     $bookmarked: Boolean!
+//   ) {
+//     insert_bookmark(
+//       objects: {
+//         recipe_id: $recipe_id
+//         user_id: $user_id
+//         bookmarked: $bookmarked
+//       }
+//       on_conflict: {
+//         constraint: bookmark_recipe_id_user_id_key
+//         update_columns: bookmarked
+//       }
+//     ) {
+//       affected_rows
+//       returning {
+//         id
+//         bookmarked
+//         recipe_id
+//         user_id
+//       }
+//     }
+//   }
+// `
 
 const Icons = ({ recipe, toggleBookmark }) => {
   const [bookmarked, setBookmarked] = useState(recipe.bookmark)
@@ -175,12 +179,14 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
       console.log(result)
     },
   })
+
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
       userId,
     },
   })
+
   const recipe = loading ? null : recipeData.recipe
   const variants = loading ? null : recipeData.variants
 
