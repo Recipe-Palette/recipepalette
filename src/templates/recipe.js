@@ -1,11 +1,12 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
+import { useState } from 'react'
 import { navigate } from 'gatsby'
 import { Flex, Divider, Button } from '@theme-ui/components'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
 import { useAuth } from 'react-use-auth'
 
@@ -72,40 +73,82 @@ const recipeQuery = gql`
       }
       bookmarks(where: { user_id: { _eq: $userId } }) {
         bookmarked
+        id
       }
     }
   }
   ${recipeFragment}
 `
 
-const Icons = ({ recipe }) => (
-  <div
-    sx={{
-      my: `2`,
-      mb: `3`,
+const UPSERT_BOOKMARK = gql`
+  mutation UpsertBookmark(
+    $user_id: String!
+    $recipe_id: Int!
+    $bookmarked: Boolean!
+  ) {
+    insert_bookmark(
+      objects: {
+        recipe_id: $recipe_id
+        user_id: $user_id
+        bookmarked: $bookmarked
+      }
+      on_conflict: {
+        constraint: bookmark_recipe_id_user_id_key
+        update_columns: bookmarked
+      }
+    ) {
+      affected_rows
+      returning {
+        id
+        bookmarked
+        recipe_id
+        user_id
+      }
+    }
+  }
+`
 
-      order: 1,
-      justifyContent: [`space-evenly`, `space-between`],
-      width: [`100%`, `50%`],
-      display: [`grid`, `flex`],
-      gridTemplateColumns: `repeat(3, 1fr)`,
-      alignSelf: `flex-start`,
-      ml: [`0`, `3`],
-    }}
-  >
-    <Flex sx={{ mr: [`0`], alignItems: `center`, justifyContent: `center` }}>
-      <Heart filled={recipe.hearted} size="2em" />{' '}
-      <h2 sx={{ my: `0`, ml: `1` }}>{recipe.hearts}</h2>
-    </Flex>
-    <Flex sx={{ alignItems: `center`, justifyContent: `center` }}>
-      <Copy filled={recipe.copied} size="2em" />{' '}
-      <h2 sx={{ my: `0`, ml: `1` }}>{recipe.copies}</h2>
-    </Flex>
-    <Flex sx={{ justifyContent: `center` }}>
-      <Bookmark filled={recipe.bookmark} size="2em" />
-    </Flex>
-  </div>
-)
+const Icons = ({ recipe, toggleBookmark }) => {
+  const [bookmarked, setBookmarked] = useState(recipe.bookmark)
+  return (
+    <div
+      sx={{
+        my: `2`,
+        mb: `3`,
+
+        order: 1,
+        justifyContent: [`space-evenly`, `space-between`],
+        width: [`100%`, `50%`],
+        display: [`grid`, `flex`],
+        gridTemplateColumns: `repeat(3, 1fr)`,
+        alignSelf: `flex-start`,
+        ml: [`0`, `3`],
+      }}
+    >
+      <Flex sx={{ mr: [`0`], alignItems: `center`, justifyContent: `center` }}>
+        <Heart filled={recipe.hearted} size="2em" />{' '}
+        <h2 sx={{ my: `0`, ml: `1` }}>{recipe.hearts}</h2>
+      </Flex>
+      <Flex sx={{ alignItems: `center`, justifyContent: `center` }}>
+        <Copy filled={recipe.copied} size="2em" />{' '}
+        <h2 sx={{ my: `0`, ml: `1` }}>{recipe.copies}</h2>
+      </Flex>
+      <Flex sx={{ justifyContent: `center` }}>
+        <Bookmark
+          filled={bookmarked}
+          sx={{
+            cursor: `pointer`,
+          }}
+          size="2em"
+          onClick={() => {
+            setBookmarked(!bookmarked)
+            toggleBookmark(bookmarked)
+          }}
+        />
+      </Flex>
+    </div>
+  )
+}
 
 const TimingSmall = ({ recipe }) => (
   <Flex
@@ -166,6 +209,11 @@ const TimingSmall = ({ recipe }) => (
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId } = useAuth()
+  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK, {
+    onCompleted({ insert_bookmark: result }) {
+      console.log(result)
+    },
+  })
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
@@ -178,6 +226,16 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
   // stop gap loading solution
   if (loading) {
     return null
+  }
+
+  const toggleBookmark = bookmarked => {
+    upsertBookmark({
+      variables: {
+        user_id: userId,
+        recipe_id: recipeId,
+        bookmarked: !bookmarked,
+      },
+    })
   }
 
   recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
@@ -206,7 +264,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             <h1 sx={{ mb: `1` }}>{recipe.version.name}</h1>
             <p>by {recipe.user.name}</p>
           </div>
-          <Icons recipe={recipe} />
+          <Icons recipe={recipe} toggleBookmark={toggleBookmark} />
         </Flex>
         <div
           sx={{
