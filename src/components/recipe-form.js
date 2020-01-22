@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Fragment, useState, useEffect } from 'react'
@@ -20,7 +21,7 @@ import { useAuth } from 'react-use-auth'
 import axios from 'axios'
 import * as Yup from 'yup'
 
-import { parseTime } from '../utils/parseTime'
+import { parseTime, formatTime } from '../utils/parseTime'
 
 //Should move this to a environmental variable
 const API_ENDPOINT =
@@ -418,7 +419,7 @@ const RecipeForm = ({
             />
             <Label htmlFor="instructions">Instructions</Label>
             <Textarea
-              value={values.instructions}
+              value={values.instructions && values.instructions.join('\n')}
               id="instructions"
               rows={6}
               onChange={handleChange}
@@ -436,7 +437,7 @@ const RecipeForm = ({
                   inputMode="numeric"
                   placeholder="hh:mm"
                   options={{ time: true, timePattern: ['h', 'm'] }}
-                  value={values.prep_time}
+                  value={values.prep_time && formatTime(values.prep_time)}
                   onChange={handleChange}
                   sx={{
                     variant: `forms.input`,
@@ -454,7 +455,7 @@ const RecipeForm = ({
                   inputMode="numeric"
                   placeholder="hh:mm"
                   options={{ time: true, timePattern: ['h', 'm'] }}
-                  value={values.cook_time}
+                  value={values.cook_time && formatTime(values.cook_time)}
                   onChange={handleChange}
                   sx={{
                     variant: `forms.input`,

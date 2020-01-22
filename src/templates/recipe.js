@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { useState } from 'react'
-import { navigate } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { Flex, Divider, Button } from '@theme-ui/components'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
@@ -11,50 +11,11 @@ import { isEmpty } from 'lodash'
 import { useAuth } from 'react-use-auth'
 
 import { convertTime } from '../utils/convertTime'
+import { findRecipeVersion } from '../utils/findRecipeVersion'
 import Layout from '../components/layout'
 import { Heart, Copy, Bookmark } from '../components/icons'
 import { RecipeCard } from '../components/cards'
-
-const versionInfoFragmnt = gql`
-  fragment VersionInformation on recipe_version {
-    id
-    name
-    prep_time_minutes
-    cook_time_minutes
-    servings
-    instructions
-    version
-    ingredients {
-      name
-      amount
-      unit
-    }
-  }
-`
-
-const recipeFragment = gql`
-  fragment RecipeInformation on recipe {
-    id
-    image_url
-    upvotes
-    private
-    variation_count
-    latest_version
-    latest {
-      ...VersionInformation
-    }
-    versions {
-      ...VersionInformation
-    }
-    user {
-      name
-    }
-    bookmarks(where: { user_id: { _eq: $userId } }) {
-      bookmarked
-    }
-  }
-  ${versionInfoFragmnt}
-`
+import { recipeInformationFragment } from '../graphql/fragments'
 
 const recipeQuery = gql`
   query($id: Int!, $userId: String!) {
@@ -77,7 +38,7 @@ const recipeQuery = gql`
       }
     }
   }
-  ${recipeFragment}
+  ${recipeInformationFragment}
 `
 
 const UPSERT_BOOKMARK = gql`
@@ -240,14 +201,8 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
 
   recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
 
-  // intelligently assign the recipe.version
-  if (versionNumber) {
-    recipe.version = {
-      ...recipe.versions.find(v => v.version == versionNumber),
-    }
-  } else {
-    recipe.version = { ...recipe.latest }
-  }
+  // intelligently assign the recipe.version to the correct version number
+  recipe.version = findRecipeVersion(recipe, versionNumber)
 
   // stop gap solution to display error if no version is found
   if (isEmpty(recipe.version)) return 'Version not found'
@@ -262,7 +217,14 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
         <Flex sx={{ flexDirection: [`column`, `row`] }}>
           <div sx={{ width: `100%` }}>
             <h1 sx={{ mb: `1` }}>{recipe.version.name}</h1>
-            <p>by {recipe.user.name}</p>
+            <div sx={{ display: `flex`, flexDirection: `row`, mb: `2` }}>
+              <div>by {recipe.user.name}</div>
+
+              <div sx={{ ml: `3` }}>Version {recipe.latest.version}</div>
+              <div sx={{ ml: `3` }}>
+                <Link to={`/recipe/${recipeId}/log`}>View edit log</Link>
+              </div>
+            </div>
           </div>
           <Icons recipe={recipe} toggleBookmark={toggleBookmark} />
         </Flex>
@@ -299,13 +261,21 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
           >
             <Flex sx={{ justifyContent: `space-between` }}>
               <Button
-                onClick={() => navigate(`/recipe/${recipe.id}/variant`)}
+                onClick={() =>
+                  navigate(
+                    `/recipe/${recipe.id}/${versionNumber || `latest`}/variant`
+                  )
+                }
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Create new version
               </Button>
               <Button
-                onClick={() => navigate(`/recipe/${recipe.id}/edit`)}
+                onClick={() =>
+                  navigate(
+                    `/recipe/${recipe.id}/${versionNumber || `latest`}/edit`
+                  )
+                }
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
                 Edit recipe
