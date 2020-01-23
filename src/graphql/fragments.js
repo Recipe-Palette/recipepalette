@@ -45,8 +45,23 @@ const bookmarkInformationFragment = gql`
   }
 `
 
+const recipeCardInformationFragment = gql`
+  fragment RecipeCardInformation on recipe {
+    id
+    upvotes
+    variation_count
+    image_url
+    latest {
+      name
+      prep_time_minutes
+      cook_time_minutes
+    }
+  }
+`
+
 export {
   versionInfoFragment,
   recipeInformationFragment,
   bookmarkInformationFragment,
+  recipeCardInformationFragment,
 }
