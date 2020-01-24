@@ -8,44 +8,65 @@ import { useAuth } from 'react-use-auth'
 import Layout from '../components/layout'
 import Title from '../components/title'
 import { RecipeCard } from '../components/cards'
-import { bookmarkInformationFragment } from '../graphql/fragments'
+import {
+  bookmarkInformationFragment,
+  recipeCardInformationFragment,
+} from '../graphql/fragments'
 
 const SEARCH_QUERY = gql`
-  query SearchQuery($q: String!, $user_id: String!) {
-    recipes: recipe(
-      distinct_on: id
-      where: { latest: { name: { _ilike: $q } } }
-    ) {
-      id
-      upvotes
-      variation_count
-      image_url
-      latest {
-        name
-        prep_time_minutes
-        cook_time_minutes
-      }
+  query SearchQuery($whereClause: recipe_bool_exp!, $user_id: String!) {
+    recipes: recipe(distinct_on: id, where: $whereClause) {
+      ...RecipeCardInformation
       bookmarks(where: { user_id: { _eq: $user_id } }) {
         ...BookmarkInformation
       }
     }
   }
   ${bookmarkInformationFragment}
+  ${recipeCardInformationFragment}
 `
+
+// Function to dynamically create where clause based on query string inputs
+const createWhereClase = parsedSearch => {
+  const { q, ingredients } = parsedSearch
+  const whereClause = {}
+  if (q) {
+    whereClause.latest = {
+      name: {
+        _ilike: `%${q}%`,
+      },
+    }
+  }
+
+  if (ingredients) {
+    let ingredientQuery = ingredients
+    if (typeof ingredients === 'object') {
+      ingredientQuery = ingredients.join('|')
+    }
+    whereClause.ingredients = {
+      name: {
+        _similar: `%(${ingredientQuery})%`,
+      },
+    }
+  }
+
+  return whereClause
+}
 
 const Search = ({ location }) => {
   const { userId } = useAuth()
-  const parsedSearch = queryString.parse(location.search)
+  const parsedSearch = queryString.parse(location.search, {
+    arrayFormat: 'comma',
+  })
   const { q } = parsedSearch
+  const whereClause = createWhereClase(parsedSearch)
+
   const { data: searchData, loading } = useQuery(SEARCH_QUERY, {
     variables: {
-      q: `%${q}%`,
+      whereClause,
       user_id: userId || '',
     },
   })
-  console.log(userId)
-  console.log(loading)
-  console.log(searchData)
 
   if (loading) {
     return null
