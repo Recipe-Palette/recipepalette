@@ -27,41 +27,6 @@ import ImageDropZone from './image-dropzone'
 const API_ENDPOINT =
   'https://0qup50mcf6.execute-api.us-west-2.amazonaws.com/Prod'
 
-// const INSERT_RECIPE = gql`
-//   mutation InsertRecipe($objects: [recipe_version_insert_input!]!) {
-//     insert_recipe_version(objects: $objects) {
-//       returning {
-//         name
-//         id
-//         version
-//         recipe {
-//           id
-//         }
-//       }
-//     }
-//   }
-// `
-
-// const UPDATE_RECIPE = gql`
-//   mutation UpdateRecipe(
-//     $version: [recipe_version_insert_input!]!
-//     $recipe_id: Int!
-//     $recipe: recipe_set_input
-//   ) {
-//     insert_recipe_version(objects: $version) {
-//       returning {
-//         name
-//         id
-//         version
-//         recipe {
-//           id
-//         }
-//       }
-//     }
-//     update_recipe(where: { id: { _eq: $recipe_id } }, _set: $recipe)
-//   }
-// `
-
 const UNITS = [
   '---',
   'tsp',
@@ -137,101 +102,6 @@ const uploadImageToS3 = async (file, submitMutation) => {
   await reader.readAsArrayBuffer(file)
 }
 
-// const ImageDropZone = ({ handleImageDrop, image_url, name }) => {
-//   const [file, setFile] = useState(null)
-//   const { getRootProps, getInputProps } = useDropzone({
-//     accept: 'image/*',
-//     onDrop: acceptedFiles => {
-//       const acceptedFile = acceptedFiles[0]
-//       handleImageDrop(acceptedFile)
-//       setFile({ ...acceptedFile, preview: URL.createObjectURL(acceptedFile) })
-//     },
-//     multiple: false,
-//   })
-
-//   const src = file ? file.preview : image_url
-//   const alt = file ? file.name : name
-
-//   const thumb =
-//     src.length > 0 ? (
-//       <div
-//         sx={{
-//           display: `flex`,
-//           justifyContent: `center`,
-//           p: `3`,
-//           maxHeight: ``,
-//         }}
-//       >
-//         <img
-//           src={src}
-//           alt={alt}
-//           sx={{
-//             maxWidth: `100%`,
-//             maxHeight: [`400px`, `auto`],
-//           }}
-//         />
-//       </div>
-//     ) : null
-
-//   return (
-//     <div
-//       sx={{
-//         display: `flex`,
-//         flexDirection: `column`,
-//         mt: `4`,
-//         backgroundColor: `#fafafa`,
-//         '& > p': {
-//           fontSize: `1rem`,
-//         },
-
-//         '& > em': {
-//           fontSize: `.8rem`,
-//         },
-//       }}
-//     >
-//       <div
-//         {...getRootProps({ className: 'dropzone' })}
-//         sx={{
-//           flex: 1,
-//           display: `flex`,
-//           flexDirection: `column`,
-//           alignItems: `center`,
-//           padding: `20px`,
-//           borderWidth: `2px`,
-//           borderRadius: `2px`,
-//           borderColor: `#eeeeee`,
-//           borderStyle: `dashed`,
-//           backgroundColor: `#fafafa`,
-//           color: `#bdbdbd`,
-//           outline: `none`,
-//           transition: `border .24s ease-in-out`,
-
-//           '&:focus': {
-//             borderColor: `#2196f3`,
-//           },
-//         }}
-//       >
-//         <input {...getInputProps()} />
-//         <p sx={{ mb: `0` }}>
-//           Drag 'n' drop an image here, or click to select an image
-//         </p>
-//       </div>
-//       <div
-//         sx={{
-//           display: `flex`,
-//           justifyContent: `center`,
-//           borderColor: `#eeeeee`,
-//           borderStyle: `solid`,
-//           borderWidth: src ? `2px` : `0px`,
-//           borderTop: `none`,
-//         }}
-//       >
-//         {thumb}
-//       </div>
-//     </div>
-//   )
-// }
-
 const UnitDropdown = props => (
   <Select {...props}>
     {UNITS.map((unit, index) => (
@@ -255,12 +125,6 @@ const RecipeForm = ({
   const { userId } = useAuth()
   const [image, setImage] = useState(null)
   const [saving, setSaving] = useState(false)
-  // const [insertRecipe] = useMutation(INSERT_RECIPE, {
-  //   onCompleted({ insert_recipe_version: result }) {
-  //     setSaving(false)
-  //     navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
-  //   },
-  // })
   const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
       setSaving(false)
@@ -281,44 +145,6 @@ const RecipeForm = ({
         latest_version,
         imageUrl
       )
-      // const submitInstructions = values.instructions.split('\n')
-      // console.log(submitInstructions)
-      // console.log(values)
-      // const prep_time_minutes = parseTime(values.prep_time)
-      // const cook_time_minutes = parseTime(values.cook_time)
-
-      // const recipe = {
-      //   data: {
-      //     image_url: imageUrl,
-      //     latest_version: latest_version + 1,
-      //     user_id: userId,
-      //   },
-      //   on_conflict: {
-      //     constraint: 'recipe_info_pkey',
-      //     update_columns: ['image_url', 'latest_version', 'user_id', 'private'],
-      //   },
-      // }
-
-      // const submitIngredients = {
-      //   data: values.ingredients,
-      // }
-
-      // const recipeVersion = {
-      //   recipe,
-      //   prep_time_minutes,
-      //   cook_time_minutes,
-      //   name: values.name,
-      //   servings: values.servings,
-      //   ingredients: submitIngredients,
-      //   instructions: submitInstructions,
-      //   version: latest_version + 1,
-      // }
-
-      // console.log(recipeVersion)
-
-      // insertRecipe({
-      //   variables: { objects: recipeVersion },
-      // })
       upsertRecipe({
         variables: { objects: recipeVersion },
       })
@@ -329,7 +155,6 @@ const RecipeForm = ({
 
   return (
     <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>
-      {/* TODO: Add validation */}
       <Formik
         initialValues={{
           name,
