@@ -16,31 +16,32 @@ import { FiTrash2, FiPlus } from 'react-icons/fi'
 import Cleave from 'cleave.js/react'
 import { useDropzone } from 'react-dropzone'
 import { useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
+// import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 import axios from 'axios'
 import * as Yup from 'yup'
 
-import { parseTime, formatTime } from '../utils/parseTime'
+import { createRecipeObject } from '../utils/createRecipeObject'
+import { UPSERT_RECIPE } from '../graphql/mutations'
 
 //Should move this to a environmental variable
 const API_ENDPOINT =
   'https://0qup50mcf6.execute-api.us-west-2.amazonaws.com/Prod'
 
-const INSERT_RECIPE = gql`
-  mutation InsertRecipe($objects: [recipe_version_insert_input!]!) {
-    insert_recipe_version(objects: $objects) {
-      returning {
-        name
-        id
-        version
-        recipe {
-          id
-        }
-      }
-    }
-  }
-`
+// const INSERT_RECIPE = gql`
+//   mutation InsertRecipe($objects: [recipe_version_insert_input!]!) {
+//     insert_recipe_version(objects: $objects) {
+//       returning {
+//         name
+//         id
+//         version
+//         recipe {
+//           id
+//         }
+//       }
+//     }
+//   }
+// `
 
 // const UPDATE_RECIPE = gql`
 //   mutation UpdateRecipe(
@@ -102,6 +103,10 @@ const ErrorMessage = props => {
 }
 
 const uploadImageToS3 = async (file, submitMutation) => {
+  if (!file) {
+    submitMutation('')
+    return
+  }
   const reader = new FileReader()
 
   reader.onabort = () => console.log('file reading was aborted')
@@ -131,8 +136,6 @@ const uploadImageToS3 = async (file, submitMutation) => {
     submitMutation(url)
   }
   await reader.readAsArrayBuffer(file)
-
-  return URL
 }
 
 const ImageDropZone = ({ handleImageDrop }) => {
@@ -248,6 +251,7 @@ const UnitDropdown = props => (
 )
 
 const RecipeForm = ({
+  recipe_id = null,
   name = '',
   ingredients = [{ name: '', unit: '', amount: '' }],
   instructions = '',
@@ -255,52 +259,82 @@ const RecipeForm = ({
   cook_time = '',
   servings = '',
   image_url = '',
+  latest_version = 0,
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
   const [image, setImage] = useState(null)
   const [saving, setSaving] = useState(false)
-  const [insertRecipe] = useMutation(INSERT_RECIPE, {
+  // const [insertRecipe] = useMutation(INSERT_RECIPE, {
+  //   onCompleted({ insert_recipe_version: result }) {
+  //     setSaving(false)
+  //     navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
+  //   },
+  // })
+  const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
       setSaving(false)
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
-
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
 
+  console.log('recipe_id:', recipe_id)
+
   const handleSubmit = async values => {
     setSaving(true)
     const submitMutation = imageUrl => {
-      const submitInstructions = values.instructions.split('\n')
-      const prep_time_minutes = parseTime(values.prep_time)
-      const cook_time_minutes = parseTime(values.cook_time)
+      console.log(values)
+      console.log(imageUrl)
+      const recipeVersion = createRecipeObject(
+        values,
+        recipe_id,
+        userId,
+        latest_version,
+        imageUrl
+      )
+      // const submitInstructions = values.instructions.split('\n')
+      // console.log(submitInstructions)
+      // console.log(values)
+      // const prep_time_minutes = parseTime(values.prep_time)
+      // const cook_time_minutes = parseTime(values.cook_time)
 
-      const recipe = {
-        data: {
-          image_url: imageUrl,
-          latest_version: 1,
-          user_id: userId,
-        },
-      }
+      // const recipe = {
+      //   data: {
+      //     image_url: imageUrl,
+      //     latest_version: latest_version + 1,
+      //     user_id: userId,
+      //   },
+      //   on_conflict: {
+      //     constraint: 'recipe_info_pkey',
+      //     update_columns: ['image_url', 'latest_version', 'user_id', 'private'],
+      //   },
+      // }
 
-      const submitIngredients = {
-        data: values.ingredients,
-      }
+      // const submitIngredients = {
+      //   data: values.ingredients,
+      // }
 
-      const recipeVersion = {
-        recipe,
-        prep_time_minutes,
-        cook_time_minutes,
-        name: values.name,
-        servings: values.servings,
-        ingredients: submitIngredients,
-        instructions: submitInstructions,
-      }
+      // const recipeVersion = {
+      //   recipe,
+      //   prep_time_minutes,
+      //   cook_time_minutes,
+      //   name: values.name,
+      //   servings: values.servings,
+      //   ingredients: submitIngredients,
+      //   instructions: submitInstructions,
+      //   version: latest_version + 1,
+      // }
 
-      insertRecipe({
+      // console.log(recipeVersion)
+      console.log(recipeVersion)
+
+      // insertRecipe({
+      //   variables: { objects: recipeVersion },
+      // })
+      upsertRecipe({
         variables: { objects: recipeVersion },
       })
     }
@@ -419,7 +453,7 @@ const RecipeForm = ({
             />
             <Label htmlFor="instructions">Instructions</Label>
             <Textarea
-              value={values.instructions && values.instructions.join('\n')}
+              value={values.instructions}
               id="instructions"
               rows={6}
               onChange={handleChange}
@@ -437,7 +471,7 @@ const RecipeForm = ({
                   inputMode="numeric"
                   placeholder="hh:mm"
                   options={{ time: true, timePattern: ['h', 'm'] }}
-                  value={values.prep_time && formatTime(values.prep_time)}
+                  value={values.prep_time}
                   onChange={handleChange}
                   sx={{
                     variant: `forms.input`,
@@ -455,7 +489,7 @@ const RecipeForm = ({
                   inputMode="numeric"
                   placeholder="hh:mm"
                   options={{ time: true, timePattern: ['h', 'm'] }}
-                  value={values.cook_time && formatTime(values.cook_time)}
+                  value={values.cook_time}
                   onChange={handleChange}
                   sx={{
                     variant: `forms.input`,

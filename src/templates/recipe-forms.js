@@ -9,6 +9,7 @@ import Layout from '../components/layout'
 import Title from '../components/title'
 import RecipeForm from '../components/recipe-form'
 import { versionInfoFragment } from '../graphql/fragments'
+import { formatTime } from '../utils/parseTime'
 
 const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
@@ -43,6 +44,16 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
     recipe.version = {}
   }
 
+  if (recipe.version && recipe.version.ingredients) {
+    const ingredients = recipe.version.ingredients.map(ingredient => ({
+      name: ingredient.name,
+      amount: ingredient.amount,
+      unit: ingredient.unit,
+    }))
+
+    recipe.version.ingredients = ingredients
+  }
+
   return (
     <Layout location={location}>
       <Title sx={{ textAlign: `center` }}>{title}</Title>
@@ -52,13 +63,23 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
         </div>
       ) : (
         <RecipeForm
+          recipe_id={parseInt(recipeId)}
           name={recipe.version && recipe.version.name}
           ingredients={recipe.version && recipe.version.ingredients}
-          instructions={recipe.version && recipe.version.instructions}
-          prep_time={recipe.version && recipe.version.prep_time_minutes}
-          cook_time={recipe.version && recipe.version.cook_time_minutes}
+          instructions={
+            recipe.version &&
+            recipe.version.instructions &&
+            recipe.version.instructions.join('\n')
+          }
+          prep_time={
+            recipe.version && formatTime(recipe.version.prep_time_minutes)
+          }
+          cook_time={
+            recipe.version && formatTime(recipe.version.cook_time_minutes)
+          }
           servings={recipe.version && recipe.version.servings}
           image_url={recipe.version && recipe.version.image_url}
+          latest_version={recipe.latest_version}
         />
       )}
     </Layout>
