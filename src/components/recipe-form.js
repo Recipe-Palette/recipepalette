@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray, useField } from 'formik'
 import {
@@ -14,15 +14,14 @@ import {
 } from '@theme-ui/components'
 import { FiTrash2, FiPlus } from 'react-icons/fi'
 import Cleave from 'cleave.js/react'
-import { useDropzone } from 'react-dropzone'
 import { useMutation } from '@apollo/react-hooks'
-// import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 import axios from 'axios'
 import * as Yup from 'yup'
 
 import { createRecipeObject } from '../utils/createRecipeObject'
 import { UPSERT_RECIPE } from '../graphql/mutations'
+import ImageDropZone from './image-dropzone'
 
 //Should move this to a environmental variable
 const API_ENDPOINT =
@@ -138,109 +137,100 @@ const uploadImageToS3 = async (file, submitMutation) => {
   await reader.readAsArrayBuffer(file)
 }
 
-const ImageDropZone = ({ handleImageDrop }) => {
-  const [files, setFiles] = useState([])
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
-    onDrop: acceptedFiles => {
-      const acceptedFile = acceptedFiles[0]
-      handleImageDrop(acceptedFile)
-      setFiles(
-        acceptedFiles.map(file => ({
-          ...file,
-          preview: URL.createObjectURL(file),
-        }))
-      )
-    },
-    multiple: false,
-  })
+// const ImageDropZone = ({ handleImageDrop, image_url, name }) => {
+//   const [file, setFile] = useState(null)
+//   const { getRootProps, getInputProps } = useDropzone({
+//     accept: 'image/*',
+//     onDrop: acceptedFiles => {
+//       const acceptedFile = acceptedFiles[0]
+//       handleImageDrop(acceptedFile)
+//       setFile({ ...acceptedFile, preview: URL.createObjectURL(acceptedFile) })
+//     },
+//     multiple: false,
+//   })
 
-  const thumbs = files.map((file, index) => (
-    <div
-      key={index}
-      sx={{
-        display: `flex`,
-        justifyContent: `center`,
-        p: `3`,
-        maxHeight: ``,
-      }}
-    >
-      <img
-        src={file.preview}
-        alt={file.name}
-        sx={{
-          maxWidth: `100%`,
-          maxHeight: [`400px`, `auto`],
-        }}
-      />
-    </div>
-  ))
+//   const src = file ? file.preview : image_url
+//   const alt = file ? file.name : name
 
-  useEffect(
-    () => () => {
-      files.forEach(file => URL.revokeObjectURL(file.preview))
-    },
-    [files]
-  )
+//   const thumb =
+//     src.length > 0 ? (
+//       <div
+//         sx={{
+//           display: `flex`,
+//           justifyContent: `center`,
+//           p: `3`,
+//           maxHeight: ``,
+//         }}
+//       >
+//         <img
+//           src={src}
+//           alt={alt}
+//           sx={{
+//             maxWidth: `100%`,
+//             maxHeight: [`400px`, `auto`],
+//           }}
+//         />
+//       </div>
+//     ) : null
 
-  return (
-    <div
-      sx={{
-        display: `flex`,
-        flexDirection: `column`,
-        mt: `4`,
-        backgroundColor: `#fafafa`,
-        '& > p': {
-          fontSize: `1rem`,
-        },
+//   return (
+//     <div
+//       sx={{
+//         display: `flex`,
+//         flexDirection: `column`,
+//         mt: `4`,
+//         backgroundColor: `#fafafa`,
+//         '& > p': {
+//           fontSize: `1rem`,
+//         },
 
-        '& > em': {
-          fontSize: `.8rem`,
-        },
-      }}
-    >
-      <div
-        {...getRootProps({ className: 'dropzone' })}
-        sx={{
-          flex: 1,
-          display: `flex`,
-          flexDirection: `column`,
-          alignItems: `center`,
-          padding: `20px`,
-          borderWidth: `2px`,
-          borderRadius: `2px`,
-          borderColor: `#eeeeee`,
-          borderStyle: `dashed`,
-          backgroundColor: `#fafafa`,
-          color: `#bdbdbd`,
-          outline: `none`,
-          transition: `border .24s ease-in-out`,
+//         '& > em': {
+//           fontSize: `.8rem`,
+//         },
+//       }}
+//     >
+//       <div
+//         {...getRootProps({ className: 'dropzone' })}
+//         sx={{
+//           flex: 1,
+//           display: `flex`,
+//           flexDirection: `column`,
+//           alignItems: `center`,
+//           padding: `20px`,
+//           borderWidth: `2px`,
+//           borderRadius: `2px`,
+//           borderColor: `#eeeeee`,
+//           borderStyle: `dashed`,
+//           backgroundColor: `#fafafa`,
+//           color: `#bdbdbd`,
+//           outline: `none`,
+//           transition: `border .24s ease-in-out`,
 
-          '&:focus': {
-            borderColor: `#2196f3`,
-          },
-        }}
-      >
-        <input {...getInputProps()} />
-        <p sx={{ mb: `0` }}>
-          Drag 'n' drop an image here, or click to select an image
-        </p>
-      </div>
-      <div
-        sx={{
-          display: `flex`,
-          justifyContent: `center`,
-          borderColor: `#eeeeee`,
-          borderStyle: `solid`,
-          borderWidth: files.length > 0 ? `2px` : `0px`,
-          borderTop: `none`,
-        }}
-      >
-        {thumbs}
-      </div>
-    </div>
-  )
-}
+//           '&:focus': {
+//             borderColor: `#2196f3`,
+//           },
+//         }}
+//       >
+//         <input {...getInputProps()} />
+//         <p sx={{ mb: `0` }}>
+//           Drag 'n' drop an image here, or click to select an image
+//         </p>
+//       </div>
+//       <div
+//         sx={{
+//           display: `flex`,
+//           justifyContent: `center`,
+//           borderColor: `#eeeeee`,
+//           borderStyle: `solid`,
+//           borderWidth: src ? `2px` : `0px`,
+//           borderTop: `none`,
+//         }}
+//       >
+//         {thumb}
+//       </div>
+//     </div>
+//   )
+// }
 
 const UnitDropdown = props => (
   <Select {...props}>
@@ -281,13 +271,9 @@ const RecipeForm = ({
     setImage(imageFile)
   }
 
-  console.log('recipe_id:', recipe_id)
-
   const handleSubmit = async values => {
     setSaving(true)
     const submitMutation = imageUrl => {
-      console.log(values)
-      console.log(imageUrl)
       const recipeVersion = createRecipeObject(
         values,
         recipe_id,
@@ -329,7 +315,6 @@ const RecipeForm = ({
       // }
 
       // console.log(recipeVersion)
-      console.log(recipeVersion)
 
       // insertRecipe({
       //   variables: { objects: recipeVersion },
@@ -514,8 +499,11 @@ const RecipeForm = ({
                 ) : null}
               </div>
             </div>
-
-            <ImageDropZone handleImageDrop={handleImageDrop} />
+            <ImageDropZone
+              handleImageDrop={handleImageDrop}
+              image_url={image_url}
+              name={values.name}
+            />
             {/* TODO:
               - Add tags */}
             <div

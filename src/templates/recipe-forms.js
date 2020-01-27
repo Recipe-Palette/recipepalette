@@ -78,7 +78,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
             recipe.version && formatTime(recipe.version.cook_time_minutes)
           }
           servings={recipe.version && recipe.version.servings}
-          image_url={recipe.version && recipe.version.image_url}
+          image_url={recipe.image_url}
           latest_version={recipe.latest_version}
         />
       )}
