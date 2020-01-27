@@ -13,8 +13,11 @@ const parseTime = rawTime => {
 const formatTime = rawMinutes => {
   const hours = Math.floor(rawMinutes / 60)
   const minutes = rawMinutes % 60
+  console.log(minutes)
 
-  return `${hours < 10 ? `0${hours}` : hours}:${minutes}`
+  return `${hours < 10 ? `0${hours}` : hours}:${
+    minutes < 10 ? `0${minutes}` : minutes
+  }`
 }
 
 export { parseTime, formatTime }
