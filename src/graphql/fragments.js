@@ -45,6 +45,13 @@ const bookmarkInformationFragment = gql`
   }
 `
 
+const upvoteInformationFragment = gql`
+  fragment UpvoteInformation on upvote {
+    id
+    upvoted
+  }
+`
+
 const recipeCardInformationFragment = gql`
   fragment RecipeCardInformation on recipe {
     id
@@ -63,5 +70,6 @@ export {
   versionInfoFragment,
   recipeInformationFragment,
   bookmarkInformationFragment,
+  upvoteInformationFragment,
   recipeCardInformationFragment,
 }
