@@ -24,7 +24,7 @@ import {
 import { UPSERT_BOOKMARK, UPSERT_UPVOTE } from '../graphql/mutations'
 
 const recipeQuery = gql`
-  query($id: Int!, $userId: String!) {
+  query($id: Int!, $userId: String) {
     recipe: recipe_by_pk(id: $id) {
       ...RecipeInformation
       bookmarks(where: { user_id: { _eq: $userId } }) {
@@ -43,6 +43,9 @@ const recipeQuery = gql`
         name
         cook_time_minutes
         prep_time_minutes
+      }
+      bookmarks(where: { user_id: { _eq: $userId } }) {
+        ...BookmarkInformation
       }
     }
   }
@@ -237,7 +240,8 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     }
   }
 
-  recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
+  recipe.bookmark =
+    recipe.bookmarks && recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
 
   const toggleUpvote = async upvoted => {
     await upsertUpvote({

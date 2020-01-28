@@ -8,6 +8,7 @@ import { Heart, Bookmark, Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
 import { useMutation } from '@apollo/react-hooks'
+import { get } from 'lodash'
 import { useToasts } from 'react-toast-notifications'
 
 import BackgroundImage from 'gatsby-background-image'
@@ -49,10 +50,12 @@ const RecipeCard = ({
     upvotes,
     variation_count,
     latest: { name, cook_time_minutes, prep_time_minutes },
-    bookmarks: [bookmark],
+    bookmarks,
   },
 }) => {
-  const [bookmarked, setBookmarked] = useState(bookmark && bookmark.bookmarked)
+  const [bookmarked, setBookmarked] = useState(
+    get(bookmarks, `[0].bookmarked`, false)
+  )
   const [upsertBookmark, { error: errorMutation }] = useMutation(
     UPSERT_BOOKMARK
   )
