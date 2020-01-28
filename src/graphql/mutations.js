@@ -28,4 +28,18 @@ const UPSERT_BOOKMARK = gql`
   }
 `
 
-export { UPSERT_BOOKMARK }
+const UPSERT_RECIPE = gql`
+  mutation UpsertRecipe($objects: [recipe_version_insert_input!]!) {
+    insert_recipe_version(objects: $objects) {
+      returning {
+        id
+        name
+        recipe {
+          id
+        }
+      }
+    }
+  }
+`
+
+export { UPSERT_BOOKMARK, UPSERT_RECIPE }

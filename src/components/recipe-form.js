@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray, useField } from 'formik'
 import {
@@ -14,53 +14,18 @@ import {
 } from '@theme-ui/components'
 import { FiTrash2, FiPlus } from 'react-icons/fi'
 import Cleave from 'cleave.js/react'
-import { useDropzone } from 'react-dropzone'
 import { useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 import axios from 'axios'
 import * as Yup from 'yup'
 
-import { parseTime, formatTime } from '../utils/parseTime'
+import { createRecipeObject } from '../utils/createRecipeObject'
+import { UPSERT_RECIPE } from '../graphql/mutations'
+import ImageDropZone from './image-dropzone'
 
 //Should move this to a environmental variable
 const API_ENDPOINT =
   'https://0qup50mcf6.execute-api.us-west-2.amazonaws.com/Prod'
-
-const INSERT_RECIPE = gql`
-  mutation InsertRecipe($objects: [recipe_version_insert_input!]!) {
-    insert_recipe_version(objects: $objects) {
-      returning {
-        name
-        id
-        version
-        recipe {
-          id
-        }
-      }
-    }
-  }
-`
-
-// const UPDATE_RECIPE = gql`
-//   mutation UpdateRecipe(
-//     $version: [recipe_version_insert_input!]!
-//     $recipe_id: Int!
-//     $recipe: recipe_set_input
-//   ) {
-//     insert_recipe_version(objects: $version) {
-//       returning {
-//         name
-//         id
-//         version
-//         recipe {
-//           id
-//         }
-//       }
-//     }
-//     update_recipe(where: { id: { _eq: $recipe_id } }, _set: $recipe)
-//   }
-// `
 
 const UNITS = [
   '---',
@@ -102,6 +67,10 @@ const ErrorMessage = props => {
 }
 
 const uploadImageToS3 = async (file, submitMutation) => {
+  if (!file) {
+    submitMutation('')
+    return
+  }
   const reader = new FileReader()
 
   reader.onabort = () => console.log('file reading was aborted')
@@ -131,112 +100,6 @@ const uploadImageToS3 = async (file, submitMutation) => {
     submitMutation(url)
   }
   await reader.readAsArrayBuffer(file)
-
-  return URL
-}
-
-const ImageDropZone = ({ handleImageDrop }) => {
-  const [files, setFiles] = useState([])
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
-    onDrop: acceptedFiles => {
-      const acceptedFile = acceptedFiles[0]
-      handleImageDrop(acceptedFile)
-      setFiles(
-        acceptedFiles.map(file => ({
-          ...file,
-          preview: URL.createObjectURL(file),
-        }))
-      )
-    },
-    multiple: false,
-  })
-
-  const thumbs = files.map((file, index) => (
-    <div
-      key={index}
-      sx={{
-        display: `flex`,
-        justifyContent: `center`,
-        p: `3`,
-        maxHeight: ``,
-      }}
-    >
-      <img
-        src={file.preview}
-        alt={file.name}
-        sx={{
-          maxWidth: `100%`,
-          maxHeight: [`400px`, `auto`],
-        }}
-      />
-    </div>
-  ))
-
-  useEffect(
-    () => () => {
-      files.forEach(file => URL.revokeObjectURL(file.preview))
-    },
-    [files]
-  )
-
-  return (
-    <div
-      sx={{
-        display: `flex`,
-        flexDirection: `column`,
-        mt: `4`,
-        backgroundColor: `#fafafa`,
-        '& > p': {
-          fontSize: `1rem`,
-        },
-
-        '& > em': {
-          fontSize: `.8rem`,
-        },
-      }}
-    >
-      <div
-        {...getRootProps({ className: 'dropzone' })}
-        sx={{
-          flex: 1,
-          display: `flex`,
-          flexDirection: `column`,
-          alignItems: `center`,
-          padding: `20px`,
-          borderWidth: `2px`,
-          borderRadius: `2px`,
-          borderColor: `#eeeeee`,
-          borderStyle: `dashed`,
-          backgroundColor: `#fafafa`,
-          color: `#bdbdbd`,
-          outline: `none`,
-          transition: `border .24s ease-in-out`,
-
-          '&:focus': {
-            borderColor: `#2196f3`,
-          },
-        }}
-      >
-        <input {...getInputProps()} />
-        <p sx={{ mb: `0` }}>
-          Drag 'n' drop an image here, or click to select an image
-        </p>
-      </div>
-      <div
-        sx={{
-          display: `flex`,
-          justifyContent: `center`,
-          borderColor: `#eeeeee`,
-          borderStyle: `solid`,
-          borderWidth: files.length > 0 ? `2px` : `0px`,
-          borderTop: `none`,
-        }}
-      >
-        {thumbs}
-      </div>
-    </div>
-  )
 }
 
 const UnitDropdown = props => (
@@ -248,6 +111,7 @@ const UnitDropdown = props => (
 )
 
 const RecipeForm = ({
+  recipe_id = null,
   name = '',
   ingredients = [{ name: '', unit: '', amount: '' }],
   instructions = '',
@@ -255,18 +119,18 @@ const RecipeForm = ({
   cook_time = '',
   servings = '',
   image_url = '',
+  latest_version = 0,
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
   const [image, setImage] = useState(null)
   const [saving, setSaving] = useState(false)
-  const [insertRecipe] = useMutation(INSERT_RECIPE, {
+  const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
       setSaving(false)
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
-
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -274,33 +138,14 @@ const RecipeForm = ({
   const handleSubmit = async values => {
     setSaving(true)
     const submitMutation = imageUrl => {
-      const submitInstructions = values.instructions.split('\n')
-      const prep_time_minutes = parseTime(values.prep_time)
-      const cook_time_minutes = parseTime(values.cook_time)
-
-      const recipe = {
-        data: {
-          image_url: imageUrl,
-          latest_version: 1,
-          user_id: userId,
-        },
-      }
-
-      const submitIngredients = {
-        data: values.ingredients,
-      }
-
-      const recipeVersion = {
-        recipe,
-        prep_time_minutes,
-        cook_time_minutes,
-        name: values.name,
-        servings: values.servings,
-        ingredients: submitIngredients,
-        instructions: submitInstructions,
-      }
-
-      insertRecipe({
+      const recipeVersion = createRecipeObject(
+        values,
+        recipe_id,
+        userId,
+        latest_version,
+        imageUrl
+      )
+      upsertRecipe({
         variables: { objects: recipeVersion },
       })
     }
@@ -310,7 +155,6 @@ const RecipeForm = ({
 
   return (
     <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>
-      {/* TODO: Add validation */}
       <Formik
         initialValues={{
           name,
@@ -419,7 +263,7 @@ const RecipeForm = ({
             />
             <Label htmlFor="instructions">Instructions</Label>
             <Textarea
-              value={values.instructions && values.instructions.join('\n')}
+              value={values.instructions}
               id="instructions"
               rows={6}
               onChange={handleChange}
@@ -437,7 +281,7 @@ const RecipeForm = ({
                   inputMode="numeric"
                   placeholder="hh:mm"
                   options={{ time: true, timePattern: ['h', 'm'] }}
-                  value={values.prep_time && formatTime(values.prep_time)}
+                  value={values.prep_time}
                   onChange={handleChange}
                   sx={{
                     variant: `forms.input`,
@@ -455,7 +299,7 @@ const RecipeForm = ({
                   inputMode="numeric"
                   placeholder="hh:mm"
                   options={{ time: true, timePattern: ['h', 'm'] }}
-                  value={values.cook_time && formatTime(values.cook_time)}
+                  value={values.cook_time}
                   onChange={handleChange}
                   sx={{
                     variant: `forms.input`,
@@ -480,8 +324,11 @@ const RecipeForm = ({
                 ) : null}
               </div>
             </div>
-
-            <ImageDropZone handleImageDrop={handleImageDrop} />
+            <ImageDropZone
+              handleImageDrop={handleImageDrop}
+              image_url={image_url}
+              name={values.name}
+            />
             {/* TODO:
               - Add tags */}
             <div
