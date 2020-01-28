@@ -19,8 +19,9 @@ import { RecipeCard } from '../components/cards'
 import {
   recipeInformationFragment,
   bookmarkInformationFragment,
+  upvoteInformationFragment,
 } from '../graphql/fragments'
-import { UPSERT_BOOKMARK } from '../graphql/mutations'
+import { UPSERT_BOOKMARK, UPSERT_UPVOTE } from '../graphql/mutations'
 
 const recipeQuery = gql`
   query($id: Int!, $userId: String!) {
@@ -28,6 +29,9 @@ const recipeQuery = gql`
       ...RecipeInformation
       bookmarks(where: { user_id: { _eq: $userId } }) {
         ...BookmarkInformation
+      }
+      ups(where: { user_id: { _eq: $userId } }) {
+        ...UpvoteInformation
       }
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
@@ -44,10 +48,12 @@ const recipeQuery = gql`
   }
   ${recipeInformationFragment}
   ${bookmarkInformationFragment}
+  ${upvoteInformationFragment}
 `
 
-const Icons = ({ recipe, toggleBookmark }) => {
+const Icons = ({ recipe, toggleBookmark, toggleUpvote }) => {
   const [bookmarked, setBookmarked] = useState(recipe.bookmark)
+  const [upvoted, setUpvoted] = useState(recipe.upvote)
   return (
     <div
       sx={{
@@ -64,8 +70,17 @@ const Icons = ({ recipe, toggleBookmark }) => {
       }}
     >
       <Flex sx={{ mr: [`0`], alignItems: `center`, justifyContent: `center` }}>
-        <Heart filled={recipe.hearted} size="2em" />{' '}
-        <h2 sx={{ my: `0`, ml: `1` }}>{recipe.hearts}</h2>
+        <Heart
+          filled={upvoted}
+          sx={{
+            cursor: `pointer`,
+          }}
+          size="2em"
+          onClick={() => {
+            setUpvoted(!upvoted)
+            toggleUpvote(upvoted)
+          }}
+        />
       </Flex>
       <Flex sx={{ alignItems: `center`, justifyContent: `center` }}>
         <Copy filled={recipe.copied} size="2em" />{' '}
@@ -147,9 +162,13 @@ const TimingSmall = ({ recipe }) => (
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId, isAuthenticated, login } = useAuth()
-  const [upsertBookmark, { error: errorMutation }] = useMutation(
+  const [upsertBookmark, { error: errorBookmarkMutation }] = useMutation(
     UPSERT_BOOKMARK
   )
+  const [upsertUpvote, { error: errorUpvoteMutation }] = useMutation(
+    UPSERT_UPVOTE
+  )
+
   const { addToast } = useToasts()
 
   const { data: recipeData, loading } = useQuery(recipeQuery, {
@@ -179,7 +198,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
       },
     })
 
-    if (errorMutation) {
+    if (errorBookmarkMutation) {
       addToast('Bookmark Failed to Save', { appearance: 'error' })
     } else {
       let text = ''
@@ -220,6 +239,56 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
 
   recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
 
+  const toggleUpvote = async upvoted => {
+    await upsertUpvote({
+      variables: {
+        user_id: userId,
+        recipe_id: recipeId,
+        upvoted: !upvoted,
+      },
+    })
+
+    if (errorUpvoteMutation) {
+      addToast('Failed to Upvote Recipe', { appearance: 'error' })
+    } else {
+      let text = ''
+      if (upvoted) {
+        text = `Upvote for ${recipe.version.name} has been removed`
+      } else {
+        text = `${recipe.version.name} has been upvoted`
+      }
+
+      addToast(text, { appearance: 'success' })
+    }
+  }
+
+  const handleUpvoteClick = upvoted => {
+    if (isAuthenticated()) {
+      toggleUpvote(upvoted)
+    } else {
+      addToast(
+        <span>
+          Please{' '}
+          <span
+            sx={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              color: 'blue',
+            }}
+            onClick={login}
+            onKeyDown={login}
+          >
+            login
+          </span>{' '}
+          to upvote recipes
+        </span>,
+        { appearance: 'error' }
+      )
+    }
+  }
+
+  recipe.upvote = recipe.ups[0] && recipe.ups[0].upvoted
+
   // stop gap solution to display error if no version is found
   if (isEmpty(recipe.version)) return 'Version not found'
 
@@ -242,7 +311,11 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </div>
             </div>
           </div>
-          <Icons recipe={recipe} toggleBookmark={handleBookmarkClick} />
+          <Icons
+            recipe={recipe}
+            toggleBookmark={handleBookmarkClick}
+            toggleUpvote={handleUpvoteClick}
+          />
         </Flex>
         <div
           sx={{
