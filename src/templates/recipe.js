@@ -146,7 +146,7 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
-  const { userId, isAuthenticated } = useAuth()
+  const { userId, isAuthenticated, login } = useAuth()
   const [upsertBookmark, { error: errorMutation }] = useMutation(
     UPSERT_BOOKMARK
   )
@@ -197,7 +197,24 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     if (isAuthenticated()) {
       toggleBookmark(bookmarked)
     } else {
-      addToast('Plz login to save bookmarks', { appearance: 'error' })
+      addToast(
+        <span>
+          Please{' '}
+          <span
+            sx={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              color: 'blue',
+            }}
+            onClick={login}
+            onKeyDown={login}
+          >
+            login
+          </span>{' '}
+          to bookmark recipes
+        </span>,
+        { appearance: 'error' }
+      )
     }
   }
 
