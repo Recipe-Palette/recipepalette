@@ -56,7 +56,7 @@ const RecipeCard = ({
   const [upsertBookmark, { error: errorMutation }] = useMutation(
     UPSERT_BOOKMARK
   )
-  const { userId, isAuthenticated } = useAuth()
+  const { userId, isAuthenticated, login } = useAuth()
   const { addToast } = useToasts()
 
   const toggleBookmark = async () => {
@@ -72,7 +72,14 @@ const RecipeCard = ({
     if (errorMutation) {
       addToast('Bookmark Failed to Save', { appearance: 'error' })
     } else {
-      addToast(`${name} has been bookmarked`, { appearance: 'success' })
+      let text = ''
+      if (bookmarked) {
+        text = `${name} has been removed from bookmarks`
+      } else {
+        text = `${name} has been bookmarked`
+      }
+
+      addToast(text, { appearance: 'success' })
     }
   }
 
@@ -81,7 +88,24 @@ const RecipeCard = ({
     if (isAuthenticated()) {
       toggleBookmark()
     } else {
-      addToast('Please Login To Save Bookmarks', { appearance: 'error' })
+      addToast(
+        <span>
+          Please{' '}
+          <span
+            sx={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              color: 'blue',
+            }}
+            onClick={login}
+            onKeyDown={login}
+          >
+            login
+          </span>{' '}
+          to bookmark recipes
+        </span>,
+        { appearance: 'error' }
+      )
     }
   }
 

@@ -182,9 +182,14 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     if (errorMutation) {
       addToast('Bookmark Failed to Save', { appearance: 'error' })
     } else {
-      addToast(`${recipe.version.name} has been bookmarked`, {
-        appearance: 'success',
-      })
+      let text = ''
+      if (bookmarked) {
+        text = `${recipe.version.name} has been removed from bookmarks`
+      } else {
+        text = `${recipe.version.name} has been bookmarked`
+      }
+
+      addToast(text, { appearance: 'success' })
     }
   }
 
@@ -192,7 +197,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     if (isAuthenticated()) {
       toggleBookmark(bookmarked)
     } else {
-      addToast('Please Login To Save Bookmarks', { appearance: 'error' })
+      addToast('Plz login to save bookmarks', { appearance: 'error' })
     }
   }
 
