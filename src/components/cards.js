@@ -8,6 +8,7 @@ import { Heart, Bookmark, Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
 import { useMutation } from '@apollo/react-hooks'
+import { useToasts } from 'react-toast-notifications'
 
 import BackgroundImage from 'gatsby-background-image'
 import { UPSERT_BOOKMARK } from '../graphql/mutations'
@@ -52,19 +53,60 @@ const RecipeCard = ({
   },
 }) => {
   const [bookmarked, setBookmarked] = useState(bookmark && bookmark.bookmarked)
-  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK)
-  const { userId } = useAuth()
+  const [upsertBookmark, { error: errorMutation }] = useMutation(
+    UPSERT_BOOKMARK
+  )
+  const { userId, isAuthenticated, login } = useAuth()
+  const { addToast } = useToasts()
 
-  const toggleBookmark = e => {
-    e.preventDefault()
+  const toggleBookmark = async () => {
     setBookmarked(!bookmarked)
-    upsertBookmark({
+    await upsertBookmark({
       variables: {
         user_id: userId,
         recipe_id: id,
         bookmarked: !bookmarked,
       },
     })
+
+    if (errorMutation) {
+      addToast('Bookmark Failed to Save', { appearance: 'error' })
+    } else {
+      let text = ''
+      if (bookmarked) {
+        text = `${name} has been removed from bookmarks`
+      } else {
+        text = `${name} has been bookmarked`
+      }
+
+      addToast(text, { appearance: 'success' })
+    }
+  }
+
+  const handleBookmarkClick = e => {
+    e.preventDefault()
+    if (isAuthenticated()) {
+      toggleBookmark()
+    } else {
+      addToast(
+        <span>
+          Please{' '}
+          <span
+            sx={{
+              textDecoration: 'underline',
+              cursor: 'pointer',
+              color: 'blue',
+            }}
+            onClick={login}
+            onKeyDown={login}
+          >
+            login
+          </span>{' '}
+          to bookmark recipes
+        </span>,
+        { appearance: 'error' }
+      )
+    }
   }
 
   time = convertTime(cook_time_minutes + prep_time_minutes)
@@ -167,7 +209,11 @@ const RecipeCard = ({
             justifyContent: `center`,
           }}
         >
-          <Bookmark size={24} filled={bookmarked} onClick={toggleBookmark} />
+          <Bookmark
+            size={24}
+            filled={bookmarked}
+            onClick={handleBookmarkClick}
+          />
         </div>
       </Card>
     </Link>
