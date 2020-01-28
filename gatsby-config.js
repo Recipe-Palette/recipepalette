@@ -8,6 +8,7 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    'gatsby-plugin-toast',
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     // Theme-UI support

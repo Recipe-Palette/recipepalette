@@ -8,6 +8,7 @@ import { Heart, Bookmark, Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
 import { useMutation } from '@apollo/react-hooks'
+import { useToasts } from 'react-toast-notifications'
 
 import BackgroundImage from 'gatsby-background-image'
 import { UPSERT_BOOKMARK } from '../graphql/mutations'
@@ -52,19 +53,28 @@ const RecipeCard = ({
   },
 }) => {
   const [bookmarked, setBookmarked] = useState(bookmark && bookmark.bookmarked)
-  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK)
+  const [upsertBookmark, { error: errorMutation }] = useMutation(
+    UPSERT_BOOKMARK
+  )
   const { userId } = useAuth()
+  const { addToast } = useToasts()
 
-  const toggleBookmark = e => {
+  const toggleBookmark = async e => {
     e.preventDefault()
     setBookmarked(!bookmarked)
-    upsertBookmark({
+    await upsertBookmark({
       variables: {
         user_id: userId,
         recipe_id: id,
         bookmarked: !bookmarked,
       },
     })
+
+    if (errorMutation) {
+      addToast('Bookmark Failed to Save', { appearance: 'errorMutation' })
+    } else {
+      addToast('Saved Successfully', { appearance: 'success' })
+    }
   }
 
   time = convertTime(cook_time_minutes + prep_time_minutes)

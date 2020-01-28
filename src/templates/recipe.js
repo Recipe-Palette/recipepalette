@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
 import { useAuth } from 'react-use-auth'
+import { useToasts } from 'react-toast-notifications'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
@@ -146,7 +147,10 @@ const TimingSmall = ({ recipe }) => (
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId } = useAuth()
-  const [upsertBookmark] = useMutation(UPSERT_BOOKMARK)
+  const [upsertBookmark, { error: errorMutation }] = useMutation(
+    UPSERT_BOOKMARK
+  )
+  const { addToast } = useToasts()
 
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
@@ -163,14 +167,20 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     return null
   }
 
-  const toggleBookmark = bookmarked => {
-    upsertBookmark({
+  const toggleBookmark = async bookmarked => {
+    await upsertBookmark({
       variables: {
         user_id: userId,
         recipe_id: recipeId,
         bookmarked: !bookmarked,
       },
     })
+
+    if (errorMutation) {
+      addToast('Bookmark Failed to Save', { appearance: 'error' })
+    } else {
+      addToast('Saved Successfully', { appearance: 'success' })
+    }
   }
 
   recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
