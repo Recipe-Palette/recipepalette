@@ -146,7 +146,7 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
-  const { userId } = useAuth()
+  const { userId, isAuthenticated } = useAuth()
   const [upsertBookmark, { error: errorMutation }] = useMutation(
     UPSERT_BOOKMARK
   )
@@ -167,6 +167,9 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     return null
   }
 
+  // intelligently assign the recipe.version to the correct version number
+  recipe.version = findRecipeVersion(recipe, versionNumber)
+
   const toggleBookmark = async bookmarked => {
     await upsertBookmark({
       variables: {
@@ -179,14 +182,21 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     if (errorMutation) {
       addToast('Bookmark Failed to Save', { appearance: 'error' })
     } else {
-      addToast('Saved Successfully', { appearance: 'success' })
+      addToast(`${recipe.version.name} has been bookmarked`, {
+        appearance: 'success',
+      })
+    }
+  }
+
+  const handleBookmarkClick = bookmarked => {
+    if (isAuthenticated()) {
+      toggleBookmark(bookmarked)
+    } else {
+      addToast('Please Login To Save Bookmarks', { appearance: 'error' })
     }
   }
 
   recipe.bookmark = recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
-
-  // intelligently assign the recipe.version to the correct version number
-  recipe.version = findRecipeVersion(recipe, versionNumber)
 
   // stop gap solution to display error if no version is found
   if (isEmpty(recipe.version)) return 'Version not found'
@@ -210,7 +220,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </div>
             </div>
           </div>
-          <Icons recipe={recipe} toggleBookmark={toggleBookmark} />
+          <Icons recipe={recipe} toggleBookmark={handleBookmarkClick} />
         </Flex>
         <div
           sx={{
