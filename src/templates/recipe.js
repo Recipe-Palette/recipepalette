@@ -20,6 +20,7 @@ import {
   bookmarkInformationFragment,
 } from '../graphql/fragments'
 import { UPSERT_BOOKMARK } from '../graphql/mutations'
+import { RecipeLoader } from '../components/loaders'
 
 const recipeQuery = gql`
   query($id: Int!, $userId: String!) {
@@ -38,6 +39,9 @@ const recipeQuery = gql`
         name
         cook_time_minutes
         prep_time_minutes
+      }
+      bookmarks(where: { user_id: { _eq: $userId } }) {
+        ...BookmarkInformation
       }
     }
   }
@@ -155,13 +159,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     },
   })
 
-  const recipe = loading ? null : recipeData.recipe
-  const variants = loading ? null : recipeData.variants
-
   // stop gap loading solution
   if (loading) {
-    return null
+    return <RecipeLoader location={location} />
   }
+
+  const recipe = loading ? null : recipeData.recipe
+  const variants = loading ? null : recipeData.variants
 
   const toggleBookmark = bookmarked => {
     upsertBookmark({
