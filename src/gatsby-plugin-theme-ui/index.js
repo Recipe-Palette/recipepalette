@@ -61,6 +61,20 @@ export default {
     icon: {
       display: `flex`,
       alignItems: `center`,
+      justifyContent: `center`,
+      cursor: `pointer`,
+      borderRadius: 999,
+      padding: 1,
+      transition: `0.15s all ease-in-out`,
+      color: `text`,
+      '&:hover': {
+        background: `rgba(25,25,25,0.05)`,
+      },
+      outline: 0,
+      '&:active, &:focus': {
+        boxShadow: theme =>
+          `0 0 0 0 ${theme.colors.background}, 0 0 0 3px ${theme.colors.border}`,
+      },
     },
   },
   cards: {

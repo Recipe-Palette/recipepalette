@@ -18,7 +18,6 @@ const recipeQuery = gql`
     ) {
       id
       image_url
-      upvotes
       variation_count
       latest_version
       latest {
