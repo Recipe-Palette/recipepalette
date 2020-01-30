@@ -1,68 +1,47 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useState } from 'react'
 import { Link, navigate } from 'gatsby'
 import { Flex, Divider, Button } from '@theme-ui/components'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
-import { useAuth } from 'react-use-auth'
-import { useToasts } from 'react-toast-notifications'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
 import Layout from '../components/layout'
-import { Heart, Copy, Bookmark } from '../components/icons'
+import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
-import {
-  recipeInformationFragment,
-  bookmarkInformationFragment,
-  upvoteInformationFragment,
-} from '../graphql/fragments'
-import { UPSERT_BOOKMARK, UPSERT_UPVOTE } from '../graphql/mutations'
+import BookmarkButton from '../components/bookmark-button'
+import UpvoteButton from '../components/upvote-button'
+import { recipeInformationFragment } from '../graphql/fragments'
 
 const recipeQuery = gql`
-  query($id: Int!, $userId: String) {
+  query($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
       ...RecipeInformation
-      bookmarks(where: { user_id: { _eq: $userId } }) {
-        ...BookmarkInformation
-      }
-      ups(where: { user_id: { _eq: $userId } }) {
-        ...UpvoteInformation
-      }
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
       id
       image_url
-      upvotes
       variation_count
       latest {
         name
         cook_time_minutes
         prep_time_minutes
       }
-      bookmarks(where: { user_id: { _eq: $userId } }) {
-        ...BookmarkInformation
-      }
     }
   }
   ${recipeInformationFragment}
-  ${bookmarkInformationFragment}
-  ${upvoteInformationFragment}
 `
 
-const Icons = ({ recipe, toggleBookmark, toggleUpvote }) => {
-  const [bookmarked, setBookmarked] = useState(recipe.bookmark)
-  const [upvoted, setUpvoted] = useState(recipe.upvote)
+const Icons = ({ recipe }) => {
   return (
     <div
       sx={{
         my: `2`,
         mb: `3`,
-
         order: 1,
         justifyContent: [`space-evenly`, `space-between`],
         width: [`100%`, `50%`],
@@ -73,16 +52,10 @@ const Icons = ({ recipe, toggleBookmark, toggleUpvote }) => {
       }}
     >
       <Flex sx={{ mr: [`0`], alignItems: `center`, justifyContent: `center` }}>
-        <Heart
-          filled={upvoted}
-          sx={{
-            cursor: `pointer`,
-          }}
-          size="2em"
-          onClick={() => {
-            setUpvoted(!upvoted)
-            toggleUpvote(upvoted)
-          }}
+        <UpvoteButton
+          size={32}
+          recipeId={recipe.id}
+          recipeName={recipe.version.name}
         />
       </Flex>
       <Flex sx={{ alignItems: `center`, justifyContent: `center` }}>
@@ -90,16 +63,10 @@ const Icons = ({ recipe, toggleBookmark, toggleUpvote }) => {
         <h2 sx={{ my: `0`, ml: `1` }}>{recipe.copies}</h2>
       </Flex>
       <Flex sx={{ justifyContent: `center` }}>
-        <Bookmark
-          filled={bookmarked}
-          sx={{
-            cursor: `pointer`,
-          }}
-          size="2em"
-          onClick={() => {
-            setBookmarked(!bookmarked)
-            toggleBookmark(bookmarked)
-          }}
+        <BookmarkButton
+          size={32}
+          recipeId={recipe.id}
+          recipeName={recipe.version.name}
         />
       </Flex>
     </div>
@@ -164,20 +131,9 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
-  const { userId, isAuthenticated, login } = useAuth()
-  const [upsertBookmark, { error: errorBookmarkMutation }] = useMutation(
-    UPSERT_BOOKMARK
-  )
-  const [upsertUpvote, { error: errorUpvoteMutation }] = useMutation(
-    UPSERT_UPVOTE
-  )
-
-  const { addToast } = useToasts()
-
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
-      userId,
     },
   })
 
@@ -191,107 +147,6 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
 
   // intelligently assign the recipe.version to the correct version number
   recipe.version = findRecipeVersion(recipe, versionNumber)
-
-  const toggleBookmark = async bookmarked => {
-    await upsertBookmark({
-      variables: {
-        user_id: userId,
-        recipe_id: recipeId,
-        bookmarked: !bookmarked,
-      },
-    })
-
-    if (errorBookmarkMutation) {
-      addToast('Bookmark Failed to Save', { appearance: 'error' })
-    } else {
-      let text = ''
-      if (bookmarked) {
-        text = `${recipe.version.name} has been removed from bookmarks`
-      } else {
-        text = `${recipe.version.name} has been bookmarked`
-      }
-
-      addToast(text, { appearance: 'success' })
-    }
-  }
-
-  const handleBookmarkClick = bookmarked => {
-    if (isAuthenticated()) {
-      toggleBookmark(bookmarked)
-    } else {
-      addToast(
-        <span>
-          Please{' '}
-          <span
-            sx={{
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              color: 'blue',
-            }}
-            onClick={login}
-            onKeyDown={login}
-          >
-            login
-          </span>{' '}
-          to bookmark recipes
-        </span>,
-        { appearance: 'error' }
-      )
-    }
-  }
-
-  recipe.bookmark =
-    recipe.bookmarks && recipe.bookmarks[0] && recipe.bookmarks[0].bookmarked
-
-  const toggleUpvote = async upvoted => {
-    await upsertUpvote({
-      variables: {
-        user_id: userId,
-        recipe_id: recipeId,
-        upvoted: !upvoted,
-      },
-    })
-
-    if (errorUpvoteMutation) {
-      addToast('Failed to Upvote Recipe', { appearance: 'error' })
-    } else {
-      let text = ''
-      if (upvoted) {
-        text = `Upvote for ${recipe.version.name} has been removed`
-      } else {
-        text = `${recipe.version.name} has been upvoted`
-      }
-
-      addToast(text, { appearance: 'success' })
-    }
-  }
-
-  const handleUpvoteClick = upvoted => {
-    if (isAuthenticated()) {
-      toggleUpvote(upvoted)
-    } else {
-      addToast(
-        <span>
-          Please{' '}
-          <span
-            sx={{
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              color: 'blue',
-            }}
-            onClick={login}
-            onKeyDown={login}
-          >
-            login
-          </span>{' '}
-          to upvote recipes
-        </span>,
-        { appearance: 'error' }
-      )
-    }
-  }
-
-  recipe.upvote = recipe.ups[0] && recipe.ups[0].upvoted
 
   // stop gap solution to display error if no version is found
   if (isEmpty(recipe.version)) return 'Version not found'
@@ -309,17 +164,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             <div sx={{ display: `flex`, flexDirection: `row`, mb: `2` }}>
               <div>by {recipe.user.name}</div>
 
-              <div sx={{ ml: `3` }}>Version {recipe.latest.version}</div>
+              <div sx={{ ml: `3` }}>Version {recipe.version.version}</div>
               <div sx={{ ml: `3` }}>
                 <Link to={`/recipe/${recipeId}/log`}>View edit log</Link>
               </div>
             </div>
           </div>
-          <Icons
-            recipe={recipe}
-            toggleBookmark={handleBookmarkClick}
-            toggleUpvote={handleUpvoteClick}
-          />
+          <Icons recipe={recipe} />
         </Flex>
         <div
           sx={{
