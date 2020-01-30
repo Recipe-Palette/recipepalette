@@ -3,12 +3,13 @@ import { jsx } from 'theme-ui'
 import { Link } from 'gatsby'
 import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
-import { Heart, Copy } from './icons'
+import { Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
 
 import BackgroundImage from 'gatsby-background-image'
 import BookmarkButton from './bookmark-button'
+import UpvoteCardIcon from './upvote-card-icon'
 
 const CategoryCard = ({ image, name }) => {
   return (
@@ -37,12 +38,10 @@ const CategoryCard = ({ image, name }) => {
 const RecipeCard = ({
   time = 0,
   mini = false,
-  hearted = false,
   copied = false,
   recipe: {
     id,
     image_url,
-    variation_count,
     latest: { name, cook_time_minutes, prep_time_minutes },
     bookmarks,
   },
@@ -99,15 +98,7 @@ const RecipeCard = ({
           }}
         >
           <div sx={{ display: `flex`, alignItems: `center` }}>
-            <Heart size={20} filled={hearted} />
-            <span
-              sx={{
-                fontSize: `2`,
-                ml: `2`,
-              }}
-            >
-              {/* TOOD add actual data here */}#
-            </span>
+            <UpvoteCardIcon recipeId={id} recipeName={name} />
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
             <Copy size={20} filled={copied} />
@@ -116,9 +107,7 @@ const RecipeCard = ({
                 fontSize: `2`,
                 ml: `2`,
               }}
-            >
-              {variation_count}
-            </span>
+            />
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
             <FiClock size={20} />

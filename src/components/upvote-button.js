@@ -5,11 +5,13 @@ import { Heart } from './icons'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { get } from 'lodash'
 import { useToasts } from 'react-toast-notifications'
-import { useAuth } from 'react-use-auth'
 import gql from 'graphql-tag'
-import { upvoteInformationFragment } from '../graphql/fragments'
+import React from 'react'
 
 import { UPSERT_UPVOTE } from '../graphql/mutations'
+import { useAuth } from 'react-use-auth'
+import UpvoteCount from './upvote-count'
+import { upvoteInformationFragment } from '../graphql/fragments'
 
 const upvoteQuery = gql`
   query($recipeId: Int!, $userId: String) {
@@ -19,6 +21,7 @@ const upvoteQuery = gql`
       ...UpvoteInformation
     }
   }
+
   ${upvoteInformationFragment}
 `
 
@@ -86,14 +89,17 @@ const UpvoteButton = ({ size = 24, recipeName, recipeId }) => {
   }
 
   return (
-    <IconButton
-      sx={{ height: size + 12, width: size + 12 }}
-      onClick={handleUpvote}
-    >
-      <div sx={{ display: `flex` }}>
-        <Heart sx={{ padding: `2px` }} size={36} filled={upvoted} />
-      </div>
-    </IconButton>
+    <React.Fragment>
+      <IconButton
+        sx={{ height: size + 12, width: size + 12 }}
+        onClick={handleUpvote}
+      >
+        <div sx={{ display: `flex` }}>
+          <Heart sx={{ padding: `2px` }} size={size} filled={upvoted} />
+        </div>
+      </IconButton>
+      <UpvoteCount recipeId={recipeId} />
+    </React.Fragment>
   )
 }
 
