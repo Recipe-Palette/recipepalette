@@ -98,10 +98,30 @@ Important files related to hasura are the `config.yaml` file at the root of the 
 - https://recipe-palette-stg.herokuapp.com/
 - https://recipe-palette.herokuapp.com/
 
-Running
+These endpoints all correspond to an app on Heroku that is running an identical instance of the Hasura `graphql-engine`.
+
+By keeping individual apps we can update the schema, or play with data in the database while updating GraphQL queries without breaking production.
+
+In order to make changes to the database don't use the link at https://recipe-palette.herokuapp.com/console, this will lead to inconsistent versions of the schema. We can turn this off with an `HASURA_GRAPHQL_ENABLE_CONSOLE=false` environment variable. It's on so we can still use GraphiQL and easily view the schema. We can change it if need be.
+
+To make changes to the schema run:
 
 ```
+hasura console --admin-secret <admin-secret>
+```
 
+When it's running it will open up a Hasura console like the one on the Heroku app with a GUI. When you make changes there however, it will automatically create timestamped migration files in the `migrations` folder. These migrations tell the Postgres database how tables are altered with up and down files. Up for editing the database to the new format, down for rolling it back. It basically saves our database schema as snapshots in time like git does for code so we can rollback to any point we may need.
+
+To apply the migrations to a deployed app run:
+
+```
+hasura migrate apply --endpoint http://another-graphql-instance.herokuapp.com
+```
+
+To check the status of migrations:
+
+```
+hasura migrate status
 ```
 
 ## 💫 Deploy
