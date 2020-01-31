@@ -42,7 +42,6 @@ const RecipeCard = ({
   recipe: {
     id,
     image_url,
-    variation_count,
     latest: { name, cook_time_minutes, prep_time_minutes },
     bookmarks,
   },
@@ -117,7 +116,7 @@ const RecipeCard = ({
                 ml: `2`,
               }}
             >
-              {variation_count}
+              #
             </span>
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>

@@ -7,7 +7,9 @@ export const client = new ApolloClient({
     const isBrowser = typeof window !== 'undefined'
     const token = isBrowser ? localStorage.getItem('token') : null
     operation.setContext({
-      uri: 'https://recipe-palette.herokuapp.com/v1/graphql',
+      uri:
+        process.env.GATSBY_HASURA_URL ||
+        'https://recipe-palette-dev.herokuapp.com/v1/graphql',
       headers: {
         'content-type': 'application/json',
         'x-hasura-admin-secret': 'Something 2 think about!',

@@ -1,0 +1,11 @@
+- args:
+    sql: ALTER TABLE "public"."recipe" ADD COLUMN "variation_count" int4
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."recipe" ALTER COLUMN "variation_count" DROP NOT NULL
+  type: run_sql
+- args:
+    sql:
+      ALTER TABLE "public"."recipe" ALTER COLUMN "variation_count" SET DEFAULT
+      0
+  type: run_sql
