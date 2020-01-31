@@ -25,7 +25,7 @@ import ImageDropZone from './image-dropzone'
 
 //Should move this to a environmental variable
 const API_ENDPOINT =
-  'https://0qup50mcf6.execute-api.us-west-2.amazonaws.com/Prod'
+  'https://4upcip6ivg.execute-api.us-west-2.amazonaws.com/Prod'
 
 const UNITS = [
   '---',
