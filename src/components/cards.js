@@ -1,19 +1,14 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useState } from 'react'
 import { Link } from 'gatsby'
 import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
-import { Heart, Bookmark, Copy } from './icons'
+import { Heart, Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
-import { useMutation } from '@apollo/react-hooks'
-import { get } from 'lodash'
-import { useToasts } from 'react-toast-notifications'
 
 import BackgroundImage from 'gatsby-background-image'
-import { UPSERT_BOOKMARK } from '../graphql/mutations'
-import { useAuth } from 'react-use-auth'
+import BookmarkButton from './bookmark-button'
 
 const CategoryCard = ({ image, name }) => {
   return (
@@ -47,71 +42,10 @@ const RecipeCard = ({
   recipe: {
     id,
     image_url,
-    upvotes,
-    variation_count,
     latest: { name, cook_time_minutes, prep_time_minutes },
     bookmarks,
   },
 }) => {
-  const [bookmarked, setBookmarked] = useState(
-    get(bookmarks, `[0].bookmarked`, false)
-  )
-  const [upsertBookmark, { error: errorMutation }] = useMutation(
-    UPSERT_BOOKMARK
-  )
-  const { userId, isAuthenticated, login } = useAuth()
-  const { addToast } = useToasts()
-
-  const toggleBookmark = async () => {
-    setBookmarked(!bookmarked)
-    await upsertBookmark({
-      variables: {
-        user_id: userId,
-        recipe_id: id,
-        bookmarked: !bookmarked,
-      },
-    })
-
-    if (errorMutation) {
-      addToast('Bookmark Failed to Save', { appearance: 'error' })
-    } else {
-      let text = ''
-      if (bookmarked) {
-        text = `${name} has been removed from bookmarks`
-      } else {
-        text = `${name} has been bookmarked`
-      }
-
-      addToast(text, { appearance: 'success' })
-    }
-  }
-
-  const handleBookmarkClick = e => {
-    e.preventDefault()
-    if (isAuthenticated()) {
-      toggleBookmark()
-    } else {
-      addToast(
-        <span>
-          Please{' '}
-          <span
-            sx={{
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              color: 'blue',
-            }}
-            onClick={login}
-            onKeyDown={login}
-          >
-            login
-          </span>{' '}
-          to bookmark recipes
-        </span>,
-        { appearance: 'error' }
-      )
-    }
-  }
-
   time = convertTime(cook_time_minutes + prep_time_minutes)
   return (
     <Link
@@ -171,7 +105,7 @@ const RecipeCard = ({
                 ml: `2`,
               }}
             >
-              {upvotes}
+              {/* TOOD add actual data here */}#
             </span>
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
@@ -182,7 +116,7 @@ const RecipeCard = ({
                 ml: `2`,
               }}
             >
-              {variation_count}
+              #
             </span>
           </div>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
@@ -212,10 +146,10 @@ const RecipeCard = ({
             justifyContent: `center`,
           }}
         >
-          <Bookmark
-            size={24}
-            filled={bookmarked}
-            onClick={handleBookmarkClick}
+          <BookmarkButton
+            recipeId={id}
+            recipeName={name}
+            bookmarks={bookmarks}
           />
         </div>
       </Card>

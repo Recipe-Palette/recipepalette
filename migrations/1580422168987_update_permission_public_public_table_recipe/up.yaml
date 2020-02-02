@@ -1,0 +1,23 @@
+- args:
+    role: public
+    table:
+      name: recipe
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+        - id
+        - image_url
+        - latest_version
+        - parent_id
+        - private
+        - user_id
+      computed_fields: []
+      filter: {}
+    role: public
+    table:
+      name: recipe
+      schema: public
+  type: create_select_permission
