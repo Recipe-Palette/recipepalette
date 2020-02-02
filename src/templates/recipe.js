@@ -25,7 +25,6 @@ const recipeQuery = gql`
     variants: recipe(where: { parent_id: { _eq: $id } }) {
       id
       image_url
-      variation_count
       latest {
         name
         cook_time_minutes
