@@ -111,8 +111,8 @@ const RecipeCard = ({
                   ml: `2`,
                 }}
               />
+              <VariationCount recipeId={id} />
             </div>
-            <VariationCount recipeId={id} />
           </React.Fragment>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
             <FiClock size={20} />

@@ -15,6 +15,7 @@ import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
 import UpvoteButton from '../components/upvote-button'
+import VariationCount from '../components/variation-count'
 import { recipeInformationFragment } from '../graphql/fragments'
 
 const recipeQuery = gql`
@@ -60,6 +61,7 @@ const Icons = ({ recipe }) => {
       <Flex sx={{ alignItems: `center`, justifyContent: `center` }}>
         <Copy filled={recipe.copied} size="2em" />{' '}
         <h2 sx={{ my: `0`, ml: `1` }}>{recipe.copies}</h2>
+        <VariationCount recipeId={recipe.id} />
       </Flex>
       <Flex sx={{ justifyContent: `center` }}>
         <BookmarkButton
@@ -226,7 +228,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             </Flex>
 
             <div>
-              <h2 sx={{ mb: `0` }}>Popular Versions</h2>
+              <h2 sx={{ mb: `0` }}>Popular Variations</h2>
               <Flex
                 sx={{
                   overflow: `scroll`,
