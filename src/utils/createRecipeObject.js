@@ -1,6 +1,13 @@
 import { parseTime } from './parseTime'
 
-const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
+const createRecipeObject = (
+  values,
+  recipe_id,
+  userId,
+  version,
+  log,
+  imageUrl
+) => {
   const instructions = values.instructions.split('\n')
   const prep_time_minutes = parseTime(values.prep_time)
   const cook_time_minutes = parseTime(values.cook_time)
@@ -23,6 +30,8 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
     version: latest_version,
     name: values.name,
     servings: values.servings,
+    log,
+    notes: values.notes,
   }
 
   if (recipe_id) {
