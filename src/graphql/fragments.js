@@ -22,7 +22,6 @@ const recipeInformationFragment = gql`
     id
     image_url
     private
-    variation_count
     latest_version
     latest {
       ...VersionInformation
@@ -54,7 +53,6 @@ const upvoteInformationFragment = gql`
 const recipeCardInformationFragment = gql`
   fragment RecipeCardInformation on recipe {
     id
-    variation_count
     image_url
     latest {
       name
