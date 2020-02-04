@@ -6,10 +6,12 @@ import { FiClock } from 'react-icons/fi'
 import { Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
+import React from 'react'
 
 import BackgroundImage from 'gatsby-background-image'
 import BookmarkButton from './bookmark-button'
 import UpvoteCardIcon from './upvote-card-icon'
+import VariationCount from './variation-count'
 
 const CategoryCard = ({ image, name }) => {
   return (
@@ -100,15 +102,18 @@ const RecipeCard = ({
           <div sx={{ display: `flex`, alignItems: `center` }}>
             <UpvoteCardIcon recipeId={id} recipeName={name} />
           </div>
-          <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
-            <Copy size={20} filled={copied} />
-            <span
-              sx={{
-                fontSize: `2`,
-                ml: `2`,
-              }}
-            />
-          </div>
+          <React.Fragment>
+            <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
+              <Copy size={20} filled={copied} />
+              <span
+                sx={{
+                  fontSize: `2`,
+                  ml: `2`,
+                }}
+              />
+            </div>
+            <VariationCount recipeId={id} />
+          </React.Fragment>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
             <FiClock size={20} />
             <span
