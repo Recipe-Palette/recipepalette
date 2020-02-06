@@ -4,6 +4,7 @@ import ContentLoader from 'react-content-loader'
 import { Flex } from '@theme-ui/components'
 
 import Layout from './layout'
+import { RecipeCardLoader } from './recipe-card-loader'
 
 const ImageLoader = () => (
   <ContentLoader
@@ -93,23 +94,6 @@ const ButtonLoader = () => (
   </ContentLoader>
 )
 
-const CardLoader = () => (
-  <ContentLoader
-    speed={2}
-    width={200}
-    height={200}
-    viewBox="0 0 200 200"
-    backgroundColor="#f3f3f3"
-    foregroundColor="#ecebeb"
-    preserveAspectRatio="none"
-    sx={{
-      variant: `cards.recipeMini`,
-    }}
-  >
-    <rect x="0" y="0" rx="8" ry="8" width="200" height="200" />
-  </ContentLoader>
-)
-
 const RecipeLoader = ({ location }) => (
   <Layout location={location}>
     <div>
@@ -159,8 +143,8 @@ const RecipeLoader = ({ location }) => (
                 justifyContent: `space-evenly`,
               }}
             >
-              <CardLoader />
-              <CardLoader />
+              <RecipeCardLoader sx={{ mr: `3` }} />
+              <RecipeCardLoader />
             </Flex>
           </div>
         </div>

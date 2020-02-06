@@ -2,7 +2,7 @@
 import { jsx } from 'theme-ui'
 import { RecipeCard } from './cards'
 
-const CardGrid = ({ recipes, children }) => (
+const CardGrid = ({ recipes, children, ...props }) => (
   <div
     sx={{
       display: `grid`,
@@ -11,6 +11,7 @@ const CardGrid = ({ recipes, children }) => (
       gridGap: `3`,
       mb: `4`,
     }}
+    {...props}
   >
     {children}
     {recipes.map((recipe, index) => (
