@@ -12,6 +12,7 @@ import {
   bookmarkInformationFragment,
   recipeCardInformationFragment,
 } from '../graphql/fragments'
+import CardGrid from '../components/card-grid'
 
 const SEARCH_QUERY = gql`
   query SearchQuery($whereClause: recipe_bool_exp!, $user_id: String!) {
@@ -76,19 +77,11 @@ const Search = ({ location }) => {
     <Layout location={location}>
       <div sx={{ py: `4` }}>
         <Title>Search results for {q}</Title>
-        <div
-          sx={{
-            display: `grid`,
-            gridTemplateColumns: [`repeat(auto-fit, minmax(275px, 1fr))`],
-            gridAutoFlow: `row`,
-            gridGap: `3`,
-            mb: `4`,
-          }}
-        >
+        <CardGrid recipes={searchData.recipes}>
           {searchData.recipes.map((recipe, index) => (
             <RecipeCard key={index} recipe={recipe} />
           ))}
-        </div>
+        </CardGrid>
       </div>
     </Layout>
   )

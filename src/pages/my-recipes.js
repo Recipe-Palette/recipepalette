@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 
 import { bookmarkInformationFragment } from '../graphql/fragments'
+import CardGrid from '../components/card-grid'
 
 const recipeQuery = gql`
   query MyQuery($user_id: String!) {
@@ -51,20 +52,12 @@ export default ({ location }) => {
         }}
       >
         <Title>My Recipes</Title>
-        <div
-          sx={{
-            display: `grid`,
-            gridTemplateColumns: [`repeat(auto-fit, minmax(275px, 1fr))`],
-            gridAutoFlow: `row`,
-            gridGap: `3`,
-            mb: `4`,
-          }}
-        >
+        <CardGrid recipes={recipeData.recipes}>
           <NewCard />
           {recipeData.recipes.map((recipe, index) => (
             <RecipeCard key={index} recipe={recipe} />
           ))}
-        </div>
+        </CardGrid>
       </div>
     </Layout>
   )
