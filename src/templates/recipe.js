@@ -240,6 +240,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             </div>
           </div>
         </div>
+        {/* Categories tags here */}
         <Divider />
         <div>
           <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
