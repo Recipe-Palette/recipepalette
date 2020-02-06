@@ -16,7 +16,7 @@ import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
-import { RecipeLoader } from '../components/loaders'
+import { RecipeLoader } from '../components/recipe-loader'
 
 const recipeQuery = gql`
   query($id: Int!) {

@@ -169,4 +169,4 @@ const RecipeLoader = ({ location }) => (
   </Layout>
 )
 
-export { RecipeLoader, ImageLoader, TitleLoader }
+export { RecipeLoader }
