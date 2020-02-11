@@ -120,7 +120,7 @@ const RecipeForm = ({
   servings = '',
   image_url = '',
   latest_version = 0,
-  log = '',
+  log = [],
   notes = '',
   privateRecipe = false,
 }) => {
@@ -139,30 +139,30 @@ const RecipeForm = ({
 
   const handleSubmit = async values => {
     if (name != values.name) {
-      log += 'Name, '
+      log.push('Name')
     }
     if (JSON.stringify(ingredients) != JSON.stringify(values.ingredients)) {
-      log += 'Ingredients, '
+      log.push('Ingredients')
     }
     if (instructions != values.instructions) {
-      log += 'Instructions, '
+      log.push('Instructions')
     }
     if (prep_time != values.prep_time) {
-      log += 'Prep Time, '
+      log.push('Prep Time')
     }
     if (cook_time != values.cook_time) {
-      log += 'Cook Time, '
+      log.push('Cook Time')
     }
     if (servings != values.servings) {
-      log += 'Servings, '
+      log.push('Servings')
     }
     if (image_url != values.image_url) {
-      log += 'Image, '
+      log.push('Image')
     }
 
     //remove trailing ', ' if present
-    if (log != '') {
-      log = log.substring(0, log.length - 2)
+    if (log.length > 0) {
+      log = log.join(', ')
     }
 
     setSaving(true)

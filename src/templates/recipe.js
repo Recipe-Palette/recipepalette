@@ -134,6 +134,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
+    fetchPolicy: 'network-only',
   })
 
   const recipe = loading ? null : recipeData.recipe
