@@ -1,8 +1,9 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { Flex } from '@theme-ui/components'
 import styled from '@emotion/styled'
+import { useAuth } from 'react-use-auth'
 
 import { Heart, Bookmark, Book, Profile } from './icons'
 
@@ -24,6 +25,7 @@ const IconContainer = styled.div`
 const isActiveLink = (pathname, matchText) => pathname.includes(matchText)
 
 const NavigationMobile = ({ location }) => {
+  const { isAuthenticated, login } = useAuth()
   return (
     <div
       sx={{
@@ -43,30 +45,39 @@ const NavigationMobile = ({ location }) => {
           height: `100%`,
         }}
       >
-        <Link to="/my-recipes" sx={{ color: `initial`, width: `100%` }}>
-          <IconContainer>
-            <Book
-              filled={isActiveLink(location.pathname, `my-recipes`)}
-              size="1.5rem"
-            />
-          </IconContainer>
-        </Link>
-        <Link to="/favorites" sx={{ color: `initial`, width: `100%` }}>
-          <IconContainer>
-            <Heart
-              filled={isActiveLink(location.pathname, `favorites`)}
-              size="1.5rem"
-            />
-          </IconContainer>
-        </Link>
-        <Link to="/bookmarks" sx={{ color: `initial`, width: `100%` }}>
-          <IconContainer>
-            <Bookmark
-              filled={isActiveLink(location.pathname, `bookmarks`)}
-              size="1.5rem"
-            />
-          </IconContainer>
-        </Link>
+        <IconContainer
+          onClick={() =>
+            isAuthenticated() ? navigate('/my-recipes') : login()
+          }
+          sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
+        >
+          <Book
+            filled={isActiveLink(location.pathname, `my-recipes`)}
+            size="1.5rem"
+          />
+        </IconContainer>
+        <IconContainer
+          onClick={() =>
+            isAuthenticated() ? navigate('/my-hearted') : login()
+          }
+          sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
+        >
+          <Heart
+            filled={isActiveLink(location.pathname, `my-hearted`)}
+            size="1.5rem"
+          />
+        </IconContainer>
+        <IconContainer
+          onClick={() =>
+            isAuthenticated() ? navigate('/my-bookmarked') : login()
+          }
+          sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
+        >
+          <Bookmark
+            filled={isActiveLink(location.pathname, `my-bookmarked`)}
+            size="1.5rem"
+          />
+        </IconContainer>
         <Link to="/account" sx={{ color: `initial`, width: `100%` }}>
           <IconContainer>
             <Profile
