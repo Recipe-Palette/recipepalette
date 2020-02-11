@@ -28,6 +28,28 @@ export default {
     bookmarked: '#C1E1AE',
     error: '#C00',
   },
+  badge: {
+    primary: {
+      cursor: `pointer`,
+      color: `black`,
+      borderWidth: `1px`,
+      borderColor: `secondary`,
+      borderStyle: `solid`,
+      boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      backgroundColor: `secondary`,
+      transition: `0.2s all`,
+      fontWeight: `bold`,
+      textDecoration: `none`,
+      fontSize: `2`,
+      px: `3`,
+      py: `2`,
+      borderRadius: `1`,
+      textAlign: `center`,
+      '&:hover': {
+        backgroundColor: lighten(`primary`, 0.1),
+      },
+    },
+  },
   buttons: {
     primary: {
       cursor: `pointer`,

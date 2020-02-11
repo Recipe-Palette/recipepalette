@@ -1,5 +1,11 @@
 import gql from 'graphql-tag'
 
+const tagInfoFragment = gql`
+  fragment TagInformation on tags {
+    tag
+  }
+`
+
 const versionInfoFragment = gql`
   fragment VersionInformation on recipe_version {
     id
@@ -31,6 +37,11 @@ const recipeInformationFragment = gql`
     }
     user {
       name
+    }
+    tags {
+      tag {
+        name
+      }
     }
   }
   ${versionInfoFragment}
@@ -68,4 +79,5 @@ export {
   bookmarkInformationFragment,
   upvoteInformationFragment,
   recipeCardInformationFragment,
+  tagInfoFragment,
 }

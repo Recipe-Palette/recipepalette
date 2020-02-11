@@ -1,0 +1,6 @@
+- args:
+    relationship: recipe
+    table:
+      name: tag_recipe
+      schema: public
+  type: drop_relationship

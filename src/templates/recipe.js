@@ -14,6 +14,7 @@ import Layout from '../components/layout'
 import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
+import TagBadge from '../components/tag'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
 
@@ -150,6 +151,10 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
   // stop gap solution to display error if no version is found
   if (isEmpty(recipe.version)) return 'Version not found'
 
+  console.log(recipe.tags[0].tag.name)
+  console.log(recipe.tags.length)
+  console.log(recipe.tags)
+
   const image =
     recipe.image_url ||
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
@@ -240,7 +245,6 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             </div>
           </div>
         </div>
-        {/* Categories tags here */}
         <Divider />
         <div>
           <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
@@ -281,6 +285,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               ))}
           </ol>
         </div>
+      </div>
+      <Divider />
+      <div>
+        <h2>Tags</h2>
+        {recipe.tags.map((recipe_tag, index) => (
+          <TagBadge key={index} name={recipe_tag.tag.name} />
+        ))}
       </div>
     </Layout>
   )
