@@ -16,6 +16,7 @@ import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
+import { RecipeLoader } from '../components/recipe-loader'
 
 const recipeQuery = gql`
   query($id: Int!) {
@@ -136,13 +137,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     },
   })
 
-  const recipe = loading ? null : recipeData.recipe
-  const variants = loading ? null : recipeData.variants
-
   // stop gap loading solution
   if (loading) {
-    return null
+    return <RecipeLoader location={location} />
   }
+
+  const recipe = loading ? null : recipeData.recipe
+  const variants = loading ? null : recipeData.variants
 
   // intelligently assign the recipe.version to the correct version number
   recipe.version = findRecipeVersion(recipe, versionNumber)
