@@ -11,10 +11,12 @@ const IconContainer = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
-  border-width: 1px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 0px;
+  border-right-width: 1px;
   border-color: ${({ theme }) => theme.colors.border};
   border-style: solid;
-  border-bottom: none;
   padding-top: ${({ theme }) => `${theme.space[3]}px`};
   padding-bottom: ${({ theme }) => `${theme.space[3]}px`};
 `

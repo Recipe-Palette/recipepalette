@@ -44,11 +44,7 @@ export default ({ location }) => {
 
   return (
     <Layout location={location}>
-      <div
-        sx={{
-          py: `4`,
-        }}
-      >
+      <div sx={{}}>
         <Title>My Recipes</Title>
         {loading ? (
           <RecipeCardGridLoader />

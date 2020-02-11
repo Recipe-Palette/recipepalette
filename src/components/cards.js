@@ -50,7 +50,15 @@ const RecipeCard = ({
   return (
     <Link
       to={`/recipe/${id}/latest`}
-      sx={{ color: `text`, textDecoration: `none` }}
+      sx={{
+        color: `text`,
+        textDecoration: `none`,
+        outline: `none`,
+        '&:active, &:focus': {
+          boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+        },
+        borderRadius: `1`,
+      }}
     >
       <Card
         sx={{
@@ -158,7 +166,17 @@ const RecipeCard = ({
 }
 
 const NewCard = () => (
-  <Link to="/recipe/new" sx={{ textDecoration: `none` }}>
+  <Link
+    to="/recipe/new"
+    sx={{
+      textDecoration: `none`,
+      outline: `none`,
+      '&:active, &:focus': {
+        boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+      },
+      borderRadius: `1`,
+    }}
+  >
     <Card
       sx={{
         display: `flex`,
@@ -174,6 +192,9 @@ const NewCard = () => (
         backgroundColor: `background`,
         transition: `0.3s all`,
         height: `100%`,
+        '&:hover': {
+          backgroundColor: darken(`background`, 0.035),
+        },
       }}
     >
       + Add New
