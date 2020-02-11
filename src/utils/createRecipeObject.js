@@ -11,7 +11,7 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
 
   const on_conflict = {
     constraint: 'recipe_info_pkey',
-    update_columns: ['latest_version', 'user_id', 'image_url', 'private'],
+    update_columns: ['latest_version', 'user_id', 'private'],
   }
   const recipe = { data: {}, on_conflict }
   const recipeVersion = {
@@ -23,6 +23,7 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
     version: latest_version,
     name: values.name,
     servings: values.servings,
+    image_url: imageUrl,
   }
 
   if (recipe_id) {
@@ -34,7 +35,7 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
   }
 
   if (imageUrl.length > 0) {
-    recipe.data.image_url = imageUrl
+    recipeVersion.image_url = imageUrl
   }
 
   recipe.data.user_id = userId

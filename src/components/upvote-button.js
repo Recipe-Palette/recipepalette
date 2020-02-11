@@ -14,7 +14,7 @@ import UpvoteCount from './upvote-count'
 import { upvoteInformationFragment } from '../graphql/fragments'
 
 const upvoteQuery = gql`
-  query($recipeId: Int!, $userId: String) {
+  query hasUserUpvoted($recipeId: Int!, $userId: String) {
     upvote(
       where: { recipe_id: { _eq: $recipeId }, user_id: { _eq: $userId } }
     ) {
@@ -45,6 +45,7 @@ const UpvoteButton = ({ size = 24, recipeName, recipeId }) => {
         recipe_id: recipeId,
         upvoted: !upvoted,
       },
+      refetchQueries: ['upvoteCountQuery'],
     })
 
     if (errorMutation) {
