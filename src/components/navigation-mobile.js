@@ -61,7 +61,7 @@ const NavigationMobile = ({ location }) => {
           sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
         >
           <Heart
-            filled={isActiveLink(location.pathname, `favorites`)}
+            filled={isActiveLink(location.pathname, `my-hearted`)}
             size="1.5rem"
           />
         </IconContainer>
@@ -72,7 +72,7 @@ const NavigationMobile = ({ location }) => {
           sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
         >
           <Bookmark
-            filled={isActiveLink(location.pathname, `bookmarks`)}
+            filled={isActiveLink(location.pathname, `my-bookmarked`)}
             size="1.5rem"
           />
         </IconContainer>
