@@ -135,6 +135,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
+    fetchPolicy: 'network-only',
   })
 
   // stop gap loading solution

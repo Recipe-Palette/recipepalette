@@ -19,7 +19,7 @@ const ImageDropZone = ({ handleImageDrop, image_url, name }) => {
   const alt = file ? file.name : name
 
   const thumb =
-    src.length > 0 ? (
+    src && src.length > 0 ? (
       <div
         sx={{
           display: `flex`,
