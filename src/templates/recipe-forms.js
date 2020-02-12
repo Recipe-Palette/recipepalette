@@ -14,7 +14,6 @@ import { formatTime } from '../utils/parseTime'
 const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
-      image_url
       latest_version
       latest {
         ...VersionInformation
@@ -33,7 +32,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
   })
 
   let recipe = {}
