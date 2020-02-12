@@ -68,11 +68,11 @@ const RecipeCard = ({
           position: `relative`,
           minHeight: 150,
           p: `3`,
-          backgroundColor: darken(`background`, 0.01),
+          backgroundColor: `background`,
           transition: `0.3s all`,
           variant: mini ? `cards.recipeMini` : `cards.primary`,
           '&:hover': {
-            backgroundColor: darken(`background`, 0.035),
+            backgroundColor: darken(`background`, 0.03),
           },
         }}
       >
@@ -186,7 +186,7 @@ const NewCard = () => (
         fontSize: `3`,
         py: `4`,
         px: `4`,
-        borderRadius: `1`,
+        borderRadius: `2`,
         textAlign: `center`,
         border: theme => `1px dashed ${theme.colors.border}`,
         backgroundColor: `background`,

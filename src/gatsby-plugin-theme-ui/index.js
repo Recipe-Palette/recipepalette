@@ -18,7 +18,7 @@ export default {
   colors: {
     text: '#222',
     background: '#FFF',
-    accentBackground: '#fcfbf8',
+    accentBackground: '#FFF',
     border: '#DDD',
     gray: '#8e8d8d',
     primary: '#eb7b15',
@@ -99,7 +99,7 @@ export default {
   cards: {
     primary: {
       cursor: `pointer`,
-      borderRadius: `1`,
+      borderRadius: `2`,
       border: theme => `1px solid ${theme.colors.border}`,
       // boxShadow: `0px 2px 4px 0px rgba(225, 227, 229, 0.75)`,
       // '&:hover': {

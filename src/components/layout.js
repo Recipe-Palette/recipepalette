@@ -25,7 +25,6 @@ const Layout = ({ children, location }) => (
     >
       <Container
         sx={{
-          borderRadius: [`0`, `2`],
           minHeight: `calc(100vh - 160px - 32px)`,
           // border: theme => `1px solid ${theme.colors.border}`,
           // borderWidth: [0, 1],

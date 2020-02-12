@@ -7,7 +7,6 @@ import { Monogram } from '../components/logo'
 const Footer = () => (
   <footer
     sx={{
-      height: 80,
       borderTop: `1px solid`,
       borderTopColor: `border`,
       pb: [`5`, `0`],
