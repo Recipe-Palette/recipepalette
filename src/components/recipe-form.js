@@ -67,8 +67,8 @@ const ErrorMessage = props => {
 }
 
 const uploadImageToS3 = async (file, submitMutation) => {
-  if (!file) {
-    submitMutation('')
+  if (typeof file === 'string') {
+    submitMutation(file)
     return
   }
   const reader = new FileReader()
@@ -125,7 +125,7 @@ const RecipeForm = ({
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(image_url)
   const [saving, setSaving] = useState(false)
   const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
@@ -161,9 +161,7 @@ const RecipeForm = ({
     }
 
     //remove trailing ', ' if present
-    if (log.length > 0) {
-      log = log.join(', ')
-    }
+    log = log.length > 0 ? log.join(', ') : ''
 
     setSaving(true)
     const submitMutation = imageUrl => {
