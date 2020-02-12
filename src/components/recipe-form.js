@@ -20,8 +20,27 @@ import axios from 'axios'
 import * as Yup from 'yup'
 
 import { createRecipeObject } from '../utils/createRecipeObject'
-import { UPSERT_RECIPE } from '../graphql/mutations'
+import { UPSERT_RECIPE /*, UPSERT_TAGS */ } from '../graphql/mutations'
 import ImageDropZone from './image-dropzone'
+// import gql from 'graphql-tag'
+
+// const findTagIDQuery = gql`
+//   query findtagIDQuery ($name: String!) {
+//     tag: (where: {name: {_eq: $name}}) {
+//      id
+//     }
+//   }
+// `
+
+// const createTagQuery = gql`
+//   mutation createTagQuery($name: String!) {
+//     insert_tag(objects: { name: $name }) {
+//       returning {
+//         id
+//       }
+//     }
+//   }
+// `
 
 //Should move this to a environmental variable
 const API_ENDPOINT =
@@ -119,6 +138,7 @@ const RecipeForm = ({
   cook_time = '',
   servings = '',
   image_url = '',
+  tags = [],
   latest_version = 0,
   privateRecipe = false,
 }) => {
@@ -131,6 +151,41 @@ const RecipeForm = ({
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
+
+  // const upsertTags = ({ recipeID, tagID }) => {
+  //   const { data: tag_data } = useMutation(UPSERT_TAGS, {
+  //     variables: {
+  //       recipe_id: recipeID,
+  //       tag_id: tagID,
+  //     },
+  //   })
+  // }
+
+  // console.log('upsertTags: ' + upsertTags)
+  // console.log('tag_data: ' + tag_data)
+
+  // const findTagID = ({ tag_name }) => {
+  //   const { data: tag_id } = useQuery(findTagIDQuery, {
+  //     variables: {
+  //       name: tag_name,
+  //     },
+  //   })
+  // }
+
+  // console.log('findtagID: ' + findTagID)
+  // console.log('tag_id: ' + tag_id)
+
+  // const createTag = ({ tag_name }) => {
+  //   const { data: created_tag_id } = useMutation(createTagQuery, {
+  //     variables: {
+  //       name: tag_name,
+  //     },
+  //   })
+  // }
+
+  // console.log('createTag: ' + createTag)
+  // console.log('created_tag_id: ' + created_tag_id)
+
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -150,6 +205,19 @@ const RecipeForm = ({
       })
     }
 
+    // for (let i = 0; i < values.tags.length; i++) {
+    //   let new_tag_id = 0
+
+    //   new_tag_id = findtagID(values.tags[i])
+
+    //   if (new_tag_id != 0) {
+    //     new_tag_id = createTag(values.tags[i])
+    //   }
+
+    //   console.log(recipe_id)
+    //   console.log(values.tags[i])
+    // }
+
     await uploadImageToS3(image, submitMutation)
   }
 
@@ -165,13 +233,14 @@ const RecipeForm = ({
           servings,
           image_url,
           privateRecipe,
+          tags,
         }}
         validationSchema={RecipeSchema}
         onSubmit={handleSubmit}
       >
         {({ values, handleChange, errors, touched }) => (
           <Form>
-            <Label htmlFor="name">Recipe name</Label>
+            <Label htmlFor="name">Recipe Name</Label>
             <Input
               name="name"
               type="text"
@@ -329,8 +398,60 @@ const RecipeForm = ({
               image_url={image_url}
               name={values.name}
             />
-            {/* TODO:
-              - Add tags */}
+
+            <FieldArray
+              name="tags"
+              render={arrayHelpers => (
+                <Fragment>
+                  <Label>Tags</Label>
+                  <div
+                    sx={{
+                      display: `grid`,
+                      gridTemplateColumns: `1fr 15px`,
+                      gridGap: `2`,
+                      alignItems: `baseline`,
+                    }}
+                  >
+                    {values.tags &&
+                      values.tags.length > 0 &&
+                      values.tags.map((tag, index) => (
+                        <Fragment key={index}>
+                          <div>
+                            <Input
+                              name={`tags.${index}.name`}
+                              value={tag}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage name={`tags[${index}].name`} />
+                          </div>
+                          <FiTrash2
+                            onClick={() => arrayHelpers.remove(index)}
+                            sx={{ cursor: `pointer` }}
+                          />
+                        </Fragment>
+                      ))}
+                  </div>
+                  <div
+                    sx={{
+                      display: `flex`,
+                      justifyContent: `flex-end`,
+                      pt: `3`,
+                    }}
+                  >
+                    <Button
+                      type="button"
+                      onClick={() => arrayHelpers.push('')}
+                      sx={{
+                        variant: `buttons.icon`,
+                      }}
+                    >
+                      Add Tag <FiPlus sx={{ ml: `2` }} />
+                    </Button>
+                  </div>
+                </Fragment>
+              )}
+            />
+
             <div
               sx={{
                 display: `flex`,
