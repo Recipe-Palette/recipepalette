@@ -1,8 +1,10 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Button, Container } from '@theme-ui/components'
+import { lighten } from '@theme-ui/color'
 import { Link, navigate } from 'gatsby'
 import { useAuth } from 'react-use-auth'
+import { FiSearch } from 'react-icons/fi'
 
 import { Profile } from '../components/icons'
 import { Logo, HorizontalType, Monogram } from '../components/logo'
@@ -14,6 +16,7 @@ const Header = () => {
   return (
     <header
       sx={{
+        height: 80,
         borderBottom: `1px solid`,
         borderBottomColor: `border`,
       }}
@@ -64,9 +67,34 @@ const Header = () => {
             <HorizontalType sx={{ width: 200 }} />
           </Link>
         </div>
-        <div sx={{ width: [`50px`, `100%`] }}>
-          <SearchBar />
+        <div
+          sx={{
+            display: [`none`, `flex`],
+            width: `100%`,
+          }}
+        >
+          <SearchBar sx={{ width: `100%` }} />
         </div>
+        <button
+          sx={{
+            display: [`flex`, `none`],
+            alignItems: `center`,
+            justifyContent: `center`,
+            borderRadius: `2`,
+            height: `39px`,
+            width: `39px`,
+            cursor: `pointer`,
+            outline: 0,
+            border: 0,
+            backgroundColor: lighten(`border`, 0.075),
+            '&:active, &:focus': {
+              boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+            },
+          }}
+          onClick={() => navigate(`search`)}
+        >
+          <FiSearch size={20} />
+        </button>
         <div
           sx={{
             display: [`none`, `flex`],
@@ -76,7 +104,7 @@ const Header = () => {
           }}
         >
           <Button
-            sx={{ variant: `buttons.link` }}
+            sx={{ variant: `buttons.link`, height: `39px` }}
             onClick={() =>
               isAuthenticated() ? navigate('/my-recipes') : login()
             }
@@ -84,7 +112,7 @@ const Header = () => {
             My Palette
           </Button>
         </div>
-        <div sx={{ display: [`none`, `flex`] }}>
+        <div sx={{ display: [`none`, `flex`], height: `39px` }}>
           <Button
             sx={{ px: `10px` }}
             onClick={() => (isAuthenticated() ? navigate('/account') : login())}

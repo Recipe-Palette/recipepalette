@@ -283,10 +283,16 @@ const RecipeForm = ({
                         arrayHelpers.push({ name: '', amount: '', unit: '' })
                       }
                       sx={{
-                        variant: `buttons.icon`,
+                        variant: `buttons.primary`,
+                        py: 2,
+                        px: 3,
+                        display: `flex`,
+                        alignItems: `center`,
+                        fontWeight: `normal`,
+                        fontSize: `14px`,
                       }}
                     >
-                      Add a ingredient <FiPlus sx={{ ml: `2` }} />
+                      Add ingredient <FiPlus sx={{ strokeWidth: 3, ml: `2` }} />
                     </Button>
                   </div>
                 </Fragment>

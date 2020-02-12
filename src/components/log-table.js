@@ -51,7 +51,10 @@ const LogTable = ({ versions, recipeId, ...props }) => {
             py: `2`,
             borderBottom: theme => `1px solid ${theme.colors.border}`,
             '&:nth-child(even)': {
-              background: alpha(`gray`, 0.05),
+              backgroundColor: alpha(`gray`, 0.05),
+            },
+            '&:nth-child(odd)': {
+              backgroundColor: `background`,
             },
           }}
         >
@@ -67,15 +70,9 @@ const LogTable = ({ versions, recipeId, ...props }) => {
                 index === 0 ? `latest` : version.version
               }`}
               sx={{
+                variant: `buttons.secondary`,
                 display: `flex`,
                 alignItems: `center`,
-                px: `2`,
-                py: `1`,
-                borderRadius: `1`,
-                textDecoration: `none`,
-                '&:hover': {
-                  background: alpha(`gray`, 0.15),
-                },
               }}
             >
               View <FiArrowUpRight />
