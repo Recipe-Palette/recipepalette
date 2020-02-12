@@ -123,6 +123,7 @@ const RecipeForm = ({
   log = [],
   notes = '',
   privateRecipe = false,
+  recipeOwnerId,
 }) => {
   const { userId } = useAuth()
   const [image, setImage] = useState(null)
@@ -133,6 +134,7 @@ const RecipeForm = ({
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
+  const isOwner = userId && recipeOwnerId === userId
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -182,6 +184,13 @@ const RecipeForm = ({
 
     await uploadImageToS3(image, submitMutation)
   }
+
+  if (!isOwner)
+    return (
+      <div sx={{ textAlign: `center` }}>
+        Woops, looks like you aren't the owner of this recipe!
+      </div>
+    )
 
   return (
     <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>

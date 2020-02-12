@@ -16,6 +16,9 @@ const recipeFormQuery = gql`
     recipe: recipe_by_pk(id: $id) {
       image_url
       latest_version
+      user {
+        id
+      }
       latest {
         ...VersionInformation
       }
@@ -81,6 +84,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
           servings={recipe.version && recipe.version.servings}
           image_url={recipe.image_url}
           latest_version={recipe.latest_version}
+          recipeOwnerId={recipe.user && recipe.user.id}
         />
       )}
     </Layout>
