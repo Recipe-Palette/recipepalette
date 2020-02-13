@@ -33,7 +33,6 @@ const createRecipeObject = (
     image_url: imageUrl,
     log,
     notes: values.notes,
-    image_url: imageUrl,
   }
 
   if (recipe_id) {

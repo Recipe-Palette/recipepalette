@@ -19,6 +19,8 @@ const recipeFormQuery = gql`
         tag {
           name
         }
+      user {
+        id
       }
       latest {
         ...VersionInformation
@@ -44,7 +46,7 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
 
   let recipe = {}
   if (!loading && recipeData) {
-    recipe = recipeData.recipe
+    recipe = { ...recipeData.recipe }
     // intelligently assign the recipe.version to the correct version number
     recipe.version = findRecipeVersion(recipe, versionNumber)
   } else {
@@ -63,7 +65,7 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
 
   return (
     <Layout location={location}>
-      <Title sx={{ textAlign: `center` }}>{title}</Title>
+      <Title sx={{ '&': { textAlign: `center` } }}>{title}</Title>
       {loading ? (
         <div sx={{ display: `flex`, placeContent: `center` }}>
           <Spinner />
@@ -87,6 +89,8 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
           servings={recipe.version && recipe.version.servings}
           image_url={recipe.version.image_url}
           latest_version={recipe.latest_version}
+          recipeOwnerId={recipe.user && recipe.user.id}
+          location={location}
         />
       )}
     </Layout>
