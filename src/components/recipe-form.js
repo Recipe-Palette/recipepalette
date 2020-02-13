@@ -164,7 +164,6 @@ const RecipeForm = ({
         log.push('Image')
       }
 
-      //remove trailing ', ' if present
       log = log.length > 0 ? log.join(', ') : ''
 
       const recipeVersion = createRecipeObject(
@@ -175,7 +174,6 @@ const RecipeForm = ({
         log,
         imageUrl
       )
-      console.log(recipeVersion)
       upsertRecipe({
         variables: { objects: recipeVersion, recipe_id },
       })
