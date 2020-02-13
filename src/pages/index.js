@@ -2,12 +2,11 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { graphql, useStaticQuery } from 'gatsby'
-import { Button } from '@theme-ui/components'
-import { useAuth } from 'react-use-auth'
+import HeroImage from 'gatsby-background-image'
 
+import Layout from '../components/layout'
 import SearchBar from '../components/search-bar'
 import Title from '../components/title'
-import Layout from '../components/layout'
 import { CategoryCard } from '../components/cards'
 
 const imageQuery = graphql`
@@ -54,46 +53,81 @@ const imageQuery = graphql`
         }
       }
     }
+    hero: file(relativePath: { eq: "hero.jpg" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
+    }
   }
 `
 
-export default ({ location }) => {
-  const { appetizer, bread, dessert, breakfast, pasta } = useStaticQuery(
+export default () => {
+  const { appetizer, bread, dessert, breakfast, pasta, hero } = useStaticQuery(
     imageQuery
   )
-  const { isAuthenticated, login } = useAuth()
 
   return (
-    <Layout location={location} home={true}>
-      <div
+    <Layout location={location}>
+      <HeroImage
+        fluid={[
+          `linear-gradient(rgba(235,123,21,.25), rgba(128,65,13,.75))`,
+          hero.childImageSharp.fluid,
+        ]}
         sx={{
-          textAlign: `center`,
-          mt: `6`,
-          mb: `6`,
+          height: [320, 520],
+          borderRadius: `3`,
+          '&::before, &::after': {
+            borderRadius: `3`,
+          },
+          display: `flex`,
+          alignItems: `center`,
+          justifyContent: `center`,
         }}
       >
-        <Title sx={{ '&': { textAlign: `center` } }}>
-          The best way to keep track of recipes
-        </Title>
         <div
           sx={{
-            display: `flex`,
-            justifyContent: 'center',
-            fontSize: `3`,
-            mb: [`1`, `3`],
+            color: `background`,
+            textAlign: `center`,
+            width: [`90%`, `60%`],
           }}
         >
-          <SearchBar sx={{ width: '100%', maxWidth: '700px' }} />
-        </div>
-        {!isAuthenticated() && (
-          <Button
-            sx={{ variant: `buttons.link`, display: `inline-block` }}
-            onClick={() => login()}
+          <Title
+            sx={{
+              fontSize: [`5`, `6`],
+              width: `80%`,
+              mx: `auto`,
+              textShadow: `0px 2px 12px #444`,
+              '&': { textAlign: `center` },
+            }}
           >
-            Join for free!
-          </Button>
-        )}
-      </div>
+            Discover and keep track of recipes
+          </Title>
+          <div
+            sx={{
+              display: `flex`,
+              justifyContent: 'center',
+              fontSize: `3`,
+              mb: [`1`, `3`],
+            }}
+          >
+            <SearchBar
+              sx={{
+                width: '100%',
+                maxWidth: '700px',
+                backgroundColor: `background`,
+                boxShadow: `0 0 30px -5px #444`,
+                borderRadius: `2`,
+              }}
+              labelSx={{
+                p: `3`,
+              }}
+            />
+          </div>
+        </div>
+      </HeroImage>
+
       <h2>Explore Recipes</h2>
       <div
         sx={{
