@@ -19,6 +19,7 @@ const recipeFormQuery = gql`
         tag {
           name
         }
+      }
       user {
         id
       }
@@ -36,7 +37,6 @@ const recipeFormQuery = gql`
 // used for recipe form pages like edit/new/variant
 // eslint-disable-next-line complexity
 const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
-  console.log(recipeId)
   const { data: recipeData, loading } = useQuery(recipeFormQuery, {
     variables: {
       id: recipeId,
@@ -88,7 +88,7 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
           }
           servings={recipe.version && recipe.version.servings}
           image_url={recipe.version.image_url}
-          latest_version={recipe.latest_version}
+          latest_version={type === 'variant' ? 0 : recipe.latest_version}
           recipeOwnerId={recipe.user && recipe.user.id}
           location={location}
         />
