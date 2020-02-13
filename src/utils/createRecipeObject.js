@@ -46,10 +46,10 @@ const createRecipeObject = (
 
   if (tags.length > 0) {
     const tagData = {
-      data: tags.map(tag => ({
+      data: tags.filter(Boolean).map(tag => ({
         tag: {
           data: {
-            name: tag,
+            name: tag.toLowerCase(),
           },
           on_conflict: {
             constraint: 'tag_value_key',

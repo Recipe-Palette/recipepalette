@@ -4,6 +4,7 @@ import { jsx } from 'theme-ui'
 import { Fragment, useState } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray, useField } from 'formik'
+import { useToasts } from 'react-toast-notifications'
 import {
   Label,
   Input,
@@ -30,7 +31,7 @@ const API_ENDPOINT =
 const UNITS = [
   '---',
   'tsp',
-  'tsbp',
+  'tbsp',
   'cup',
   'oz',
   'box',
@@ -126,6 +127,7 @@ const RecipeForm = ({
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
+  const { addToast } = useToasts()
   const [image, setImage] = useState(image_url)
   const [saving, setSaving] = useState(false)
   const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
@@ -140,7 +142,6 @@ const RecipeForm = ({
   }
 
   const handleSubmit = async values => {
-    setSaving(true)
     const submitMutation = imageUrl => {
       if (name != values.name) {
         log.push('Name')
@@ -163,20 +164,34 @@ const RecipeForm = ({
       if (image_url != values.image_url) {
         log.push('Image')
       }
+      if (JSON.stringify(tags) != JSON.stringify(values.tags)) {
+        log.push('Tags')
+      }
 
       log = log.length > 0 ? log.join(', ') : ''
 
-      const recipeVersion = createRecipeObject(
-        values,
-        recipe_id,
-        userId,
-        latest_version,
-        log,
-        imageUrl
-      )
-      upsertRecipe({
-        variables: { objects: recipeVersion, recipe_id },
-      })
+      if (log == '') {
+        addToast('No changes to save', { appearance: 'error' })
+      } else {
+        setSaving(true)
+
+        const recipeVersion = createRecipeObject(
+          values,
+          recipe_id,
+          userId,
+          latest_version,
+          log,
+          imageUrl
+        )
+
+        if (!recipe_id) {
+          recipe_id = -1
+        }
+
+        upsertRecipe({
+          variables: { objects: recipeVersion, recipe_id },
+        })
+      }
     }
 
     await uploadImageToS3(image, submitMutation)
@@ -239,6 +254,7 @@ const RecipeForm = ({
                               inputMode="decimal"
                               step={0.01}
                               min={0}
+                              max={1000000000}
                               name={`ingredients.${index}.amount`}
                               value={ingredient.amount}
                               onChange={handleChange}
@@ -317,6 +333,8 @@ const RecipeForm = ({
                   id="prep_time"
                   inputMode="numeric"
                   placeholder="hh:mm"
+                  min={0}
+                  max={1000000000}
                   options={{ time: true, timePattern: ['h', 'm'] }}
                   value={values.prep_time}
                   onChange={handleChange}
@@ -335,6 +353,8 @@ const RecipeForm = ({
                   id="cook_time"
                   inputMode="numeric"
                   placeholder="hh:mm"
+                  min={0}
+                  max={1000000000}
                   options={{ time: true, timePattern: ['h', 'm'] }}
                   value={values.cook_time}
                   onChange={handleChange}
@@ -353,6 +373,8 @@ const RecipeForm = ({
                   inputMode="numeric"
                   type="number"
                   id="servings"
+                  min={0}
+                  max={1000000000}
                   value={values.servings}
                   onChange={handleChange}
                 />
