@@ -30,6 +30,7 @@ const createRecipeObject = (
     version: latest_version,
     name: values.name,
     servings: values.servings,
+    image_url: imageUrl,
     log,
     notes: values.notes,
     image_url: imageUrl,
