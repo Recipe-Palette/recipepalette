@@ -238,7 +238,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 }
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
-                Create new version
+                Create new variant
               </Button>
               {isOwner && (
                 <Button
@@ -263,7 +263,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                   size="1em"
                   sx={{ strokeWidth: `2.5px`, mr: `1` }}
                 />
-                Popular Versions ({variants.length})
+                Popular Variants ({variants.length})
               </Flex>
               <Flex
                 sx={{

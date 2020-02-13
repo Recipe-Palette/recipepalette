@@ -17,11 +17,13 @@ const RecipeRoutes = () => {
         path="/:recipeId/:versionNumber/edit"
         exact
         title="Edit recipe"
+        type="edit"
       />
       <RecipeForms
         path="/:recipeId/:versionNumber/variant"
         exact
         title="Create a new version of recipe"
+        type="variant"
       />
     </Router>
   )

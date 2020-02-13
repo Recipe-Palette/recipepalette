@@ -71,6 +71,11 @@ const uploadImageToS3 = async (file, submitMutation) => {
     submitMutation(file)
     return
   }
+
+  if (!file) {
+    submitMutation('')
+    return
+  }
   const reader = new FileReader()
 
   reader.onabort = () => console.log('file reading was aborted')
@@ -124,6 +129,7 @@ const RecipeForm = ({
   notes = '',
   privateRecipe = false,
   recipeOwnerId,
+  parent_id,
   location,
 }) => {
   const { userId } = useAuth()
@@ -176,7 +182,8 @@ const RecipeForm = ({
         userId,
         latest_version,
         log,
-        imageUrl
+        imageUrl,
+        parent_id
       )
       upsertRecipe({
         variables: { objects: recipeVersion },
