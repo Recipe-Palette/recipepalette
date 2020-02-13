@@ -15,6 +15,11 @@ const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
       latest_version
+      tags {
+        tag {
+          name
+        }
+      }
       latest {
         ...VersionInformation
       }
@@ -27,7 +32,9 @@ const recipeFormQuery = gql`
 `
 
 // used for recipe form pages like edit/new/variant
-const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
+// eslint-disable-next-line complexity
+const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
+  console.log(recipeId)
   const { data: recipeData, loading } = useQuery(recipeFormQuery, {
     variables: {
       id: recipeId,
@@ -63,7 +70,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
         </div>
       ) : (
         <RecipeForm
-          recipe_id={parseInt(recipeId)}
+          recipe_id={type === 'variant' ? null : parseInt(recipeId)}
           name={recipe.version && recipe.version.name}
           ingredients={recipe.version && recipe.version.ingredients}
           instructions={

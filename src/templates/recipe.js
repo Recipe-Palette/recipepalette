@@ -229,7 +229,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 }
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
-                Create new version
+                Create new variant
               </Button>
               <Button
                 onClick={() =>
