@@ -414,7 +414,13 @@ const RecipeForm = ({
                       type="button"
                       onClick={() => arrayHelpers.push('')}
                       sx={{
-                        variant: `buttons.icon`,
+                        variant: `buttons.primary`,
+                        py: 2,
+                        px: 3,
+                        display: `flex`,
+                        alignItems: `center`,
+                        fontWeight: `normal`,
+                        fontSize: `14px`,
                       }}
                     >
                       Add Tag <FiPlus sx={{ ml: `2` }} />
