@@ -1,6 +1,13 @@
 import { parseTime } from './parseTime'
 
-const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
+const createRecipeObject = (
+  values,
+  recipe_id,
+  userId,
+  version,
+  log,
+  imageUrl
+) => {
   const { tags } = values
   const instructions = values.instructions.split('\n')
   const prep_time_minutes = parseTime(values.prep_time)
@@ -12,7 +19,7 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
 
   const on_conflict = {
     constraint: 'recipe_info_pkey',
-    update_columns: ['latest_version', 'user_id', 'image_url', 'private'],
+    update_columns: ['latest_version', 'user_id', 'private'],
   }
   const recipe = { data: {}, on_conflict }
   const recipeVersion = {
@@ -24,6 +31,9 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
     version: latest_version,
     name: values.name,
     servings: values.servings,
+    image_url: imageUrl,
+    log,
+    notes: values.notes,
   }
 
   if (recipe_id) {
@@ -32,10 +42,6 @@ const createRecipeObject = (values, recipe_id, userId, version, imageUrl) => {
 
   if (values.private) {
     recipe.data.private = values.private
-  }
-
-  if (imageUrl.length > 0) {
-    recipe.data.image_url = imageUrl
   }
 
   if (tags.length > 0) {

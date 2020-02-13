@@ -1,4 +1,4 @@
-import { lighten } from '@theme-ui/color'
+import { lighten, alpha } from '@theme-ui/color'
 
 export default {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
@@ -14,10 +14,11 @@ export default {
     heading: 700,
     bold: 700,
   },
-  radii: [2, 4, 8],
+  radii: [1, 2, 4],
   colors: {
     text: '#222',
     background: '#FFF',
+    accentBackground: '#FFF',
     border: '#DDD',
     gray: '#8e8d8d',
     primary: '#eb7b15',
@@ -50,10 +51,7 @@ export default {
     primary: {
       cursor: `pointer`,
       color: `background`,
-      borderWidth: `1px`,
-      borderColor: `primary`,
-      borderStyle: `solid`,
-      boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      boxShadow: `0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)`,
       backgroundColor: `primary`,
       transition: `0.2s all`,
       fontWeight: `bold`,
@@ -61,10 +59,32 @@ export default {
       fontSize: `2`,
       px: `3`,
       py: `2`,
-      borderRadius: `1`,
+      borderRadius: `2`,
       textAlign: `center`,
+      outline: 0,
+      '&:active, &:focus': {
+        boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+      },
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
+      },
+    },
+    secondary: {
+      cursor: `pointer`,
+      color: `gray`,
+      transition: `0.2s all`,
+      textDecoration: `none`,
+      fontSize: `2`,
+      px: `2`,
+      py: `1`,
+      borderRadius: `1`,
+      textAlign: `center`,
+      outline: 0,
+      '&:active, &:focus': {
+        background: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+      },
+      '&:hover': {
+        backgroundColor: alpha(`primary`, 0.1),
       },
     },
     link: {
@@ -90,31 +110,38 @@ export default {
       },
       outline: 0,
       '&:active, &:focus': {
-        boxShadow: theme =>
-          `0 0 0 0 ${theme.colors.background}, 0 0 0 3px ${theme.colors.border}`,
+        boxShadow: theme => `0 0 0 3px ${theme.colors.accent}`,
       },
     },
   },
   cards: {
     primary: {
       cursor: `pointer`,
-      borderRadius: `1`,
+      borderRadius: `2`,
       border: theme => `1px solid ${theme.colors.border}`,
-      boxShadow: `0px 2px 4px 0px rgba(225, 227, 229, 0.75)`,
-      '&:hover': {
-        boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
+      // boxShadow: `0px 2px 4px 0px rgba(225, 227, 229, 0.75)`,
+      // '&:hover': {
+      //   boxShadow: `0px 3.5px 6px 0px rgba(225, 227, 229, 0.75)`,
+      // },
+      outline: 0,
+      '&:active, &:focus': {
+        boxShadow: theme => `0 0 0 3px ${theme.colors.accent}`,
       },
     },
     recipeMini: {
       my: `1`,
       mr: `3`,
       height: `calc(100% - 16px)`,
+      outline: 0,
+      '&:active, &:focus': {
+        boxShadow: theme => `0 0 0 3px ${theme.colors.accent}`,
+      },
     },
   },
   layout: {
     container: {
       maxWidth: `960px`,
-      px: `3`,
+      px: [`3`, `0`],
       header: {
         display: `flex`,
         flexDirection: `row`,
@@ -122,12 +149,6 @@ export default {
         alignItems: `center`,
         py: `3`,
         '*+*': { marginLeft: `3` },
-      },
-      footer: {
-        display: `flex`,
-        flexDirection: `row`,
-        justifyContent: `center`,
-        py: `3`,
       },
     },
   },

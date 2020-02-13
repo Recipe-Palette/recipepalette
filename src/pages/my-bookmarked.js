@@ -3,20 +3,18 @@
 import { jsx } from 'theme-ui'
 import Title from '../components/title'
 import Layout from '../components/layout'
-import { NewCard } from '../components/cards'
+import { NewCard, RecipeCard } from '../components/cards'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 
 import { bookmarkInformationFragment } from '../graphql/fragments'
-import CardGrid from '../components/card-grid'
-import { RecipeCardGridLoader } from '../components/recipe-card-loader'
 
-const recipeQuery = gql`
+const bookmarkedQuery = gql`
   query MyQuery($user_id: String!) {
     recipes: recipe(
       order_by: { latest: { created_at: desc } }
-      where: { user_id: { _eq: $user_id } }
+      where: { bookmarks: { user_id: { _eq: $user_id } } }
     ) {
       id
       image_url
@@ -38,21 +36,35 @@ const recipeQuery = gql`
 
 export default ({ location }) => {
   const { userId } = useAuth()
-  const { data: recipeData, loading } = useQuery(recipeQuery, {
+  const { data: recipeData, loading } = useQuery(bookmarkedQuery, {
     variables: { user_id: userId },
   })
+  if (loading) {
+    return null
+  }
 
   return (
     <Layout location={location}>
-      <div sx={{}}>
-        <Title>My Recipes</Title>
-        {loading ? (
-          <RecipeCardGridLoader />
-        ) : (
-          <CardGrid recipes={recipeData.recipes}>
-            <NewCard />
-          </CardGrid>
-        )}
+      <div
+        sx={{
+          py: `4`,
+        }}
+      >
+        <Title>My Bookmarked Recipes</Title>
+        <div
+          sx={{
+            display: `grid`,
+            gridTemplateColumns: [`repeat(auto-fit, minmax(275px, 1fr))`],
+            gridAutoFlow: `row`,
+            gridGap: `3`,
+            mb: `4`,
+          }}
+        >
+          <NewCard />
+          {recipeData.recipes.map((recipe, index) => (
+            <RecipeCard key={index} recipe={recipe} />
+          ))}
+        </div>
       </div>
     </Layout>
   )

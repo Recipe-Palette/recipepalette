@@ -39,6 +39,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
+    fetchPolicy: 'network-only',
   })
 
   let recipe = {}

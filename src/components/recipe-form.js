@@ -121,6 +121,8 @@ const RecipeForm = ({
   image_url = '',
   tags = [],
   latest_version = 0,
+  log = [],
+  notes = '',
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
@@ -138,6 +140,33 @@ const RecipeForm = ({
   }
 
   const handleSubmit = async values => {
+    if (name != values.name) {
+      log.push('Name')
+    }
+    if (JSON.stringify(ingredients) != JSON.stringify(values.ingredients)) {
+      log.push('Ingredients')
+    }
+    if (instructions != values.instructions) {
+      log.push('Instructions')
+    }
+    if (prep_time != values.prep_time) {
+      log.push('Prep Time')
+    }
+    if (cook_time != values.cook_time) {
+      log.push('Cook Time')
+    }
+    if (servings != values.servings) {
+      log.push('Servings')
+    }
+    if (image_url != values.image_url) {
+      log.push('Image')
+    }
+
+    //remove trailing ', ' if present
+    if (log.length > 0) {
+      log = log.join(', ')
+    }
+
     setSaving(true)
     const submitMutation = imageUrl => {
       const recipeVersion = createRecipeObject(
@@ -145,6 +174,7 @@ const RecipeForm = ({
         recipe_id,
         userId,
         latest_version,
+        log,
         imageUrl
       )
       console.log(recipeVersion)
@@ -167,6 +197,7 @@ const RecipeForm = ({
           cook_time,
           servings,
           image_url,
+          notes,
           privateRecipe,
           tags,
         }}
@@ -256,10 +287,16 @@ const RecipeForm = ({
                         arrayHelpers.push({ name: '', amount: '', unit: '' })
                       }
                       sx={{
-                        variant: `buttons.icon`,
+                        variant: `buttons.primary`,
+                        py: 2,
+                        px: 3,
+                        display: `flex`,
+                        alignItems: `center`,
+                        fontWeight: `normal`,
+                        fontSize: `14px`,
                       }}
                     >
-                      Add a ingredient <FiPlus sx={{ ml: `2` }} />
+                      Add ingredient <FiPlus sx={{ strokeWidth: 3, ml: `2` }} />
                     </Button>
                   </div>
                 </Fragment>
@@ -330,7 +367,7 @@ const RecipeForm = ({
             </div>
             <ImageDropZone
               handleImageDrop={handleImageDrop}
-              image_url={image_url}
+              image_url={values.image_url}
               name={values.name}
             />
 
@@ -387,6 +424,14 @@ const RecipeForm = ({
               )}
             />
 
+            <Label htmlFor="notes">Notes</Label>
+            <Textarea
+              value={values.notes}
+              id="notes"
+              rows={3}
+              onChange={handleChange}
+              placeholder="Enter any notes here"
+            />
             <div
               sx={{
                 display: `flex`,

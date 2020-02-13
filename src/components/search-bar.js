@@ -27,15 +27,16 @@ const SearchBar = ({ ...props }) => {
               display: `flex`,
               alignItems: `center`,
               boxShadow: theme =>
-                isFocussed ? `0px 0px 2px 2px ${theme.colors.primary}` : `none`,
+                isFocussed ? `0px 0px 0px 3px ${theme.colors.accent}` : `none`,
               bg: lighten(`border`, 0.075),
               p: `2`,
               borderRadius: `2`,
               my: `0`,
+              transition: `0.15s all ease-in-out`,
             }}
           >
             <div sx={{ ml: `1`, display: `flex`, alignItems: `center` }}>
-              <Search size="1.5rem" sx={{ color: `gray` }} />
+              <Search size="1.25rem" sx={{ color: `gray` }} />
             </div>
             <Input
               type="text"
@@ -44,6 +45,7 @@ const SearchBar = ({ ...props }) => {
               value={values.search}
               onChange={handleChange}
               sx={{
+                color: `text`,
                 border: `none`,
                 fontSize: `3`,
                 width: `100%`,
