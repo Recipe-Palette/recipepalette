@@ -45,7 +45,7 @@ const UpvoteButton = ({ size = 24, recipeName, recipeId }) => {
         recipe_id: recipeId,
         upvoted: !upvoted,
       },
-      refetchQueries: ['upvoteCountQuery'],
+      refetchQueries: ['hasUserUpvoted', 'upvoteCountQuery'],
     })
 
     if (errorMutation) {

@@ -12,7 +12,7 @@ import { useAuth } from 'react-use-auth'
 import { bookmarkInformationFragment } from '../graphql/fragments'
 
 const bookmarkQuery = gql`
-  query($recipeId: Int!, $userId: String) {
+  query bookmarkQuery($recipeId: Int!, $userId: String) {
     bookmark(
       where: { recipe_id: { _eq: $recipeId }, user_id: { _eq: $userId } }
     ) {
@@ -48,6 +48,7 @@ const BookmarkButton = ({ size = 24, recipeName, recipeId }) => {
         recipe_id: recipeId,
         bookmarked: !bookmarked,
       },
+      refetchQueries: ['bookmarkQuery'],
     })
 
     if (errorMutation) {
