@@ -29,6 +29,7 @@ const Log = ({ recipeId }) => {
     variables: {
       id: recipeId,
     },
+    fetchPolicy: 'cache-and-network',
   })
 
   return (
