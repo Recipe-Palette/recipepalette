@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Link } from 'gatsby'
-import { darken } from '@theme-ui/color'
+import { darken, lighten } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Copy } from './icons'
 import { Card } from '@theme-ui/components'
@@ -81,7 +81,7 @@ const RecipeCard = ({
           sx={{
             height: 125,
             borderRadius: `1`,
-            backgroundColor: `#DDD`,
+            backgroundColor: lighten(`border`, 0.075),
             backgroundImage: `url(${image_url})`,
             backgroundSize: `cover`,
           }}
@@ -93,7 +93,12 @@ const RecipeCard = ({
         >
           <span
             sx={{
+              width: `100%`,
               fontSize: `3`,
+              display: `-webkit-box`,
+              '-webkit-box-orient': `vertical`,
+              '-webkit-line-clamp': `2`,
+              overflow: `hidden`,
             }}
           >
             {name}
@@ -176,7 +181,7 @@ const NewCard = () => (
         display: `flex`,
         alignItems: `center`,
         justifyContent: `center`,
-        color: `border`,
+        color: `gray`,
         fontSize: `3`,
         py: `4`,
         px: `4`,

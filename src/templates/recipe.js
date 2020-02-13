@@ -10,7 +10,6 @@ import { isEmpty } from 'lodash'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
-import Layout from '../components/layout'
 import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
@@ -150,156 +149,154 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
   return (
-    <Layout location={location}>
-      <div>
-        <Flex sx={{ flexDirection: [`column`, `row`] }}>
-          <div sx={{ width: `100%`, textAlign: [`center`, `inherit`] }}>
-            <h1 sx={{ mb: `1` }}>{recipe.version.name}</h1>
-            <div
-              sx={{
-                display: `flex`,
-                justifyContent: [`center`, `flex-start`],
-                flexDirection: `row`,
-                mt: [`2`, `0`],
-                mb: `2`,
-              }}
-            >
-              <div>{recipe.user.name}</div>
-              <div sx={{ ml: `3`, fontStyle: `italic` }}>
-                Version {recipe.version.version}
-              </div>
-              <div sx={{ ml: `3` }}>
-                <Link
-                  sx={{ variant: `buttons.secondary` }}
-                  to={`/recipe/${recipeId}/log`}
-                >
-                  View edit log
-                </Link>
-              </div>
-            </div>
-          </div>
-          <Icons recipe={recipe} />
-        </Flex>
-        <div
-          sx={{
-            display: [`flex`, `grid`],
-            gridGap: `3`,
-            gridTemplateColumns: `50% 1fr`,
-            flexDirection: `column`,
-          }}
-        >
-          <div>
-            <div
-              sx={{
-                width: `100%`,
-                height: `330px`,
-                background: `url(${image})`,
-                backgroundSize: `cover`,
-                borderRadius: `2`,
-                order: 2,
-                border: theme => `1px solid ${theme.colors.border}`,
-              }}
-            />
-            <TimingSmall recipe={recipe.version} />
-          </div>
+    <div>
+      <Flex sx={{ flexDirection: [`column`, `row`] }}>
+        <div sx={{ width: `100%`, textAlign: [`center`, `inherit`] }}>
+          <h1 sx={{ mb: `1` }}>{recipe.version.name}</h1>
           <div
             sx={{
-              order: 3,
-              mt: [`3`, 0],
-              overflow: `hidden`,
               display: `flex`,
-              flexDirection: `column`,
-            }}
-          >
-            <Flex sx={{ justifyContent: `space-between` }}>
-              <Button
-                onClick={() =>
-                  navigate(
-                    `/recipe/${recipe.id}/${versionNumber || `latest`}/variant`
-                  )
-                }
-                sx={{ variant: `buttons.link`, width: `48%` }}
-              >
-                Create new version
-              </Button>
-              <Button
-                onClick={() =>
-                  navigate(
-                    `/recipe/${recipe.id}/${versionNumber || `latest`}/edit`
-                  )
-                }
-                sx={{ variant: `buttons.link`, width: `48%` }}
-              >
-                Edit recipe
-              </Button>
-            </Flex>
-            <div>
-              <Flex
-                as="h2"
-                sx={{ m: `0`, mt: `3`, fontSize: `3`, alignItems: `center` }}
-              >
-                <Copy
-                  filled={recipe.copied}
-                  size="1em"
-                  sx={{ strokeWidth: `2.5px`, mr: `1` }}
-                />
-                Popular Versions ({variants.length})
-              </Flex>
-              <Flex
-                sx={{
-                  overflow: `scroll`,
-                  width: `100%`,
-                }}
-              >
-                {variants.map((variant, index) => (
-                  <RecipeCard key={index} recipe={variant} mini={true} />
-                ))}
-              </Flex>
-            </div>
-          </div>
-        </div>
-        <Divider />
-        <div>
-          <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
-          <h3
-            sx={{
-              width: `100%`,
-              mt: `0`,
+              justifyContent: [`center`, `flex-start`],
+              flexDirection: `row`,
+              mt: [`2`, `0`],
               mb: `2`,
             }}
           >
-            Servings: {recipe.version && recipe.version.servings}
-          </h3>
-
-          <ul sx={{ columnCount: 2, listStyle: `none`, pl: `0` }}>
-            {recipe.version.ingredients.map((ingredient, index) => {
-              let amount = new Fraction(ingredient.amount)
-              amount = amount.toFraction(true)
-              return (
-                <li
-                  key={index}
-                  sx={{ mb: `3`, display: `inline-block`, width: `100%` }}
-                >
-                  {amount} {ingredient.unit} {ingredient.name}
-                </li>
-              )
-            })}
-          </ul>
+            <div>{recipe.user.name}</div>
+            <div sx={{ ml: `3`, fontStyle: `italic` }}>
+              Version {recipe.version.version}
+            </div>
+            <div sx={{ ml: `3` }}>
+              <Link
+                sx={{ variant: `buttons.secondary` }}
+                to={`/recipe/${recipeId}/log`}
+              >
+                View edit log
+              </Link>
+            </div>
+          </div>
         </div>
-        <Divider />
+        <Icons recipe={recipe} />
+      </Flex>
+      <div
+        sx={{
+          display: [`flex`, `grid`],
+          gridGap: `3`,
+          gridTemplateColumns: `50% 1fr`,
+          flexDirection: `column`,
+        }}
+      >
         <div>
-          <h2>Instructions</h2>
-          <ol sx={{ pl: `3` }}>
-            {recipe.version.instructions &&
-              recipe.version.instructions.map((instruction, index) => (
-                <li key={index} sx={{ mb: `3` }}>
-                  {instruction}
-                </li>
+          <div
+            sx={{
+              width: `100%`,
+              height: `330px`,
+              background: `url(${image})`,
+              backgroundSize: `cover`,
+              borderRadius: `2`,
+              order: 2,
+              border: theme => `1px solid ${theme.colors.border}`,
+            }}
+          />
+          <TimingSmall recipe={recipe.version} />
+        </div>
+        <div
+          sx={{
+            order: 3,
+            mt: [`3`, 0],
+            overflow: `hidden`,
+            display: `flex`,
+            flexDirection: `column`,
+          }}
+        >
+          <Flex sx={{ justifyContent: `space-between` }}>
+            <Button
+              onClick={() =>
+                navigate(
+                  `/recipe/${recipe.id}/${versionNumber || `latest`}/variant`
+                )
+              }
+              sx={{ variant: `buttons.link`, width: `48%` }}
+            >
+              Create new version
+            </Button>
+            <Button
+              onClick={() =>
+                navigate(
+                  `/recipe/${recipe.id}/${versionNumber || `latest`}/edit`
+                )
+              }
+              sx={{ variant: `buttons.link`, width: `48%` }}
+            >
+              Edit recipe
+            </Button>
+          </Flex>
+          <div>
+            <Flex
+              as="h2"
+              sx={{ m: `0`, mt: `3`, fontSize: `3`, alignItems: `center` }}
+            >
+              <Copy
+                filled={recipe.copied}
+                size="1em"
+                sx={{ strokeWidth: `2.5px`, mr: `1` }}
+              />
+              Popular Versions ({variants.length})
+            </Flex>
+            <Flex
+              sx={{
+                overflow: `scroll`,
+                width: `100%`,
+              }}
+            >
+              {variants.map((variant, index) => (
+                <RecipeCard key={index} recipe={variant} mini={true} />
               ))}
-          </ol>
+            </Flex>
+          </div>
         </div>
       </div>
-    </Layout>
+      <Divider />
+      <div>
+        <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
+        <h3
+          sx={{
+            width: `100%`,
+            mt: `0`,
+            mb: `2`,
+          }}
+        >
+          Servings: {recipe.version && recipe.version.servings}
+        </h3>
+
+        <ul sx={{ columnCount: 2, listStyle: `none`, pl: `0` }}>
+          {recipe.version.ingredients.map((ingredient, index) => {
+            let amount = new Fraction(ingredient.amount)
+            amount = amount.toFraction(true)
+            return (
+              <li
+                key={index}
+                sx={{ mb: `3`, display: `inline-block`, width: `100%` }}
+              >
+                {amount} {ingredient.unit} {ingredient.name}
+              </li>
+            )
+          })}
+        </ul>
+      </div>
+      <Divider />
+      <div>
+        <h2>Instructions</h2>
+        <ol sx={{ pl: `3` }}>
+          {recipe.version.instructions &&
+            recipe.version.instructions.map((instruction, index) => (
+              <li key={index} sx={{ mb: `3` }}>
+                {instruction}
+              </li>
+            ))}
+        </ol>
+      </div>
+    </div>
   )
 }
 

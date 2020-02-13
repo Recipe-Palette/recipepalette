@@ -6,7 +6,7 @@ const CardGrid = ({ recipes, children, ...props }) => (
   <div
     sx={{
       display: `grid`,
-      gridTemplateColumns: [`repeat(auto-fit, minmax(275px, 1fr))`],
+      gridTemplateColumns: [`repeat(auto-fill, minmax(275px, 1fr))`],
       gridAutoFlow: `row`,
       gridGap: `3`,
       mb: `4`,

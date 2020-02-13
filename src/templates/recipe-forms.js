@@ -3,9 +3,9 @@ import { jsx } from 'theme-ui'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Spinner } from '@theme-ui/components'
+import { Fragment } from 'react'
 
 import { findRecipeVersion } from '../utils/findRecipeVersion'
-import Layout from '../components/layout'
 import Title from '../components/title'
 import RecipeForm from '../components/recipe-form'
 import { versionInfoFragment } from '../graphql/fragments'
@@ -55,7 +55,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
   }
 
   return (
-    <Layout location={location}>
+    <Fragment>
       <Title sx={{ textAlign: `center` }}>{title}</Title>
       {loading ? (
         <div sx={{ display: `flex`, placeContent: `center` }}>
@@ -82,7 +82,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
           latest_version={recipe.latest_version}
         />
       )}
-    </Layout>
+    </Fragment>
   )
 }
 
