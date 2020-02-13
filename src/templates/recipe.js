@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Link, navigate } from 'gatsby'
 import { Flex, Divider, Button } from '@theme-ui/components'
+import { Link, navigate } from 'gatsby'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
@@ -17,6 +17,7 @@ import BookmarkButton from '../components/bookmark-button'
 import UpvoteButton from '../components/upvote-button'
 import VariationCount from '../components/variation-count'
 import { recipeInformationFragment } from '../graphql/fragments'
+import { RecipeLoader } from '../components/recipe-loader'
 
 const recipeQuery = gql`
   query($id: Int!) {
@@ -40,18 +41,18 @@ const Icons = ({ recipe }) => {
   return (
     <div
       sx={{
-        my: `2`,
-        mb: `3`,
-        order: 1,
-        justifyContent: [`space-evenly`, `space-between`],
+        display: `flex`,
+        flexDirection: `row`,
+        alignItems: `flex-start`,
+        justifyContent: [`center`, `flex-end`],
         width: [`100%`, `50%`],
-        display: [`grid`, `flex`],
-        gridTemplateColumns: `repeat(3, 1fr)`,
-        alignSelf: `flex-start`,
-        ml: [`0`, `3`],
+        '*+*': {
+          ml: `3`,
+        },
+        mb: `2`,
       }}
     >
-      <Flex sx={{ mr: [`0`], alignItems: `center`, justifyContent: `center` }}>
+      <Flex sx={{ mr: `3`, justifyContent: `center` }}>
         <UpvoteButton
           size={32}
           recipeId={recipe.id}
@@ -136,15 +137,16 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
+    fetchPolicy: 'network-only',
   })
-
-  const recipe = loading ? null : recipeData.recipe
-  const variants = loading ? null : recipeData.variants
 
   // stop gap loading solution
   if (loading) {
-    return null
+    return <RecipeLoader location={location} />
   }
+
+  const recipe = loading ? null : recipeData.recipe
+  const variants = loading ? null : recipeData.variants
 
   // intelligently assign the recipe.version to the correct version number
   recipe.version = findRecipeVersion(recipe, versionNumber)
@@ -160,14 +162,28 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     <Layout location={location}>
       <div>
         <Flex sx={{ flexDirection: [`column`, `row`] }}>
-          <div sx={{ width: `100%` }}>
+          <div sx={{ width: `100%`, textAlign: [`center`, `inherit`] }}>
             <h1 sx={{ mb: `1` }}>{recipe.version.name}</h1>
-            <div sx={{ display: `flex`, flexDirection: `row`, mb: `2` }}>
-              <div>by {recipe.user.name}</div>
-
-              <div sx={{ ml: `3` }}>Version {recipe.version.version}</div>
+            <div
+              sx={{
+                display: `flex`,
+                justifyContent: [`center`, `flex-start`],
+                flexDirection: `row`,
+                mt: [`2`, `0`],
+                mb: `2`,
+              }}
+            >
+              <div>{recipe.user.name}</div>
+              <div sx={{ ml: `3`, fontStyle: `italic` }}>
+                Version {recipe.version.version}
+              </div>
               <div sx={{ ml: `3` }}>
-                <Link to={`/recipe/${recipeId}/log`}>View edit log</Link>
+                <Link
+                  sx={{ variant: `buttons.secondary` }}
+                  to={`/recipe/${recipeId}/log`}
+                >
+                  View edit log
+                </Link>
               </div>
             </div>
           </div>
@@ -190,6 +206,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 backgroundSize: `cover`,
                 borderRadius: `2`,
                 order: 2,
+                border: theme => `1px solid ${theme.colors.border}`,
               }}
             />
             <TimingSmall recipe={recipe.version} />
@@ -201,7 +218,6 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               overflow: `hidden`,
               display: `flex`,
               flexDirection: `column`,
-              justifyContent: `space-between`,
             }}
           >
             <Flex sx={{ justifyContent: `space-between` }}>
@@ -226,9 +242,18 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 Edit recipe
               </Button>
             </Flex>
-
             <div>
-              <h2 sx={{ mb: `0` }}>Popular Variations</h2>
+              <Flex
+                as="h2"
+                sx={{ m: `0`, mt: `3`, fontSize: `3`, alignItems: `center` }}
+              >
+                <Copy
+                  filled={recipe.copied}
+                  size="1em"
+                  sx={{ strokeWidth: `2.5px`, mr: `1` }}
+                />
+                Popular Versions ({variants.length})
+              </Flex>
               <Flex
                 sx={{
                   overflow: `scroll`,

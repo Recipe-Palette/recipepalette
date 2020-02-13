@@ -72,7 +72,9 @@ export default ({ location }) => {
           mb: `6`,
         }}
       >
-        <Title>The best way to keep track of recipes</Title>
+        <Title sx={{ '&': { textAlign: `center` } }}>
+          The best way to keep track of recipes
+        </Title>
         <div
           sx={{
             display: `flex`,
