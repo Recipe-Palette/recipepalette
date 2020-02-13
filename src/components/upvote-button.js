@@ -49,7 +49,7 @@ const UpvoteButton = ({ size = 24, recipeName, recipeId }) => {
     })
 
     if (errorMutation) {
-      addToast('Bookmark Failed to Save', { appearance: 'error' })
+      addToast('Heart Failed to Save', { appearance: 'error' })
     } else {
       let text = ''
       if (upvoted) {
