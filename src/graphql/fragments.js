@@ -9,6 +9,7 @@ const versionInfoFragment = gql`
     servings
     instructions
     version
+    image_url
     ingredients {
       name
       amount
@@ -58,11 +59,11 @@ const upvoteInformationFragment = gql`
 const recipeCardInformationFragment = gql`
   fragment RecipeCardInformation on recipe {
     id
-    image_url
     latest {
       name
       prep_time_minutes
       cook_time_minutes
+      image_url
     }
   }
 `

@@ -67,8 +67,8 @@ const ErrorMessage = props => {
 }
 
 const uploadImageToS3 = async (file, submitMutation) => {
-  if (!file) {
-    submitMutation('')
+  if (typeof file === 'string') {
+    submitMutation(file)
     return
   }
   const reader = new FileReader()
@@ -126,7 +126,7 @@ const RecipeForm = ({
   privateRecipe = false,
 }) => {
   const { userId } = useAuth()
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(image_url)
   const [saving, setSaving] = useState(false)
   const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
     onCompleted({ insert_recipe_version: result }) {
@@ -140,35 +140,33 @@ const RecipeForm = ({
   }
 
   const handleSubmit = async values => {
-    if (name != values.name) {
-      log.push('Name')
-    }
-    if (JSON.stringify(ingredients) != JSON.stringify(values.ingredients)) {
-      log.push('Ingredients')
-    }
-    if (instructions != values.instructions) {
-      log.push('Instructions')
-    }
-    if (prep_time != values.prep_time) {
-      log.push('Prep Time')
-    }
-    if (cook_time != values.cook_time) {
-      log.push('Cook Time')
-    }
-    if (servings != values.servings) {
-      log.push('Servings')
-    }
-    if (image_url != values.image_url) {
-      log.push('Image')
-    }
-
-    //remove trailing ', ' if present
-    if (log.length > 0) {
-      log = log.join(', ')
-    }
-
     setSaving(true)
     const submitMutation = imageUrl => {
+      if (name != values.name) {
+        log.push('Name')
+      }
+      if (JSON.stringify(ingredients) != JSON.stringify(values.ingredients)) {
+        log.push('Ingredients')
+      }
+      if (instructions != values.instructions) {
+        log.push('Instructions')
+      }
+      if (prep_time != values.prep_time) {
+        log.push('Prep Time')
+      }
+      if (cook_time != values.cook_time) {
+        log.push('Cook Time')
+      }
+      if (servings != values.servings) {
+        log.push('Servings')
+      }
+      if (image_url != values.image_url) {
+        log.push('Image')
+      }
+
+      //remove trailing ', ' if present
+      log = log.length > 0 ? log.join(', ') : ''
+
       const recipeVersion = createRecipeObject(
         values,
         recipe_id,
