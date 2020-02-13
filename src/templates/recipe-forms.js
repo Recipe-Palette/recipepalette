@@ -39,7 +39,7 @@ const recipeFormQuery = gql`
 const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
   const { data: recipeData, loading } = useQuery(recipeFormQuery, {
     variables: {
-      id: recipeId,
+      id: parseInt(recipeId),
     },
     fetchPolicy: 'cache-and-network',
   })
@@ -90,6 +90,7 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
           image_url={recipe.version.image_url}
           latest_version={type === 'variant' ? 0 : recipe.latest_version}
           recipeOwnerId={recipe.user && recipe.user.id}
+          parent_id={type === 'variant' ? parseInt(recipeId) : null}
           location={location}
         />
       )}

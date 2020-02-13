@@ -124,6 +124,7 @@ const RecipeForm = ({
   notes = '',
   privateRecipe = false,
   recipeOwnerId,
+  parent_id,
   location,
 }) => {
   const { userId } = useAuth()
@@ -176,7 +177,8 @@ const RecipeForm = ({
         userId,
         latest_version,
         log,
-        imageUrl
+        imageUrl,
+        parent_id
       )
       upsertRecipe({
         variables: { objects: recipeVersion },
