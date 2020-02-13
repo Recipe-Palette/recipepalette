@@ -71,6 +71,11 @@ const uploadImageToS3 = async (file, submitMutation) => {
     submitMutation(file)
     return
   }
+
+  if (!file) {
+    submitMutation('')
+    return
+  }
   const reader = new FileReader()
 
   reader.onabort = () => console.log('file reading was aborted')
