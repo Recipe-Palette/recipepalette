@@ -179,7 +179,7 @@ const RecipeForm = ({
       )
       console.log(recipeVersion)
       upsertRecipe({
-        variables: { objects: recipeVersion },
+        variables: { objects: recipeVersion, recipe_id },
       })
     }
 
