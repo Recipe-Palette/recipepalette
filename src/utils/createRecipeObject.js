@@ -43,10 +43,6 @@ const createRecipeObject = (
     recipe.data.private = values.private
   }
 
-  if (imageUrl.length > 0) {
-    recipeVersion.image_url = imageUrl
-  }
-
   recipe.data.user_id = userId
   recipe.data.latest_version = latest_version
 
