@@ -3,12 +3,15 @@ import { jsx } from 'theme-ui'
 import { Link } from 'gatsby'
 import { darken } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
-import { Heart, Copy } from './icons'
+import { Copy } from './icons'
 import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
+import React from 'react'
 
 import BackgroundImage from 'gatsby-background-image'
 import BookmarkButton from './bookmark-button'
+import UpvoteCardIcon from './upvote-card-icon'
+import VariationCount from './variation-count'
 
 const CategoryCard = ({ image, name }) => {
   return (
@@ -37,12 +40,10 @@ const CategoryCard = ({ image, name }) => {
 const RecipeCard = ({
   time = 0,
   mini = false,
-  hearted = false,
   copied = false,
   recipe: {
     id,
-    image_url,
-    latest: { name, cook_time_minutes, prep_time_minutes },
+    latest: { name, cook_time_minutes, prep_time_minutes, image_url },
     bookmarks,
   },
 }) => {
@@ -50,7 +51,15 @@ const RecipeCard = ({
   return (
     <Link
       to={`/recipe/${id}/latest`}
-      sx={{ color: `text`, textDecoration: `none` }}
+      sx={{
+        color: `text`,
+        textDecoration: `none`,
+        outline: `none`,
+        '&:active, &:focus': {
+          boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+        },
+        borderRadius: `1`,
+      }}
     >
       <Card
         sx={{
@@ -60,11 +69,11 @@ const RecipeCard = ({
           position: `relative`,
           minHeight: 150,
           p: `3`,
-          backgroundColor: darken(`background`, 0.01),
+          backgroundColor: `background`,
           transition: `0.3s all`,
           variant: mini ? `cards.recipeMini` : `cards.primary`,
           '&:hover': {
-            backgroundColor: darken(`background`, 0.035),
+            backgroundColor: darken(`background`, 0.03),
           },
         }}
       >
@@ -98,27 +107,20 @@ const RecipeCard = ({
           }}
         >
           <div sx={{ display: `flex`, alignItems: `center` }}>
-            <Heart size={20} filled={hearted} />
-            <span
-              sx={{
-                fontSize: `2`,
-                ml: `2`,
-              }}
-            >
-              {/* TOOD add actual data here */}#
-            </span>
+            <UpvoteCardIcon recipeId={id} recipeName={name} />
           </div>
-          <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
-            <Copy size={20} filled={copied} />
-            <span
-              sx={{
-                fontSize: `2`,
-                ml: `2`,
-              }}
-            >
-              #
-            </span>
-          </div>
+          <React.Fragment>
+            <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
+              <Copy size={20} filled={copied} />
+              <span
+                sx={{
+                  fontSize: `2`,
+                  ml: `2`,
+                }}
+              />
+              <VariationCount recipeId={id} />
+            </div>
+          </React.Fragment>
           <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
             <FiClock size={20} />
             <span
@@ -158,7 +160,17 @@ const RecipeCard = ({
 }
 
 const NewCard = () => (
-  <Link to="/recipe/new" sx={{ textDecoration: `none` }}>
+  <Link
+    to="/recipe/new"
+    sx={{
+      textDecoration: `none`,
+      outline: `none`,
+      '&:active, &:focus': {
+        boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
+      },
+      borderRadius: `1`,
+    }}
+  >
     <Card
       sx={{
         display: `flex`,
@@ -168,12 +180,15 @@ const NewCard = () => (
         fontSize: `3`,
         py: `4`,
         px: `4`,
-        borderRadius: `1`,
+        borderRadius: `2`,
         textAlign: `center`,
         border: theme => `1px dashed ${theme.colors.border}`,
         backgroundColor: `background`,
         transition: `0.3s all`,
         height: `100%`,
+        '&:hover': {
+          backgroundColor: darken(`background`, 0.035),
+        },
       }}
     >
       + Add New

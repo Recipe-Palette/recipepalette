@@ -19,7 +19,6 @@ const recipeQuery = gql`
       where: { user_id: { _eq: $user_id } }
     ) {
       id
-      image_url
       latest_version
       latest {
         cook_time_minutes
@@ -27,6 +26,7 @@ const recipeQuery = gql`
         name
         created_at
         version
+        image_url
       }
       bookmarks(where: { user_id: { _eq: $user_id } }) {
         ...BookmarkInformation
@@ -44,11 +44,7 @@ export default ({ location }) => {
 
   return (
     <Layout location={location}>
-      <div
-        sx={{
-          py: `4`,
-        }}
-      >
+      <div sx={{}}>
         <Title>My Recipes</Title>
         {loading ? (
           <RecipeCardGridLoader />

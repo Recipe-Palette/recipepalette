@@ -14,6 +14,7 @@ import {
 } from '../graphql/fragments'
 import CardGrid from '../components/card-grid'
 import { RecipeCardGridLoader } from '../components/recipe-card-loader'
+import SearchBar from '../components/search-bar'
 
 const SEARCH_QUERY = gql`
   query SearchQuery($whereClause: recipe_bool_exp!, $user_id: String!) {
@@ -71,19 +72,31 @@ const Search = ({ location }) => {
   })
 
   return (
-    <Layout location={location}>
-      <div sx={{ py: `4` }}>
-        <Title>Search results for {q}</Title>
-        {loading ? (
-          <RecipeCardGridLoader />
-        ) : (
-          <CardGrid recipes={searchData.recipes}>
-            {searchData.recipes.map((recipe, index) => (
-              <RecipeCard key={index} recipe={recipe} />
-            ))}
-          </CardGrid>
-        )}
-      </div>
+    <Layout location={location} sx={{ minHeight: `100vh` }}>
+      {q ? (
+        <div sx={{ py: `4` }}>
+          <Title>Search results for {q}</Title>
+          {loading ? (
+            <RecipeCardGridLoader />
+          ) : (
+            <CardGrid recipes={searchData.recipes}>
+              {searchData.recipes.map((recipe, index) => (
+                <RecipeCard key={index} recipe={recipe} />
+              ))}
+            </CardGrid>
+          )}
+        </div>
+      ) : (
+        <div sx={{ py: `4` }}>
+          <Title>Search for Recipes</Title>
+          <p>
+            You can try searching "Chocolate Chip Cookies", or just "Cookies",
+            recipe titles across our entire database will be returned to browse,
+            bookmark, and edit.
+          </p>
+          <SearchBar />
+        </div>
+      )}
     </Layout>
   )
 }

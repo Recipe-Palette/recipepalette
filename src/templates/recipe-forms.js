@@ -14,7 +14,6 @@ import { formatTime } from '../utils/parseTime'
 const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
-      image_url
       latest_version
       user {
         id
@@ -36,12 +35,12 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
   })
 
   let recipe = {}
   if (!loading && recipeData) {
-    recipe = recipeData.recipe
+    recipe = { ...recipeData.recipe }
     // intelligently assign the recipe.version to the correct version number
     recipe.version = findRecipeVersion(recipe, versionNumber)
   } else {
@@ -60,7 +59,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
 
   return (
     <Layout location={location}>
-      <Title sx={{ textAlign: `center` }}>{title}</Title>
+      <Title sx={{ '&': { textAlign: `center` } }}>{title}</Title>
       {loading ? (
         <div sx={{ display: `flex`, placeContent: `center` }}>
           <Spinner />
@@ -82,7 +81,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
             recipe.version && formatTime(recipe.version.cook_time_minutes)
           }
           servings={recipe.version && recipe.version.servings}
-          image_url={recipe.image_url}
+          image_url={recipe.version.image_url}
           latest_version={recipe.latest_version}
           recipeOwnerId={recipe.user && recipe.user.id}
         />
