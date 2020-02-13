@@ -15,7 +15,6 @@ import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
 import UpvoteButton from '../components/upvote-button'
-import VariationCount from '../components/variation-count'
 import { recipeInformationFragment } from '../graphql/fragments'
 import { RecipeLoader } from '../components/recipe-loader'
 
@@ -46,25 +45,17 @@ const Icons = ({ recipe }) => {
         alignItems: `flex-start`,
         justifyContent: [`center`, `flex-end`],
         width: [`100%`, `50%`],
-        '*+*': {
-          ml: `3`,
-        },
         mb: `2`,
       }}
     >
-      <Flex sx={{ mr: `3`, justifyContent: `center` }}>
+      <Flex sx={{ mr: `3`, justifyContent: `center`, alignItems: `center` }}>
         <UpvoteButton
           size={32}
           recipeId={recipe.id}
           recipeName={recipe.version.name}
         />
       </Flex>
-      <Flex sx={{ alignItems: `center`, justifyContent: `center` }}>
-        <Copy filled={recipe.copied} size="2em" />{' '}
-        <h2 sx={{ my: `0`, ml: `1` }}>{recipe.copies}</h2>
-        <VariationCount recipeId={recipe.id} />
-      </Flex>
-      <Flex sx={{ justifyContent: `center` }}>
+      <Flex sx={{ justifyContent: `center`, ml: 3 }}>
         <BookmarkButton
           size={32}
           recipeId={recipe.id}

@@ -7,7 +7,6 @@ import { useAuth } from 'react-use-auth'
 
 import Layout from '../components/layout'
 import Title from '../components/title'
-import { RecipeCard } from '../components/cards'
 import {
   bookmarkInformationFragment,
   recipeCardInformationFragment,
@@ -79,11 +78,7 @@ const Search = ({ location }) => {
           {loading ? (
             <RecipeCardGridLoader />
           ) : (
-            <CardGrid recipes={searchData.recipes}>
-              {searchData.recipes.map((recipe, index) => (
-                <RecipeCard key={index} recipe={recipe} />
-              ))}
-            </CardGrid>
+            <CardGrid recipes={searchData.recipes} />
           )}
         </div>
       ) : (
