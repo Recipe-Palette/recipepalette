@@ -60,7 +60,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
     recipe.version.ingredients = ingredients
   }
 
-  if (recipe.version && recipe.tags) {
+  if (recipe && recipe.tags) {
     const tags = recipe.tags.map(recipe_tag => recipe_tag.tag.name)
     recipe.tags = tags
   }
@@ -89,7 +89,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
             recipe.version && formatTime(recipe.version.cook_time_minutes)
           }
           servings={recipe.version && recipe.version.servings}
-          tags={recipe.version && recipe.tags}
+          tags={recipe && recipe.tags}
           image_url={recipe.image_url}
           latest_version={recipe.latest_version}
         />

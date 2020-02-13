@@ -66,17 +66,4 @@ const UPSERT_RECIPE = gql`
   }
 `
 
-const UPSERT_TAGS = gql`
-  mutation UpsertTags($recipe_id: Int!, $tag_id: Int!) {
-    insert_tag_recipe(objects: { recipe_id: $recipe_id, tag_id: $tag_id }) {
-      affected_rows
-      returning {
-        id
-        recipe_id
-        tag_id
-      }
-    }
-  }
-`
-
-export { UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE, UPSERT_TAGS }
+export { UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }
