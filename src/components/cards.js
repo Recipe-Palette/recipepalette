@@ -43,8 +43,7 @@ const RecipeCard = ({
   copied = false,
   recipe: {
     id,
-    image_url,
-    latest: { name, cook_time_minutes, prep_time_minutes },
+    latest: { name, cook_time_minutes, prep_time_minutes, image_url },
     bookmarks,
   },
 }) => {

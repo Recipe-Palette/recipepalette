@@ -155,7 +155,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
   if (isEmpty(recipe.version)) return 'Version not found'
 
   const image =
-    recipe.image_url ||
+    recipe.version.image_url ||
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
   return (

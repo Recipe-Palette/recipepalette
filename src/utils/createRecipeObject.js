@@ -33,6 +33,7 @@ const createRecipeObject = (
     image_url: imageUrl,
     log,
     notes: values.notes,
+    image_url: imageUrl,
   }
 
   if (recipe_id) {
@@ -42,6 +43,10 @@ const createRecipeObject = (
   if (values.private) {
     recipe.data.private = values.private
   }
+
+  // if (imageUrl.length > 0) {
+  //   recipe.data.image_url = imageUrl
+  // }
 
   recipe.data.user_id = userId
   recipe.data.latest_version = latest_version
