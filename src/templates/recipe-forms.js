@@ -84,6 +84,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
           image_url={recipe.version.image_url}
           latest_version={recipe.latest_version}
           recipeOwnerId={recipe.user && recipe.user.id}
+          location={location}
         />
       )}
     </Layout>

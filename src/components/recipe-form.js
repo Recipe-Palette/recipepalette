@@ -124,6 +124,7 @@ const RecipeForm = ({
   notes = '',
   privateRecipe = false,
   recipeOwnerId,
+  location,
 }) => {
   const { userId } = useAuth()
   const [image, setImage] = useState(image_url)
@@ -135,6 +136,8 @@ const RecipeForm = ({
     },
   })
   const isOwner = userId && recipeOwnerId === userId
+  const isVariant = location.pathname.includes('variant')
+  const isNew = location.pathname.includes('new')
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -183,9 +186,8 @@ const RecipeForm = ({
     await uploadImageToS3(image, submitMutation)
   }
 
-  // make sure they own the recipe
-  // if there is a no recipe_id (like to create a recipe) there's no need to hide the form
-  if (!isOwner && recipe_id)
+  // if they don't own the recipe, it's not creating a new recipe, and it's not for a variant, they shouldn't see the form
+  if (!isOwner && !isNew && !isVariant)
     return (
       <div sx={{ textAlign: `center` }}>
         Woops, looks like you aren't the owner of this recipe!
