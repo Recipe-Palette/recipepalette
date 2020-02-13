@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
+import { Fragment } from 'react'
 import { Flex, Divider, Button } from '@theme-ui/components'
 import { Link, navigate } from 'gatsby'
 import { FiClock } from 'react-icons/fi'
@@ -7,6 +8,7 @@ import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
+import { useAuth } from 'react-use-auth'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
@@ -133,6 +135,7 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
+  const { userId } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
@@ -158,6 +161,8 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     recipe.version.image_url ||
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
+  const isOwner = userId && recipe.user.id === userId
+
   return (
     <Layout location={location}>
       <div>
@@ -174,17 +179,21 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               }}
             >
               <div>{recipe.user.name}</div>
-              <div sx={{ ml: `3`, fontStyle: `italic` }}>
-                Version {recipe.version.version}
-              </div>
-              <div sx={{ ml: `3` }}>
-                <Link
-                  sx={{ variant: `buttons.secondary` }}
-                  to={`/recipe/${recipeId}/log`}
-                >
-                  View edit log
-                </Link>
-              </div>
+              {isOwner && (
+                <Fragment>
+                  <div sx={{ ml: `3`, fontStyle: `italic` }}>
+                    Version {recipe.version.version}
+                  </div>
+                  <div sx={{ ml: `3` }}>
+                    <Link
+                      sx={{ variant: `buttons.secondary` }}
+                      to={`/recipe/${recipeId}/log`}
+                    >
+                      View edit log
+                    </Link>
+                  </div>
+                </Fragment>
+              )}
             </div>
           </div>
           <Icons recipe={recipe} />
@@ -231,16 +240,18 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               >
                 Create new version
               </Button>
-              <Button
-                onClick={() =>
-                  navigate(
-                    `/recipe/${recipe.id}/${versionNumber || `latest`}/edit`
-                  )
-                }
-                sx={{ variant: `buttons.link`, width: `48%` }}
-              >
-                Edit recipe
-              </Button>
+              {isOwner && (
+                <Button
+                  onClick={() =>
+                    navigate(
+                      `/recipe/${recipe.id}/${versionNumber || `latest`}/edit`
+                    )
+                  }
+                  sx={{ variant: `buttons.link`, width: `48%` }}
+                >
+                  Edit recipe
+                </Button>
+              )}
             </Flex>
             <div>
               <Flex

@@ -31,6 +31,7 @@ const recipeInformationFragment = gql`
       ...VersionInformation
     }
     user {
+      id
       name
     }
   }
