@@ -10,6 +10,7 @@ import { useAuth } from 'react-use-auth'
 import { bookmarkInformationFragment } from '../../graphql/fragments'
 import PaletteToggle from '../../components/palette-toggle'
 import CardGrid from '../../components/card-grid'
+import { RecipeCardGridLoader } from '../../components/recipe-card-loader'
 
 const bookmarkedQuery = gql`
   query MyQuery($user_id: String!) {
@@ -42,15 +43,16 @@ export default ({ location }) => {
   const { data: recipeData, loading } = useQuery(bookmarkedQuery, {
     variables: { user_id: userId },
   })
-  if (loading) {
-    return null
-  }
 
   return (
     <Fragment>
       <Title>My Palette</Title>
       <PaletteToggle location={location} />
-      <CardGrid recipes={recipeData.recipes} />
+      {loading ? (
+        <RecipeCardGridLoader />
+      ) : (
+        <CardGrid recipes={recipeData.recipes} />
+      )}
     </Fragment>
   )
 }
