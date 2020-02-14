@@ -125,7 +125,7 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
-  const { userId } = useAuth()
+  const { userId, isAuthenticated, login } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
@@ -221,13 +221,16 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
           <Flex sx={{ justifyContent: `space-between` }}>
             <Button
               onClick={() =>
-                navigate(
-                  `/recipe/${recipe.id}/${versionNumber || `latest`}/variant`
-                )
+                isAuthenticated()
+                  ? navigate(
+                      `/recipe/${recipe.id}/${versionNumber ||
+                        `latest`}/variant`
+                    )
+                  : login()
               }
               sx={{ variant: `buttons.link`, width: `48%` }}
             >
-              Create new version
+              Create new variant
             </Button>
             {isOwner && (
               <Button
@@ -252,7 +255,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 size="1em"
                 sx={{ strokeWidth: `2.5px`, mr: `1` }}
               />
-              Popular Versions ({variants.length})
+              Popular Variations ({variants.length})
             </Flex>
             <Flex
               sx={{
