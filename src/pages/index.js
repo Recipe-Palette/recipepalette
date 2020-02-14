@@ -4,10 +4,10 @@ import { jsx } from 'theme-ui'
 import { graphql, useStaticQuery } from 'gatsby'
 import { Button } from '@theme-ui/components'
 import { useAuth } from 'react-use-auth'
+import { Fragment } from 'react'
 
 import SearchBar from '../components/search-bar'
 import Title from '../components/title'
-import Layout from '../components/layout'
 import { CategoryCard } from '../components/cards'
 
 const imageQuery = graphql`
@@ -57,14 +57,14 @@ const imageQuery = graphql`
   }
 `
 
-export default ({ location }) => {
+export default () => {
   const { appetizer, bread, dessert, breakfast, pasta } = useStaticQuery(
     imageQuery
   )
   const { isAuthenticated, login } = useAuth()
 
   return (
-    <Layout location={location} home={true}>
+    <Fragment>
       <div
         sx={{
           textAlign: `center`,
@@ -110,6 +110,6 @@ export default ({ location }) => {
         <CategoryCard name="Breakfast" image={breakfast} />
         <CategoryCard name="Pasta" image={pasta} />
       </div>
-    </Layout>
+    </Fragment>
   )
 }

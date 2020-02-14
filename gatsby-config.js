@@ -19,7 +19,7 @@ module.exports = {
     // create routes for client side routing
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/recipe/*`, `/palette/*`, `/search/*`] },
+      options: { prefixes: [`/recipe/*`, `/search/*`] },
     },
     `gatsby-plugin-netlify`,
     // PWA support
