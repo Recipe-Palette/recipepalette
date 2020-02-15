@@ -17,18 +17,26 @@ const CategoryCard = ({ image, name }) => {
   return (
     <BackgroundImage
       fluid={[
-        `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5))`,
+        `linear-gradient(rgba(255,255,255,.25), rgba(128,65,13,.5))`,
         image.childImageSharp.fluid,
       ]}
+      sx={{
+        '&::before, &::after': {
+          borderRadius: `3`,
+        },
+      }}
     >
       <Card
         sx={{
+          color: `background`,
+          fontSize: `3`,
           py: `5`,
           display: `flex`,
           justifyContent: `center`,
-          color: `background`,
-          fontSize: `5`,
           cursor: `pointer`,
+          border: `none`,
+          fontWeight: `bold`,
+          textShadow: `0px 2px 12px #444`,
         }}
       >
         {name}
