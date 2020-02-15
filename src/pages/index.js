@@ -180,8 +180,8 @@ export default () => {
         sx={{
           display: `grid`,
           gridTemplateColumns: [
-            `repeat(2, minmax(200px, 1fr))`,
-            `repeat(3, minmax(180px, 1fr))`,
+            `repeat(2, minmax(150px, 1fr))`,
+            `repeat(3, minmax(150px, 1fr))`,
           ],
           gridAutoFlow: `row`,
           gridGap: [`3`, `4`],
