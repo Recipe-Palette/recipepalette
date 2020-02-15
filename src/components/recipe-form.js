@@ -142,8 +142,7 @@ const RecipeForm = ({
     },
   })
   const isOwner = userId && recipeOwnerId === userId
-  const isVariant = location.pathname.includes('variant')
-  const isNew = location.pathname.includes('new')
+  const isEdit = !location.pathname.includes('edit')
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -193,8 +192,14 @@ const RecipeForm = ({
     await uploadImageToS3(image, submitMutation)
   }
 
-  // if they don't own the recipe, it's not creating a new recipe, and it's not for a variant, they shouldn't see the form
-  if (!isOwner && !isNew && !isVariant)
+  // 6 Potential states:
+  // owner + create show
+  // owner + variant show
+  // owner + edit = show
+  // viewer + create show
+  // viewer + variant show
+  // viewer + edit = hide <- this is the only case we need to check
+  if (!isOwner && isEdit)
     return (
       <div sx={{ textAlign: `center` }}>
         Woops, looks like you aren't the owner of this recipe!
