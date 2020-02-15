@@ -71,6 +71,11 @@ const uploadImageToS3 = async (file, submitMutation) => {
     submitMutation(file)
     return
   }
+
+  if (!file) {
+    submitMutation('')
+    return
+  }
   const reader = new FileReader()
 
   reader.onabort = () => console.log('file reading was aborted')
@@ -123,6 +128,9 @@ const RecipeForm = ({
   log = [],
   notes = '',
   privateRecipe = false,
+  recipeOwnerId,
+  parent_id,
+  location,
 }) => {
   const { userId } = useAuth()
   const [image, setImage] = useState(image_url)
@@ -133,6 +141,9 @@ const RecipeForm = ({
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
+  const isOwner = userId && recipeOwnerId === userId
+  const isVariant = location.pathname.includes('variant')
+  const isNew = location.pathname.includes('new')
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -171,7 +182,8 @@ const RecipeForm = ({
         userId,
         latest_version,
         log,
-        imageUrl
+        imageUrl,
+        parent_id
       )
       upsertRecipe({
         variables: { objects: recipeVersion },
@@ -180,6 +192,14 @@ const RecipeForm = ({
 
     await uploadImageToS3(image, submitMutation)
   }
+
+  // if they don't own the recipe, it's not creating a new recipe, and it's not for a variant, they shouldn't see the form
+  if (!isOwner && !isNew && !isVariant)
+    return (
+      <div sx={{ textAlign: `center` }}>
+        Woops, looks like you aren't the owner of this recipe!
+      </div>
+    )
 
   return (
     <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>

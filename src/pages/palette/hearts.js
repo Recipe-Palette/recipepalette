@@ -1,20 +1,21 @@
 /* eslint-disable react/display-name */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import Title from '../components/title'
-import Layout from '../components/layout'
-import { NewCard, RecipeCard } from '../components/cards'
+import Title from '../../components/title'
+import { Fragment } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 
-import { bookmarkInformationFragment } from '../graphql/fragments'
+import { bookmarkInformationFragment } from '../../graphql/fragments'
+import PaletteToggle from '../../components/palette-toggle'
+import CardGrid from '../../components/card-grid'
 
 const heartedQuery = gql`
   query MyQuery($user_id: String!) {
     recipes: recipe(
       order_by: { latest: { created_at: desc } }
-      where: { ups: { user_id: { _eq: $user_id } } }
+      where: { ups: { user_id: { _eq: $user_id }, upvoted: { _eq: true } } }
     ) {
       id
       image_url
@@ -44,28 +45,10 @@ export default ({ location }) => {
   }
 
   return (
-    <Layout location={location}>
-      <div
-        sx={{
-          py: `4`,
-        }}
-      >
-        <Title>My Hearted Recipes</Title>
-        <div
-          sx={{
-            display: `grid`,
-            gridTemplateColumns: [`repeat(auto-fit, minmax(275px, 1fr))`],
-            gridAutoFlow: `row`,
-            gridGap: `3`,
-            mb: `4`,
-          }}
-        >
-          <NewCard />
-          {recipeData.recipes.map((recipe, index) => (
-            <RecipeCard key={index} recipe={recipe} />
-          ))}
-        </div>
-      </div>
-    </Layout>
+    <Fragment>
+      <Title>My Palette</Title>
+      <PaletteToggle location={location} />
+      <CardGrid recipes={recipeData.recipes} />
+    </Fragment>
   )
 }

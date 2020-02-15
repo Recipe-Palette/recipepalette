@@ -6,7 +6,8 @@ const createRecipeObject = (
   userId,
   version,
   log,
-  imageUrl
+  imageUrl,
+  parent_id
 ) => {
   const instructions = values.instructions.split('\n')
   const prep_time_minutes = parseTime(values.prep_time)
@@ -33,7 +34,6 @@ const createRecipeObject = (
     image_url: imageUrl,
     log,
     notes: values.notes,
-    image_url: imageUrl,
   }
 
   if (recipe_id) {
@@ -42,6 +42,10 @@ const createRecipeObject = (
 
   if (values.private) {
     recipe.data.private = values.private
+  }
+
+  if (parent_id) {
+    recipe.data.parent_id = parent_id
   }
 
   // if (imageUrl.length > 0) {

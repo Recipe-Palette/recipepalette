@@ -47,34 +47,34 @@ const NavigationMobile = ({ location }) => {
       >
         <IconContainer
           onClick={() =>
-            isAuthenticated() ? navigate('/my-recipes') : login()
+            isAuthenticated() ? navigate('/palette/recipes') : login()
           }
           sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
         >
           <Book
-            filled={isActiveLink(location.pathname, `my-recipes`)}
+            filled={isActiveLink(location.pathname, `recipes`)}
             size="1.5rem"
           />
         </IconContainer>
         <IconContainer
           onClick={() =>
-            isAuthenticated() ? navigate('/my-hearted') : login()
+            isAuthenticated() ? navigate('/palette/hearts') : login()
           }
           sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
         >
           <Heart
-            filled={isActiveLink(location.pathname, `my-hearted`)}
+            filled={isActiveLink(location.pathname, `hearts`)}
             size="1.5rem"
           />
         </IconContainer>
         <IconContainer
           onClick={() =>
-            isAuthenticated() ? navigate('/my-bookmarked') : login()
+            isAuthenticated() ? navigate('/palette/bookmarks') : login()
           }
           sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
         >
           <Bookmark
-            filled={isActiveLink(location.pathname, `my-bookmarked`)}
+            filled={isActiveLink(location.pathname, `bookmarks`)}
             size="1.5rem"
           />
         </IconContainer>

@@ -2,12 +2,12 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Button } from '@theme-ui/components'
-
-import { graphql, useStaticQuery } from 'gatsby'
+import { Fragment } from 'react'
+import { graphql, useStaticQuery, navigate } from 'gatsby'
 import HeroImage from 'gatsby-background-image'
 import Img from 'gatsby-image'
+import { useAuth } from 'react-use-auth'
 
-import Layout from '../components/layout'
 import SearchBar from '../components/search-bar'
 import Title from '../components/title'
 import { CategoryCard } from '../components/cards'
@@ -107,9 +107,10 @@ export default () => {
     feature02,
     feature03,
   } = useStaticQuery(imageQuery)
+  const { isAuthenticated, login } = useAuth()
 
   return (
-    <Layout location={location}>
+    <Fragment>
       <section
         sx={{
           height: [320, 600],
@@ -287,8 +288,14 @@ export default () => {
         }}
       >
         <h2 sx={{ fontSize: `5` }}>Join Recipe Palette for Free</h2>
-        <Button>Get Started</Button>
+        <Button
+          onClick={() =>
+            isAuthenticated() ? navigate('/palette/recipes') : login()
+          }
+        >
+          Get Started
+        </Button>
       </section>
-    </Layout>
+    </Fragment>
   )
 }

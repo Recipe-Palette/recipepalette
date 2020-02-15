@@ -3,9 +3,9 @@ import { jsx } from 'theme-ui'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Spinner } from '@theme-ui/components'
+import { Fragment } from 'react'
 
 import { findRecipeVersion } from '../utils/findRecipeVersion'
-import Layout from '../components/layout'
 import Title from '../components/title'
 import RecipeForm from '../components/recipe-form'
 import { versionInfoFragment } from '../graphql/fragments'
@@ -15,6 +15,14 @@ const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
       latest_version
+      tags {
+        tag {
+          name
+        }
+      }
+      user {
+        id
+      }
       latest {
         ...VersionInformation
       }
@@ -27,17 +35,18 @@ const recipeFormQuery = gql`
 `
 
 // used for recipe form pages like edit/new/variant
-const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
+// eslint-disable-next-line complexity
+const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
   const { data: recipeData, loading } = useQuery(recipeFormQuery, {
     variables: {
-      id: recipeId,
+      id: parseInt(recipeId),
     },
     fetchPolicy: 'cache-and-network',
   })
 
   let recipe = {}
   if (!loading && recipeData) {
-    recipe = recipeData.recipe
+    recipe = { ...recipeData.recipe }
     // intelligently assign the recipe.version to the correct version number
     recipe.version = findRecipeVersion(recipe, versionNumber)
   } else {
@@ -55,15 +64,15 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
   }
 
   return (
-    <Layout location={location}>
-      <Title sx={{ textAlign: `center` }}>{title}</Title>
+    <Fragment>
+      <Title sx={{ '&': { textAlign: `center` } }}>{title}</Title>
       {loading ? (
         <div sx={{ display: `flex`, placeContent: `center` }}>
           <Spinner />
         </div>
       ) : (
         <RecipeForm
-          recipe_id={parseInt(recipeId)}
+          recipe_id={type === 'variant' ? null : parseInt(recipeId)}
           name={recipe.version && recipe.version.name}
           ingredients={recipe.version && recipe.version.ingredients}
           instructions={
@@ -79,10 +88,13 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
           }
           servings={recipe.version && recipe.version.servings}
           image_url={recipe.version.image_url}
-          latest_version={recipe.latest_version}
+          latest_version={type === 'variant' ? 0 : recipe.latest_version}
+          recipeOwnerId={recipe.user && recipe.user.id}
+          parent_id={type === 'variant' ? parseInt(recipeId) : null}
+          location={location}
         />
       )}
-    </Layout>
+    </Fragment>
   )
 }
 

@@ -5,9 +5,7 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 
-import Layout from '../components/layout'
 import Title from '../components/title'
-import { RecipeCard } from '../components/cards'
 import {
   bookmarkInformationFragment,
   recipeCardInformationFragment,
@@ -71,33 +69,25 @@ const Search = ({ location }) => {
     },
   })
 
-  return (
-    <Layout location={location} sx={{ minHeight: `100vh` }}>
-      {q ? (
-        <div sx={{ py: `4` }}>
-          <Title>Search results for {q}</Title>
-          {loading ? (
-            <RecipeCardGridLoader />
-          ) : (
-            <CardGrid recipes={searchData.recipes}>
-              {searchData.recipes.map((recipe, index) => (
-                <RecipeCard key={index} recipe={recipe} />
-              ))}
-            </CardGrid>
-          )}
-        </div>
+  return q ? (
+    <div sx={{ py: `4` }}>
+      <Title>Search results for {q}</Title>
+      {loading ? (
+        <RecipeCardGridLoader />
       ) : (
-        <div sx={{ py: `4` }}>
-          <Title>Search for Recipes</Title>
-          <p>
-            You can try searching "Chocolate Chip Cookies", or just "Cookies",
-            recipe titles across our entire database will be returned to browse,
-            bookmark, and edit.
-          </p>
-          <SearchBar />
-        </div>
+        <CardGrid recipes={searchData.recipes} />
       )}
-    </Layout>
+    </div>
+  ) : (
+    <div sx={{ py: `4` }}>
+      <Title>Search for Recipes</Title>
+      <p>
+        You can try searching "Chocolate Chip Cookies", or just "Cookies",
+        recipe titles across our entire database will be returned to browse,
+        bookmark, and edit.
+      </p>
+      <SearchBar />
+    </div>
   )
 }
 
