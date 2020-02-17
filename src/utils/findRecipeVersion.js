@@ -1,12 +1,15 @@
-const findRecipeVersion = (recipe, versionNumber) => {
+const findRecipeVersion = (versions, latestVersion, versionNumber) => {
   // because we don't know what version number a recipe is at with urls that include latest
-  // wee need to find it from the returned versions
+  // we need to find it from the returned versions
   if (versionNumber === 'latest') {
-    return { ...recipe.latest }
-  } else {
+    return { ...latestVersion }
+  } else if (versions) {
     return {
-      ...recipe.versions.find(v => v.version == versionNumber),
+      ...versions.find(v => v.version == versionNumber),
     }
+  } else {
+    console.error('failed to find the proper recipe version')
+    return {}
   }
 }
 

@@ -48,7 +48,11 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
   if (!loading && recipeData) {
     recipe = { ...recipeData.recipe }
     // intelligently assign the recipe.version to the correct version number
-    recipe.version = findRecipeVersion(recipe, versionNumber)
+    recipe.version = findRecipeVersion(
+      recipe.versions,
+      recipe.latest,
+      versionNumber
+    )
   } else {
     recipe.version = {}
   }
