@@ -142,7 +142,7 @@ const RecipeForm = ({
     },
   })
   const isOwner = userId && recipeOwnerId === userId
-  const isEdit = !location.pathname.includes('edit')
+  const isEdit = location.pathname.includes('edit')
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
