@@ -45,7 +45,9 @@ const RecipeSchema = Yup.object().shape({
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
-        amount: Yup.number().required('Required'),
+        amount: Yup.number()
+          .max(2 ** 31 - 1, 'Too big')
+          .required('Required'),
         unit: Yup.string().required('Required'),
         name: Yup.string().required('Required'),
       })
@@ -54,6 +56,7 @@ const RecipeSchema = Yup.object().shape({
     .min(1, 'Minimum one ingredient'),
   instructions: Yup.string().required('Instructions are required'),
   servings: Yup.number()
+    .max(2 ** 31 - 1, 'Too big')
     .positive('Enter a positive number')
     .required('Servings are required'),
   prep_time: Yup.string().required('Required'),
@@ -70,6 +73,11 @@ const ErrorMessage = props => {
 const uploadImageToS3 = async (file, submitMutation) => {
   if (typeof file === 'string') {
     submitMutation(file)
+    return
+  }
+
+  if (!file) {
+    submitMutation('')
     return
   }
   const reader = new FileReader()
@@ -125,6 +133,9 @@ const RecipeForm = ({
   log = [],
   notes = '',
   privateRecipe = false,
+  recipeOwnerId,
+  parent_id,
+  location,
 }) => {
   const { userId } = useAuth()
   const { addToast } = useToasts()
@@ -137,6 +148,8 @@ const RecipeForm = ({
     },
   })
 
+  const isOwner = userId && recipeOwnerId === userId
+  const isEdit = location.pathname.includes('edit')
   const handleImageDrop = imageFile => {
     setImage(imageFile)
   }
@@ -181,7 +194,8 @@ const RecipeForm = ({
           userId,
           latest_version,
           log,
-          imageUrl
+          imageUrl,
+          parent_id
         )
 
         if (!recipe_id) {
@@ -196,6 +210,20 @@ const RecipeForm = ({
 
     await uploadImageToS3(image, submitMutation)
   }
+
+  // 6 Potential states:
+  // owner + create show
+  // owner + variant show
+  // owner + edit = show
+  // viewer + create show
+  // viewer + variant show
+  // viewer + edit = hide <- this is the only case we need to check
+  if (!isOwner && isEdit)
+    return (
+      <div sx={{ textAlign: `center` }}>
+        Woops, looks like you aren't the owner of this recipe!
+      </div>
+    )
 
   return (
     <div sx={{ width: [`100%`, `480px`], margin: `0 auto` }}>

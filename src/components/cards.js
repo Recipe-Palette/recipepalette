@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Link } from 'gatsby'
-import { darken } from '@theme-ui/color'
+import { darken, lighten } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Copy } from './icons'
 import { Card } from '@theme-ui/components'
@@ -17,18 +17,26 @@ const CategoryCard = ({ image, name }) => {
   return (
     <BackgroundImage
       fluid={[
-        `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5))`,
+        `linear-gradient(rgba(255,255,255,.25), rgba(128,65,13,.5))`,
         image.childImageSharp.fluid,
       ]}
+      sx={{
+        '&::before, &::after': {
+          borderRadius: `3`,
+        },
+      }}
     >
       <Card
         sx={{
+          color: `background`,
+          fontSize: `3`,
           py: `5`,
           display: `flex`,
           justifyContent: `center`,
-          color: `background`,
-          fontSize: `5`,
           cursor: `pointer`,
+          border: `none`,
+          fontWeight: `bold`,
+          textShadow: `0px 2px 12px #444`,
         }}
       >
         {name}
@@ -81,7 +89,7 @@ const RecipeCard = ({
           sx={{
             height: 125,
             borderRadius: `1`,
-            backgroundColor: `#DDD`,
+            backgroundColor: lighten(`border`, 0.075),
             backgroundImage: `url(${image_url})`,
             backgroundSize: `cover`,
           }}
@@ -93,7 +101,12 @@ const RecipeCard = ({
         >
           <span
             sx={{
+              width: `100%`,
               fontSize: `3`,
+              display: `-webkit-box`,
+              WebkitBoxOrient: `vertical`,
+              WebkitLineClamp: `2`,
+              overflow: `hidden`,
             }}
           >
             {name}
@@ -176,7 +189,7 @@ const NewCard = () => (
         display: `flex`,
         alignItems: `center`,
         justifyContent: `center`,
-        color: `border`,
+        color: `gray`,
         fontSize: `3`,
         py: `4`,
         px: `4`,

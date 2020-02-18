@@ -106,7 +106,7 @@ const Header = () => {
           <Button
             sx={{ variant: `buttons.link`, height: `39px` }}
             onClick={() =>
-              isAuthenticated() ? navigate('/my-recipes') : login()
+              isAuthenticated() ? navigate('/palette/recipes') : login()
             }
           >
             My Palette

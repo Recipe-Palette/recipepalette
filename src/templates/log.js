@@ -3,8 +3,8 @@ import { jsx } from 'theme-ui'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Spinner } from '@theme-ui/components'
+import { Fragment } from 'react'
 
-import Layout from '../components/layout'
 import Title from '../components/title'
 import LogTable from '../components/log-table'
 
@@ -29,10 +29,11 @@ const Log = ({ recipeId }) => {
     variables: {
       id: recipeId,
     },
+    fetchPolicy: 'cache-and-network',
   })
 
   return (
-    <Layout location={location}>
+    <Fragment>
       <Title>Edit Log</Title>
       {loading ? (
         <div sx={{ display: `flex`, placeContent: `center` }}>
@@ -41,7 +42,7 @@ const Log = ({ recipeId }) => {
       ) : (
         <LogTable recipeId={recipeId} versions={data.versions} />
       )}
-    </Layout>
+    </Fragment>
   )
 }
 

@@ -6,7 +6,8 @@ const createRecipeObject = (
   userId,
   version,
   log,
-  imageUrl
+  imageUrl,
+  parent_id
 ) => {
   const { tags } = values
   const instructions = values.instructions.split('\n')
@@ -65,6 +66,14 @@ const createRecipeObject = (
 
     recipe.data.tags = tagData
   }
+
+  if (parent_id) {
+    recipe.data.parent_id = parent_id
+  }
+
+  // if (imageUrl.length > 0) {
+  //   recipe.data.image_url = imageUrl
+  // }
 
   recipe.data.user_id = userId
   recipe.data.latest_version = latest_version

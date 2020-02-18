@@ -8,7 +8,7 @@ import { Label, Input } from '@theme-ui/components'
 import { Search } from './icons'
 import { lighten } from '@theme-ui/color'
 
-const SearchBar = ({ ...props }) => {
+const SearchBar = ({ labelSx, ...props }) => {
   const [isFocussed, setIsFocussed] = useState(false)
 
   return (
@@ -33,6 +33,7 @@ const SearchBar = ({ ...props }) => {
               borderRadius: `2`,
               my: `0`,
               transition: `0.15s all ease-in-out`,
+              ...labelSx,
             }}
           >
             <div sx={{ ml: `1`, display: `flex`, alignItems: `center` }}>
