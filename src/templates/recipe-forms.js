@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import gql from 'graphql-tag'
@@ -15,6 +16,11 @@ const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
       latest_version
+      tags {
+        tag {
+          name
+        }
+      }
       latest {
         ...VersionInformation
       }
@@ -54,6 +60,11 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
     recipe.version.ingredients = ingredients
   }
 
+  if (recipe && recipe.tags) {
+    const tags = recipe.tags.map(recipe_tag => recipe_tag.tag.name)
+    recipe.tagNames = tags
+  }
+
   return (
     <Layout location={location}>
       <Title sx={{ textAlign: `center` }}>{title}</Title>
@@ -78,6 +89,7 @@ const RecipeFormTemplate = ({ title, recipeId, versionNumber }) => {
             recipe.version && formatTime(recipe.version.cook_time_minutes)
           }
           servings={recipe.version && recipe.version.servings}
+          tags={recipe && recipe.tagNames}
           image_url={recipe.version.image_url}
           latest_version={recipe.latest_version}
         />

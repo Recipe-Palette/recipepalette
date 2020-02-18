@@ -14,6 +14,7 @@ import Layout from '../components/layout'
 import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
+import TagBadge from '../components/tag'
 import UpvoteButton from '../components/upvote-button'
 import VariationCount from '../components/variation-count'
 import { recipeInformationFragment } from '../graphql/fragments'
@@ -307,6 +308,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               ))}
           </ol>
         </div>
+      </div>
+      <Divider />
+      <div>
+        <h2>Tags</h2>
+        {recipe.tags.map((recipe_tag, index) => (
+          <TagBadge key={index} name={recipe_tag.tag.name} />
+        ))}
       </div>
     </Layout>
   )

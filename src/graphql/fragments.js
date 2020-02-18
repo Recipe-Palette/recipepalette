@@ -33,6 +33,11 @@ const recipeInformationFragment = gql`
     user {
       name
     }
+    tags {
+      tag {
+        name
+      }
+    }
   }
   ${versionInfoFragment}
 `

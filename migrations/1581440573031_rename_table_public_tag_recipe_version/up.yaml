@@ -1,0 +1,3 @@
+- args:
+    sql: alter table "public"."tag_recipe_version" rename to "tag_recipe";
+  type: run_sql

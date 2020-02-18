@@ -1,0 +1,4 @@
+- sql:
+    "alter table \"public\".\"tag_recipe\"\n    add constraint \"tag_recipe_version_pkey\"
+    \n    primary key ( \"id\" );"
+  type: run_sql

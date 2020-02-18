@@ -1,0 +1,7 @@
+- args:
+    sql:
+      "\n           alter table \"public\".\"tag_recipe\"\n           add constraint
+      \"tag_recipe_tag_id_fkey\"\n           foreign key (\"tag_id\")\n           references
+      \"public\".\"tag\"\n           (\"id\") on update restrict on delete restrict;\n
+      \     "
+  type: run_sql

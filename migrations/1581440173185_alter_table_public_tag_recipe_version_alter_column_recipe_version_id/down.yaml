@@ -1,0 +1,11 @@
+- args:
+    sql:
+      ALTER TABLE "public"."tag_recipe_version" ALTER COLUMN "recipe_version_id"
+      TYPE integer;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."tag_recipe_version"."recipe_version_id" IS E'null'
+  type: run_sql
+- args:
+    sql: alter table "public"."tag_recipe_version" rename column "recipe_id" to "recipe_version_id";
+  type: run_sql

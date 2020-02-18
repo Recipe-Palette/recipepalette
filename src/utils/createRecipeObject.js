@@ -8,6 +8,7 @@ const createRecipeObject = (
   log,
   imageUrl
 ) => {
+  const { tags } = values
   const instructions = values.instructions.split('\n')
   const prep_time_minutes = parseTime(values.prep_time)
   const cook_time_minutes = parseTime(values.cook_time)
@@ -33,7 +34,6 @@ const createRecipeObject = (
     image_url: imageUrl,
     log,
     notes: values.notes,
-    image_url: imageUrl,
   }
 
   if (recipe_id) {
@@ -44,9 +44,27 @@ const createRecipeObject = (
     recipe.data.private = values.private
   }
 
-  // if (imageUrl.length > 0) {
-  //   recipe.data.image_url = imageUrl
-  // }
+  if (tags.length > 0) {
+    const tagData = {
+      data: tags.filter(Boolean).map(tag => ({
+        tag: {
+          data: {
+            name: tag.toLowerCase(),
+          },
+          on_conflict: {
+            constraint: 'tag_value_key',
+            update_columns: 'name',
+          },
+        },
+      })),
+      on_conflict: {
+        constraint: 'tag_recipe_tag_id_recipe_id_key',
+        update_columns: ['tag_id', 'recipe_id'],
+      },
+    }
+
+    recipe.data.tags = tagData
+  }
 
   recipe.data.user_id = userId
   recipe.data.latest_version = latest_version

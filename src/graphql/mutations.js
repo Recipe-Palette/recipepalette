@@ -53,7 +53,13 @@ const UPSERT_UPVOTE = gql`
 `
 
 const UPSERT_RECIPE = gql`
-  mutation UpsertRecipe($objects: [recipe_version_insert_input!]!) {
+  mutation UpsertRecipe(
+    $objects: [recipe_version_insert_input!]!
+    $recipe_id: Int!
+  ) {
+    delete_tag_recipe(where: { recipe_id: { _eq: $recipe_id } }) {
+      affected_rows
+    }
     insert_recipe_version(objects: $objects) {
       returning {
         id
