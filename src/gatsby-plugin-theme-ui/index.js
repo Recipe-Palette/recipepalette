@@ -14,7 +14,7 @@ export default {
     heading: 700,
     bold: 700,
   },
-  radii: [1, 2, 4],
+  radii: [1, 2, 4, 8],
   colors: {
     text: '#222',
     background: '#FFF',
