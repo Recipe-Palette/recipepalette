@@ -44,7 +44,9 @@ const RecipeSchema = Yup.object().shape({
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
-        amount: Yup.number().required('Required'),
+        amount: Yup.number()
+          .max(2 ** 31 - 1, 'Too big')
+          .required('Required'),
         unit: Yup.string().required('Required'),
         name: Yup.string().required('Required'),
       })
@@ -53,6 +55,7 @@ const RecipeSchema = Yup.object().shape({
     .min(1, 'Minimum one ingredient'),
   instructions: Yup.string().required('Instructions are required'),
   servings: Yup.number()
+    .max(2 ** 31 - 1, 'Too big')
     .positive('Enter a positive number')
     .required('Servings are required'),
   prep_time: Yup.string().required('Required'),
