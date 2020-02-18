@@ -4,6 +4,7 @@ import { jsx } from 'theme-ui'
 import { Fragment, useState } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray, useField } from 'formik'
+import { useToasts } from 'react-toast-notifications'
 import {
   Label,
   Input,
@@ -30,7 +31,7 @@ const API_ENDPOINT =
 const UNITS = [
   '---',
   'tsp',
-  'tsbp',
+  'tbsp',
   'cup',
   'oz',
   'box',
@@ -127,6 +128,7 @@ const RecipeForm = ({
   cook_time = '',
   servings = '',
   image_url = '',
+  tags = [],
   latest_version = 0,
   log = [],
   notes = '',
@@ -136,6 +138,7 @@ const RecipeForm = ({
   location,
 }) => {
   const { userId } = useAuth()
+  const { addToast } = useToasts()
   const [image, setImage] = useState(image_url)
   const [saving, setSaving] = useState(false)
   const [upsertRecipe] = useMutation(UPSERT_RECIPE, {
@@ -144,6 +147,7 @@ const RecipeForm = ({
       navigate(`/recipe/${result.returning[0].recipe.id}/latest`)
     },
   })
+
   const isOwner = userId && recipeOwnerId === userId
   const isEdit = location.pathname.includes('edit')
   const handleImageDrop = imageFile => {
@@ -151,7 +155,6 @@ const RecipeForm = ({
   }
 
   const handleSubmit = async values => {
-    setSaving(true)
     const submitMutation = imageUrl => {
       if (name != values.name) {
         log.push('Name')
@@ -174,22 +177,35 @@ const RecipeForm = ({
       if (image_url != values.image_url) {
         log.push('Image')
       }
+      if (JSON.stringify(tags) != JSON.stringify(values.tags)) {
+        log.push('Tags')
+      }
 
-      //remove trailing ', ' if present
       log = log.length > 0 ? log.join(', ') : ''
 
-      const recipeVersion = createRecipeObject(
-        values,
-        recipe_id,
-        userId,
-        latest_version,
-        log,
-        imageUrl,
-        parent_id
-      )
-      upsertRecipe({
-        variables: { objects: recipeVersion },
-      })
+      if (log == '') {
+        addToast('No changes to save', { appearance: 'error' })
+      } else {
+        setSaving(true)
+
+        const recipeVersion = createRecipeObject(
+          values,
+          recipe_id,
+          userId,
+          latest_version,
+          log,
+          imageUrl,
+          parent_id
+        )
+
+        if (!recipe_id) {
+          recipe_id = -1
+        }
+
+        upsertRecipe({
+          variables: { objects: recipeVersion, recipe_id },
+        })
+      }
     }
 
     await uploadImageToS3(image, submitMutation)
@@ -222,13 +238,14 @@ const RecipeForm = ({
           image_url,
           notes,
           privateRecipe,
+          tags,
         }}
         validationSchema={RecipeSchema}
         onSubmit={handleSubmit}
       >
         {({ values, handleChange, errors, touched }) => (
           <Form>
-            <Label htmlFor="name">Recipe name</Label>
+            <Label htmlFor="name">Recipe Name</Label>
             <Input
               name="name"
               type="text"
@@ -265,6 +282,7 @@ const RecipeForm = ({
                               inputMode="decimal"
                               step={0.01}
                               min={0}
+                              max={1000000000}
                               name={`ingredients.${index}.amount`}
                               value={ingredient.amount}
                               onChange={handleChange}
@@ -343,6 +361,8 @@ const RecipeForm = ({
                   id="prep_time"
                   inputMode="numeric"
                   placeholder="hh:mm"
+                  min={0}
+                  max={1000000000}
                   options={{ time: true, timePattern: ['h', 'm'] }}
                   value={values.prep_time}
                   onChange={handleChange}
@@ -361,6 +381,8 @@ const RecipeForm = ({
                   id="cook_time"
                   inputMode="numeric"
                   placeholder="hh:mm"
+                  min={0}
+                  max={1000000000}
                   options={{ time: true, timePattern: ['h', 'm'] }}
                   value={values.cook_time}
                   onChange={handleChange}
@@ -379,6 +401,8 @@ const RecipeForm = ({
                   inputMode="numeric"
                   type="number"
                   id="servings"
+                  min={0}
+                  max={1000000000}
                   value={values.servings}
                   onChange={handleChange}
                 />
@@ -392,6 +416,66 @@ const RecipeForm = ({
               image_url={values.image_url}
               name={values.name}
             />
+
+            <FieldArray
+              name="tags"
+              render={arrayHelpers => (
+                <Fragment>
+                  <Label>Tags</Label>
+                  <div
+                    sx={{
+                      display: `grid`,
+                      gridTemplateColumns: `1fr 15px`,
+                      gridGap: `2`,
+                      alignItems: `baseline`,
+                    }}
+                  >
+                    {values.tags &&
+                      values.tags.length > 0 &&
+                      values.tags.map((tag, index) => (
+                        <Fragment key={index}>
+                          <div>
+                            <Input
+                              name={`tags.${index}`}
+                              value={tag}
+                              onChange={handleChange}
+                            />
+                            <ErrorMessage name={`tags[${index}]`} />
+                          </div>
+                          <FiTrash2
+                            onClick={() => arrayHelpers.remove(index)}
+                            sx={{ cursor: `pointer` }}
+                          />
+                        </Fragment>
+                      ))}
+                  </div>
+                  <div
+                    sx={{
+                      display: `flex`,
+                      justifyContent: `flex-end`,
+                      pt: `3`,
+                    }}
+                  >
+                    <Button
+                      type="button"
+                      onClick={() => arrayHelpers.push('')}
+                      sx={{
+                        variant: `buttons.primary`,
+                        py: 2,
+                        px: 3,
+                        display: `flex`,
+                        alignItems: `center`,
+                        fontWeight: `normal`,
+                        fontSize: `14px`,
+                      }}
+                    >
+                      Add Tag <FiPlus sx={{ ml: `2` }} />
+                    </Button>
+                  </div>
+                </Fragment>
+              )}
+            />
+
             <Label htmlFor="notes">Notes</Label>
             <Textarea
               value={values.notes}
@@ -400,8 +484,6 @@ const RecipeForm = ({
               onChange={handleChange}
               placeholder="Enter any notes here"
             />
-            {/* TODO:
-              - Add tags */}
             <div
               sx={{
                 display: `flex`,

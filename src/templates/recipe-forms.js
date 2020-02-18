@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import gql from 'graphql-tag'
@@ -67,6 +68,11 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
     recipe.version.ingredients = ingredients
   }
 
+  if (recipe && recipe.tags) {
+    const tags = recipe.tags.map(recipe_tag => recipe_tag.tag.name)
+    recipe.tagNames = tags
+  }
+
   return (
     <Fragment>
       <Title sx={{ '&': { textAlign: `center` } }}>{title}</Title>
@@ -91,6 +97,7 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
             recipe.version && formatTime(recipe.version.cook_time_minutes)
           }
           servings={recipe.version && recipe.version.servings}
+          tags={recipe && recipe.tagNames}
           image_url={recipe.version.image_url}
           latest_version={type === 'variant' ? 0 : recipe.latest_version}
           recipeOwnerId={recipe.user && recipe.user.id}

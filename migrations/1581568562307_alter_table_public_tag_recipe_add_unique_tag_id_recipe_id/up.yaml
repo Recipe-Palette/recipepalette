@@ -1,0 +1,5 @@
+- args:
+    sql:
+      alter table "public"."tag_recipe" add constraint "tag_recipe_tag_id_recipe_id_key"
+      unique ("tag_id", "recipe_id");
+  type: run_sql

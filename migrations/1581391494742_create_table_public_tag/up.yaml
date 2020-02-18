@@ -1,0 +1,10 @@
+- args:
+    sql:
+      CREATE TABLE "public"."tag"("id" serial NOT NULL, "value" text NOT NULL,
+      PRIMARY KEY ("id") , UNIQUE ("id"), UNIQUE ("value")); COMMENT ON TABLE "public"."tag"
+      IS E'Tag table containing unique tag values.';
+  type: run_sql
+- args:
+    name: tag
+    schema: public
+  type: add_existing_table_or_view

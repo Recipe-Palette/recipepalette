@@ -15,6 +15,7 @@ import { findRecipeVersion } from '../utils/findRecipeVersion'
 import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
+import TagBadge from '../components/tag'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
 import { RecipeLoader } from '../components/recipe-loader'
@@ -313,6 +314,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </li>
             ))}
         </ol>
+      </div>
+      <Divider />
+      <div>
+        <h2>Tags</h2>
+        {recipe.tags.map((recipe_tag, index) => (
+          <TagBadge key={index} name={recipe_tag.tag.name} />
+        ))}
       </div>
     </div>
   )

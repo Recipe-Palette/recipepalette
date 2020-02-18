@@ -1,0 +1,5 @@
+- args:
+    sql:
+      "\n          alter table \"public\".\"tag_recipe_version\" drop constraint
+      \"tag_recipe_version_recipe_id_fkey\"\n      "
+  type: run_sql
