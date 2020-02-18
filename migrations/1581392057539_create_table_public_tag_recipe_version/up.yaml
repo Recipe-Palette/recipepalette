@@ -1,0 +1,13 @@
+- args:
+    sql:
+      CREATE TABLE "public"."tag_recipe_version"("id" serial NOT NULL, "id_tag"
+      integer NOT NULL, "id_recipe_version" integer NOT NULL, "record_dt" timestamptz
+      NOT NULL DEFAULT now(), PRIMARY KEY ("id") , FOREIGN KEY ("id") REFERENCES "public"."recipe_version"("id")
+      ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("id_tag") REFERENCES "public"."tag"("id")
+      ON UPDATE restrict ON DELETE restrict, UNIQUE ("id")); COMMENT ON TABLE "public"."tag_recipe_version"
+      IS E'Table links tags to a recipe version. 0 - M relationship can exist.';
+  type: run_sql
+- args:
+    name: tag_recipe_version
+    schema: public
+  type: add_existing_table_or_view

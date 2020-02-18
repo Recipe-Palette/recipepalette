@@ -9,6 +9,7 @@ const createRecipeObject = (
   imageUrl,
   parent_id
 ) => {
+  const { tags } = values
   const instructions = values.instructions.split('\n')
   const prep_time_minutes = parseTime(values.prep_time)
   const cook_time_minutes = parseTime(values.cook_time)
@@ -42,6 +43,28 @@ const createRecipeObject = (
 
   if (values.private) {
     recipe.data.private = values.private
+  }
+
+  if (tags.length > 0) {
+    const tagData = {
+      data: tags.filter(Boolean).map(tag => ({
+        tag: {
+          data: {
+            name: tag.toLowerCase(),
+          },
+          on_conflict: {
+            constraint: 'tag_value_key',
+            update_columns: 'name',
+          },
+        },
+      })),
+      on_conflict: {
+        constraint: 'tag_recipe_tag_id_recipe_id_key',
+        update_columns: ['tag_id', 'recipe_id'],
+      },
+    }
+
+    recipe.data.tags = tagData
   }
 
   if (parent_id) {

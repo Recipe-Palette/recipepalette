@@ -15,6 +15,7 @@ import { findRecipeVersion } from '../utils/findRecipeVersion'
 import { Copy } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
+import TagBadge from '../components/tag'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
 import { RecipeLoader } from '../components/recipe-loader'
@@ -125,7 +126,7 @@ const TimingSmall = ({ recipe }) => (
 
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
-  const { userId } = useAuth()
+  const { userId, isAuthenticated, login } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
@@ -225,13 +226,16 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
           <Flex sx={{ justifyContent: `space-between` }}>
             <Button
               onClick={() =>
-                navigate(
-                  `/recipe/${recipe.id}/${versionNumber || `latest`}/variant`
-                )
+                isAuthenticated()
+                  ? navigate(
+                      `/recipe/${recipe.id}/${versionNumber ||
+                        `latest`}/variant`
+                    )
+                  : login()
               }
               sx={{ variant: `buttons.link`, width: `48%` }}
             >
-              Create new version
+              Create new variant
             </Button>
             {isOwner && (
               <Button
@@ -256,7 +260,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 size="1em"
                 sx={{ strokeWidth: `2.5px`, mr: `1` }}
               />
-              Popular Versions ({variants.length})
+              Popular Variations ({variants.length})
             </Flex>
             <Flex
               sx={{
@@ -310,6 +314,13 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </li>
             ))}
         </ol>
+      </div>
+      <Divider />
+      <div>
+        <h2>Tags</h2>
+        {recipe.tags.map((recipe_tag, index) => (
+          <TagBadge key={index} name={recipe_tag.tag.name} />
+        ))}
       </div>
     </div>
   )

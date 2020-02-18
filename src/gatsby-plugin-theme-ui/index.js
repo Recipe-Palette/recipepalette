@@ -29,6 +29,24 @@ export default {
     bookmarked: '#C1E1AE',
     error: '#C00',
   },
+  badges: {
+    primary: {
+      cursor: `pointer`,
+      color: `background`,
+      borderWidth: `1px`,
+      borderColor: `primary`,
+      borderStyle: `solid`,
+      marginRight: `5px`,
+      backgroundColor: `primary`,
+      transition: `0.2s all`,
+      textDecoration: `none`,
+      fontSize: `1`,
+      px: `2`,
+      py: `1`,
+      borderRadius: `1`,
+      textAlign: `center`,
+    },
+  },
   buttons: {
     primary: {
       cursor: `pointer`,

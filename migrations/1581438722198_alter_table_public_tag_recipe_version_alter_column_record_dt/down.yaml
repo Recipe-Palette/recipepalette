@@ -1,0 +1,11 @@
+- args:
+    sql:
+      ALTER TABLE "public"."tag_recipe_version" ALTER COLUMN "record_dt" TYPE timestamp
+      with time zone;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."tag_recipe_version"."record_dt" IS E'null'
+  type: run_sql
+- args:
+    sql: alter table "public"."tag_recipe_version" rename column "created_at" to "record_dt";
+  type: run_sql

@@ -1,0 +1,5 @@
+- args:
+    sql:
+      alter table "public"."tag_recipe" add foreign key ("tag_id") references "public"."tag"("id")
+      on update restrict on delete restrict;
+  type: run_sql

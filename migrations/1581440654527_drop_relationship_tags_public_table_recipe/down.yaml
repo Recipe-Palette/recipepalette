@@ -1,0 +1,12 @@
+- args:
+    name: tags
+    table:
+      name: recipe
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: recipe_id
+        table:
+          name: tag_recipe
+          schema: public
+  type: create_array_relationship
