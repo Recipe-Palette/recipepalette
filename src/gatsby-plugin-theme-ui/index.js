@@ -31,7 +31,6 @@ export default {
   },
   badges: {
     primary: {
-      cursor: `pointer`,
       color: `background`,
       borderWidth: `1px`,
       borderColor: `primary`,

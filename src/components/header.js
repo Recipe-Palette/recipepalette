@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
+import { useState } from 'react'
 import { Button, Container } from '@theme-ui/components'
 import { lighten } from '@theme-ui/color'
 import { Link, navigate } from 'gatsby'
@@ -9,9 +10,11 @@ import { FiSearch } from 'react-icons/fi'
 import { Profile } from '../components/icons'
 import { Logo, HorizontalType, Monogram } from '../components/logo'
 import SearchBar from './search-bar'
+import SearchDrawer from './search-drawer'
 
 const Header = () => {
   const { isAuthenticated, login } = useAuth()
+  const [drawerIsOpen, setDrawerIsOpen] = useState(false)
 
   return (
     <header
@@ -103,6 +106,11 @@ const Header = () => {
             whiteSpace: `nowrap`,
           }}
         >
+          <FiSearch
+            size={20}
+            sx={{ cursor: `pointer` }}
+            onClick={() => setDrawerIsOpen(!drawerIsOpen)}
+          />
           <Button
             sx={{ variant: `buttons.link`, height: `39px` }}
             onClick={() =>
@@ -121,6 +129,13 @@ const Header = () => {
           </Button>
         </div>
       </Container>
+      <SearchDrawer
+        sx={{
+          height: drawerIsOpen ? `500px` : 0,
+          overflow: drawerIsOpen ? `auto` : `hidden`,
+          py: drawerIsOpen ? `3` : `0`,
+        }}
+      />
     </header>
   )
 }

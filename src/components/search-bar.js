@@ -18,6 +18,7 @@ const SearchBar = ({ labelSx, ...props }) => {
       }}
       onSubmit={values => {
         navigate(`/search/?q=${values.search}`)
+        values.search = ''
       }}
     >
       {({ values, handleChange }) => (
