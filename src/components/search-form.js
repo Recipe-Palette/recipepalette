@@ -12,7 +12,8 @@ import { lighten } from '@theme-ui/color'
 
 import { Search } from './icons'
 import TagsDropdown from './tags-dropdown'
-import CreatableInputOnly from './ingredients-select'
+import IngredientsSelect from './ingredients-select'
+import CreatableInputOnly from './creatable-multi-input'
 
 // const TAGS_QUERY = gql`
 //   query TagsQuery {
@@ -114,7 +115,13 @@ const SearchForm = props => {
             </Label>
             <div sx={{ gridColumn: 1 }}>
               <Label htmlFor="ingredients">Ingredients</Label>
-              <CreatableInputOnly />
+              <IngredientsSelect
+                value={values.ingredients}
+                onChange={setFieldValue}
+                onBlur={setFieldTouched}
+                touched={touched.ingredients}
+                error={errors.ingredients}
+              />
               {/* <Select
                 options={[{ value: 'ingredient 1', label: 'ingredient 1' }]}
                 sx={{ width: `100%` }}

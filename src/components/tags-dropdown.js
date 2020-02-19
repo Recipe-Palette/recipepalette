@@ -16,6 +16,8 @@ const TagsDropdown = ({ value, onChange, onBlur, touched, error }) => {
   const { data: tagsData, loading } = useQuery(TAGS_QUERY)
   let tags = []
 
+  console.log(value)
+
   if (!loading) {
     tags = tagsData.tags.map(({ name }) => ({ value: name, label: name }))
   }
