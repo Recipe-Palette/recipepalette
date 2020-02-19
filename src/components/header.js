@@ -131,7 +131,8 @@ const Header = () => {
       </Container>
       <SearchDrawer
         sx={{
-          height: drawerIsOpen ? `500px` : 0,
+          height: `auto`,
+          maxHeight: drawerIsOpen ? `500px` : 0,
           overflow: drawerIsOpen ? `auto` : `hidden`,
           py: drawerIsOpen ? `3` : `0`,
         }}

@@ -2,15 +2,16 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { useState } from 'react'
-import { navigate } from 'gatsby'
-import { Formik, Form } from 'formik'
+// import { navigate } from 'gatsby'
+// import { Formik, Form } from 'formik'
 import { Label, Input, Container } from '@theme-ui/components'
-import { lighten } from '@theme-ui/color'
-import Select from 'react-select'
+// import { lighten } from '@theme-ui/color'
+// import Select from 'react-select'
 
-import { Search } from './icons'
+// import { Search } from './icons'
 import Title from './title'
-import CustomDropdown from './custom-dropdown'
+// import CustomDropdown from './tags-dropdown'
+import SearchForm from './search-form'
 
 // import SearchBar from './search-bar'
 
@@ -32,7 +33,8 @@ const SearchDrawer = props => {
     >
       <Container>
         <Title>Search</Title>
-        <Formik
+        <SearchForm />
+        {/* <Formik
           initialValues={{
             search: '',
             ingredients: [],
@@ -109,13 +111,13 @@ const SearchDrawer = props => {
                     onBlur={() => setIsFocussed(false)}
                   />
                 </Label>
-                {/* <div
+                <div
                   sx={{
                     display: `flex`,
                     justifyContent: `space-between`,
                     flexDirection: [`column`, `row`],
                   }}
-                > */}
+                >
                 <div
                   sx={{ gridColumn: 1 }}
                   // sx={{
@@ -150,16 +152,16 @@ const SearchDrawer = props => {
                     error={errors.tags}
                     options={[{ value: 'option 1', label: 'option 1' }]}
                   />
-                  {/* <Select
+                  <Select
                     options={[{ value: 'option 1', label: 'option 1' }]}
                     sx={{ width: `100%` }}
-                  /> */}
-                  {/* </div> */}
+                  />
+                  </div>
                 </div>
               </div>
             </Form>
           )}
-        </Formik>
+        </Formik> */}
       </Container>
     </div>
   )
