@@ -2,14 +2,12 @@
 import { jsx } from 'theme-ui'
 import { useState } from 'react'
 import { Button, Container } from '@theme-ui/components'
-import { lighten } from '@theme-ui/color'
 import { Link, navigate } from 'gatsby'
 import { useAuth } from 'react-use-auth'
 import { FiSearch } from 'react-icons/fi'
 
 import { Profile } from '../components/icons'
 import { Logo, HorizontalType, Monogram } from '../components/logo'
-import SearchBar from './search-bar'
 import SearchDrawer from './search-drawer'
 
 const Header = () => {
@@ -70,15 +68,15 @@ const Header = () => {
             <HorizontalType sx={{ width: 200 }} />
           </Link>
         </div>
-        <div
+        {/* <div
           sx={{
             display: [`none`, `flex`],
             width: `100%`,
           }}
         >
           <SearchBar sx={{ width: `100%` }} />
-        </div>
-        <button
+        </div> */}
+        {/* <button
           sx={{
             display: [`flex`, `none`],
             alignItems: `center`,
@@ -97,36 +95,45 @@ const Header = () => {
           onClick={() => navigate(`search`)}
         >
           <FiSearch size={20} />
-        </button>
+        </button> */}
         <div
-          sx={{
-            display: [`none`, `flex`],
-            alignItems: `center`,
-            width: `max-content`,
-            whiteSpace: `nowrap`,
-          }}
+          sx={{ width: `max-content`, alignSelf: `flex-end`, display: `flex` }}
         >
-          <FiSearch
-            size={20}
-            sx={{ cursor: `pointer` }}
-            onClick={() => setDrawerIsOpen(!drawerIsOpen)}
-          />
-          <Button
-            sx={{ variant: `buttons.link`, height: `39px` }}
-            onClick={() =>
-              isAuthenticated() ? navigate('/palette/recipes') : login()
-            }
+          <div
+            sx={{
+              display: [`none`, `flex`],
+              alignItems: `center`,
+              width: `max-content`,
+              whiteSpace: `nowrap`,
+            }}
           >
-            My Palette
-          </Button>
-        </div>
-        <div sx={{ display: [`none`, `flex`], height: `39px` }}>
-          <Button
-            sx={{ px: `10px` }}
-            onClick={() => (isAuthenticated() ? navigate('/account') : login())}
-          >
-            <Profile size={17} sx={{ stroke: 3 }} />
-          </Button>
+            <Button
+              sx={{ variant: `buttons.link`, height: `39px` }}
+              onClick={() =>
+                isAuthenticated() ? navigate('/palette/recipes') : login()
+              }
+            >
+              My Palette
+            </Button>
+          </div>
+          <div sx={{ display: [`none`, `flex`], height: `39px` }}>
+            <Button
+              sx={{ px: `10px` }}
+              onClick={() =>
+                isAuthenticated() ? navigate('/account') : login()
+              }
+            >
+              <Profile size={17} sx={{ stroke: 3 }} />
+            </Button>
+          </div>
+          <div sx={{ display: `flex`, height: `39px` }}>
+            <Button
+              sx={{ px: `10px` }}
+              onClick={() => setDrawerIsOpen(!drawerIsOpen)}
+            >
+              <FiSearch size={20} sx={{ cursor: `pointer`, stroke: 3 }} />
+            </Button>
+          </div>
         </div>
       </Container>
       <SearchDrawer
@@ -136,6 +143,7 @@ const Header = () => {
           overflow: drawerIsOpen ? `auto` : `hidden`,
           py: drawerIsOpen ? `3` : `0`,
         }}
+        setDrawerIsOpen={setDrawerIsOpen}
       />
     </header>
   )

@@ -5,7 +5,7 @@ import CreatableInputOnly from './creatable-multi-input'
 const IngredientsSelect = ({ value, onChange, onBlur, touched, error }) => {
   const handleChange = newValue => onChange('ingredients', newValue)
   const handleBlur = () => onBlur('ingredients', true)
-  console.log(value)
+
   return (
     <div>
       <CreatableInputOnly

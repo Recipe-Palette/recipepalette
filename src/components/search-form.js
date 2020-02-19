@@ -7,31 +7,13 @@ import { Formik, Form } from 'formik'
 import { Label, Input, Button } from '@theme-ui/components'
 import { lighten } from '@theme-ui/color'
 
-// import { useQuery } from '@apollo/react-hooks'
-// import gql from 'graphql-tag'
-
 import { Search } from './icons'
 import TagsDropdown from './tags-dropdown'
 import IngredientsSelect from './ingredients-select'
 import CreatableInputOnly from './creatable-multi-input'
 
-// const TAGS_QUERY = gql`
-//   query TagsQuery {
-//     tags: tag {
-//       name
-//     }
-//   }
-// `
-
-const SearchForm = props => {
+const SearchForm = ({ setDrawerIsOpen, ...props }) => {
   const [isFocussed, setIsFocussed] = useState(false)
-  // const { data: tagsData, loading } = useQuery(TAGS_QUERY)
-
-  // let tags = []
-
-  // if (!loading) {
-  //   tags = tagsData.tags.map(tag => ({ value: tag.name, label: tag.name }))
-  // }
 
   return (
     <Formik
@@ -40,9 +22,29 @@ const SearchForm = props => {
         ingredients: [],
         tags: [],
       }}
-      onSubmit={values => {
-        console.log(values)
-        // navigate(`/search/?q=${values.search}`)
+      onSubmit={(values, { resetForm }) => {
+        setDrawerIsOpen(false)
+        let query = []
+        if (values.search.length > 0) {
+          query.push(`q=${values.search}`)
+        }
+
+        if (values.ingredients.length > 0) {
+          const ingredients = values.ingredients
+            .map(({ value }) => value)
+            .join(',')
+          query.push(`ingredients=${ingredients}`)
+        }
+
+        if (values.tags.length > 0) {
+          const tags = values.tags.map(({ value }) => value).join(',')
+          query.push(`tags=${tags}`)
+        }
+        query = query.length > 0 ? query.join('&') : ''
+
+        navigate(`/search/?${query}`)
+
+        resetForm()
         // values.search = ''
       }}
     >

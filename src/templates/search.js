@@ -57,24 +57,13 @@ const Search = ({ location }) => {
     },
   })
 
-  // console.log(searchData)
-
   const { data: tagsData, loading: tagsLoading } = useQuery(TAGS_QUERY)
-  console.log(tagsLoading)
-  console.log(tagsData)
 
   let tags = []
 
   if (!tagsLoading) {
     tags = tagsData.tags.map(tag => ({ value: tag.name, label: tag.name }))
   }
-
-  // console.log(tagsLoading)
-
-  // console.log(tagsData)
-  console.log(tags)
-
-  // console.log(parsedSearch)
 
   return isEmpty(parsedSearch) ? (
     <div sx={{ py: `4` }}>

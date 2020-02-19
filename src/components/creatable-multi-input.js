@@ -16,8 +16,6 @@ const createOption = label => ({
 const CreatableInputOnly = ({ value, onChange, onBlur }) => {
   const [inputValue, setInputValue] = useState('')
 
-  console.log(value)
-
   const handleChange = newValue => onChange('ingredients', newValue)
   const handleInputChange = newInputValue => setInputValue(newInputValue)
 
@@ -28,7 +26,6 @@ const CreatableInputOnly = ({ value, onChange, onBlur }) => {
     switch (e.key) {
       case 'Enter':
       case 'Tab':
-        console.log('in handleKeyDown')
         onChange([...value, createOption(inputValue)])
         setInputValue('')
         e.preventDefault()
