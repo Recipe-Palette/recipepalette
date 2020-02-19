@@ -77,9 +77,10 @@ export default {
       fontSize: `2`,
       px: `2`,
       py: `1`,
-      borderRadius: `1`,
+      borderRadius: `2`,
       textAlign: `center`,
       outline: 0,
+      boxShadow: `none`,
       '&:active, &:focus': {
         background: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
       },
