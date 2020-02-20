@@ -6,24 +6,26 @@ import { Link, navigate } from 'gatsby'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
 import { useAuth } from 'react-use-auth'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
-import { Copy } from '../components/icons'
+import { Copy, Trash } from '../components/icons'
 import { RecipeCard } from '../components/cards'
 import BookmarkButton from '../components/bookmark-button'
 import TagBadge from '../components/tag'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
 import { RecipeLoader } from '../components/recipe-loader'
+import { DELETE_RECIPE } from '../graphql/mutations'
 
 const recipeQuery = gql`
   query($id: Int!) {
     recipe: recipe(where: { id: { _eq: $id }, deleted: { _eq: false } }) {
       parent {
+        deleted
         latest {
           id
           recipe_id
@@ -48,6 +50,12 @@ const recipeQuery = gql`
 `
 
 const Icons = ({ recipe }) => {
+  const [deleteRecipe] = useMutation(DELETE_RECIPE, {
+    onCompleted() {
+      navigate(`/`)
+    },
+  })
+
   return (
     <div
       sx={{
@@ -71,6 +79,18 @@ const Icons = ({ recipe }) => {
           size={32}
           recipeId={recipe.id}
           recipeName={recipe.version.name}
+        />
+      </Flex>
+      <Flex sx={{ justifyContent: `center`, ml: 4, mt: 1 }}>
+        <Trash
+          onClick={() =>
+            deleteRecipe({
+              variables: {
+                recipe_id: recipe.id,
+              },
+            })
+          }
+          size={32}
         />
       </Flex>
     </div>
@@ -204,7 +224,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </Fragment>
             )}
           </div>
-          {isVariant && (
+          {isVariant && !recipe.parent.deleted && (
             <div>
               Variant of
               <Link

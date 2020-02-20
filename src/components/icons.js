@@ -8,6 +8,7 @@ import {
   FiBookOpen,
   FiUser,
   FiSearch,
+  FiTrash2,
 } from 'react-icons/fi'
 
 const Bookmark = ({ filled, size, ...props }) => (
@@ -29,6 +30,8 @@ const Copy = ({ filled, size, ...props }) => (
     {...props}
   />
 )
+
+const Trash = ({ size, ...props }) => <FiTrash2 size={size} {...props} />
 
 const Book = ({ filled, size, ...props }) => (
   <FiBookOpen
@@ -58,4 +61,4 @@ const Search = ({ size, filled, ...props }) => (
   />
 )
 
-export { Bookmark, Heart, Copy, Book, Profile, Search }
+export { Bookmark, Heart, Copy, Trash, Book, Profile, Search }

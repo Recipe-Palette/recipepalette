@@ -20,10 +20,10 @@ export default function Account() {
       <div sx={{ mb: `2` }}>
         <span sx={{ color: `gray` }}>Email:</span> {user.email}
       </div>
-      <dv>
+      <div>
         <span sx={{ color: `gray` }}>Email verified:</span>{' '}
         {user.email_verified ? 'Yes' : 'No'}
-      </dv>
+      </div>
       <div>
         <Button sx={{ mt: `3` }} onClick={() => customLogout()}>
           Logout
