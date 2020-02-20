@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Spinner } from '@theme-ui/components'
 import { Fragment } from 'react'
+import Fraction from 'fraction.js'
 
 import { findRecipeVersion } from '../utils/findRecipeVersion'
 import Title from '../components/title'
@@ -64,6 +65,17 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
       amount: ingredient.amount,
       unit: ingredient.unit,
     }))
+
+    ingredients.foreach(ingredient => {
+      if (
+        ingredient.amount
+          .toString()
+          .match(/^(\d$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[/]?\d+?$)/)
+      ) {
+        const amount = new Fraction(ingredient.amount)
+        ingredient.amount = amount.toFraction(true)
+      }
+    })
 
     recipe.version.ingredients = ingredients
   }

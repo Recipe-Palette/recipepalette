@@ -37,6 +37,18 @@ const createRecipeObject = (
     notes: values.notes,
   }
 
+  if (ingredients && ingredients.data) {
+    ingredients.data.foreach(ingredient => {
+      if (ingredient.amount.toString().includes('/')) {
+        const slashPos = ingredient.amount.toString().search('/')
+        ingredient.amount = Number(
+          ingredient.amount.substring(0, slashPos) /
+            ingredient.amount.substring(slashPos + 1)
+        )
+      }
+    })
+  }
+
   if (recipe_id) {
     recipe.data.id = recipe_id
   }

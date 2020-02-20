@@ -29,15 +29,17 @@ const API_ENDPOINT =
   'https://4upcip6ivg.execute-api.us-west-2.amazonaws.com/Prod'
 
 const UNITS = [
-  '---',
+  '',
   'tsp',
   'tbsp',
   'cup',
   'oz',
-  'box',
   'pinch',
   'pint',
   'quart',
+  'box',
+  'can',
+  'package',
 ]
 
 const RecipeSchema = Yup.object().shape({
@@ -45,10 +47,13 @@ const RecipeSchema = Yup.object().shape({
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
-        amount: Yup.number()
+        amount: Yup.string()
           .max(2 ** 31 - 1, 'Too big')
-          .required('Required'),
-        unit: Yup.string().required('Required'),
+          .matches(
+            /^(\d$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[/]?\d+?$)/,
+            'Enter a valid number or fraction'
+          ),
+        unit: Yup.string(),
         name: Yup.string().required('Required'),
       })
     )
@@ -278,11 +283,6 @@ const RecipeForm = ({
                         <Fragment key={index}>
                           <div>
                             <Input
-                              type="number"
-                              inputMode="decimal"
-                              step={0.01}
-                              min={0}
-                              max={1000000000}
                               name={`ingredients.${index}.amount`}
                               value={ingredient.amount}
                               onChange={handleChange}
