@@ -38,6 +38,10 @@ export default ({ location }) => {
     variables: { user_id: userId },
   })
 
+  if (typeof window === `undefined`) {
+    return null
+  }
+
   if (!isAuthenticated()) login()
 
   return (
