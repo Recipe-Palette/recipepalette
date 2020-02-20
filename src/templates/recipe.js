@@ -235,7 +235,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               }
               sx={{ variant: `buttons.link`, width: `48%` }}
             >
-              Create new variant
+              Create New Variant
             </Button>
             {isOwner && (
               <Button
@@ -246,7 +246,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 }
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
-                Edit recipe
+                Edit Recipe
               </Button>
             )}
           </Flex>
