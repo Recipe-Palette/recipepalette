@@ -23,6 +23,13 @@ import { RecipeLoader } from '../components/recipe-loader'
 const recipeQuery = gql`
   query($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
+      parent {
+        latest {
+          id
+          recipe_id
+          name
+        }
+      }
       ...RecipeInformation
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
@@ -127,7 +134,7 @@ const TimingSmall = ({ recipe }) => (
 // used for all /recipe/* routes
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId, isAuthenticated, login } = useAuth()
-  const { data: recipeData, loading } = useQuery(recipeQuery, {
+  const { data: recipeData, loading, refetch } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
     },
@@ -157,6 +164,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
   const isOwner = userId && recipe.user.id === userId
+  const isVariant = recipe.parent_id
 
   return (
     <div>
@@ -189,6 +197,20 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </Fragment>
             )}
           </div>
+          {isVariant && (
+            <Fragment>
+              <div>
+                Variant of
+                <Link
+                  sx={{ variant: `buttons.secondary` }}
+                  to={`/recipe/${recipe.parent_id}/latest`}
+                  onClick={() => refetch()}
+                >
+                  {recipe.parent.latest.name}
+                </Link>
+              </div>
+            </Fragment>
+          )}
         </div>
         <Icons recipe={recipe} />
       </Flex>
