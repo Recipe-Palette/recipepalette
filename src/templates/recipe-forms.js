@@ -79,19 +79,6 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
       }
     })
 
-    ingredients.foreach(ingredient => {
-      if (
-        ingredient.amount
-          .toString()
-          .match(/^(\d$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[/]?\d+?$)/)
-        //regex checks for one of the following: number with no decimal || number with decimal and at least one number after ||
-        //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
-      ) {
-        const amount = new Fraction(ingredient.amount)
-        ingredient.amount = amount.toFraction(true)
-      }
-    })
-
     recipe.version.ingredients = ingredients
   }
 
