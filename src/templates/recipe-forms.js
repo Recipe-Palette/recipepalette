@@ -59,6 +59,10 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
     recipe.version = {}
   }
 
+  if (recipe.version && recipe.version.servings === 0) {
+    recipe.version.servings = ''
+  }
+
   if (recipe.version && recipe.version.ingredients) {
     const ingredients = recipe.version.ingredients.map(ingredient => {
       if (

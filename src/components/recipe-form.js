@@ -66,8 +66,7 @@ const RecipeSchema = Yup.object().shape({
   instructions: Yup.string().required('Instructions are required'),
   servings: Yup.number()
     .max(2 ** 31 - 1, 'Too big')
-    .positive('Enter a positive number')
-    .required('Servings are required'),
+    .positive('Enter a positive number'),
   prep_time: Yup.string().required('Required'),
   cook_time: Yup.string().required('Required'),
 })
@@ -202,6 +201,10 @@ const RecipeForm = ({
             ingredient.amount = 0
           }
         })
+
+        if (values.servings === '') {
+          values.servings = 0
+        }
 
         const recipeVersion = createRecipeObject(
           values,
