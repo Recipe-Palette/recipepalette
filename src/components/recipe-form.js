@@ -30,16 +30,18 @@ const API_ENDPOINT =
 
 const UNITS = [
   '',
-  'tsp',
-  'tbsp',
+  'box',
+  'can',
   'cup',
+  'grams',
+  'ml',
   'oz',
+  'package',
   'pinch',
   'pint',
   'quart',
-  'box',
-  'can',
-  'package',
+  'tbsp',
+  'tsp',
 ]
 
 const RecipeSchema = Yup.object().shape({
@@ -50,7 +52,7 @@ const RecipeSchema = Yup.object().shape({
         amount: Yup.string()
           .max(2 ** 31 - 1, 'Too big')
           .matches(
-            /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[/]\d+$)/,
+            /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[\s]?\d[/]\d+$)/,
             'Enter a valid number or fraction'
             //regex checks for one of the following: number with no decimal || number with decimal and at least one number after ||
             //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
