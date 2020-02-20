@@ -15,7 +15,13 @@ const createRecipeObject = (
   const cook_time_minutes = parseTime(values.cook_time)
   const latest_version = version + 1
   const ingredients = {
-    data: values.ingredients,
+    data: values.ingredients.map(ingredient => {
+      if (ingredient.amount.toString().includes('/')) {
+        const [a, b] = ingredient.amount.toString().split('/')
+        ingredient.amount = Number(a / b)
+      }
+      return ingredient
+    }),
   }
 
   const on_conflict = {
@@ -35,15 +41,6 @@ const createRecipeObject = (
     image_url: imageUrl,
     log,
     notes: values.notes,
-  }
-
-  if (ingredients && ingredients.data) {
-    ingredients.data.foreach(ingredient => {
-      if (ingredient.amount.toString().includes('/')) {
-        const [a, b] = ingredient.amount.toString().split('/')
-        ingredient.amount = Number(a / b)
-      }
-    })
   }
 
   if (recipe_id) {
