@@ -141,7 +141,7 @@ const UnitDropdown = props => (
 const RecipeForm = ({
   recipe_id = null,
   name = '',
-  ingredients = [{ name: '', unit: '', amount: 0 }],
+  ingredients = [{ name: '', unit: '', amount: '' }],
   instructions = '',
   prep_time = '',
   cook_time = '',
