@@ -13,18 +13,18 @@ const RecipeRoutes = () => {
       <Recipe path="/" />
       <Log path="/:recipeId/log" />
       <Recipe path="/:recipeId/:versionNumber" />
-      <RecipeForms path="/new" exact title="Create new recipe" />
-      <PrivateRoute
+      <RecipeForms path="/new" exact title="Create New Recipe" />
+      <RecipeForms
         path="/:recipeId/:versionNumber/edit"
         exact
-        title="Edit recipe"
+        title="Edit Recipe"
         type="edit"
         component={RecipeForms}
       />
       <RecipeForms
         path="/:recipeId/:versionNumber/variant"
         exact
-        title="Create a new version of recipe"
+        title="Create New Recipe Version"
         type="variant"
       />
     </Router>

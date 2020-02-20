@@ -29,15 +29,30 @@ const API_ENDPOINT =
   'https://4upcip6ivg.execute-api.us-west-2.amazonaws.com/Prod'
 
 const UNITS = [
-  '---',
-  'tsp',
-  'tbsp',
-  'cup',
-  'oz',
+  '',
   'box',
+  'can',
+  'cm',
+  'cup',
+  'dl',
+  'fl oz',
+  'gill',
+  'g',
+  'inch',
+  'kg',
+  'l',
+  'lb',
+  'm',
+  'mg',
+  'ml',
+  'mm',
+  'oz',
+  'package',
   'pinch',
   'pint',
   'quart',
+  'tbsp',
+  'tsp',
 ]
 
 const RecipeSchema = Yup.object().shape({
@@ -45,10 +60,15 @@ const RecipeSchema = Yup.object().shape({
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
-        amount: Yup.number()
+        amount: Yup.string()
           .max(2 ** 31 - 1, 'Too big')
-          .required('Required'),
-        unit: Yup.string().required('Required'),
+          .matches(
+            /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+?[\s]?\d[/]\d+|\d[/]\d+$)/,
+            'Enter a valid number or fraction'
+            //regex checks for one of the following: number with no decimal || number with decimal and at least one number after ||
+            //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
+          ),
+        unit: Yup.string(),
         name: Yup.string().required('Required'),
       })
     )
@@ -57,8 +77,7 @@ const RecipeSchema = Yup.object().shape({
   instructions: Yup.string().required('Instructions are required'),
   servings: Yup.number()
     .max(2 ** 31 - 1, 'Too big')
-    .positive('Enter a positive number')
-    .required('Servings are required'),
+    .positive('Enter a positive number'),
   prep_time: Yup.string().required('Required'),
   cook_time: Yup.string().required('Required'),
 })
@@ -188,6 +207,16 @@ const RecipeForm = ({
       } else {
         setSaving(true)
 
+        values.ingredients.forEach(ingredient => {
+          if (ingredient.amount === '') {
+            ingredient.amount = 0
+          }
+        })
+
+        if (values.servings === '') {
+          values.servings = 0
+        }
+
         const recipeVersion = createRecipeObject(
           values,
           recipe_id,
@@ -278,11 +307,7 @@ const RecipeForm = ({
                         <Fragment key={index}>
                           <div>
                             <Input
-                              type="number"
-                              inputMode="decimal"
-                              step={0.01}
-                              min={0}
-                              max={1000000000}
+                              type="text"
                               name={`ingredients.${index}.amount`}
                               value={ingredient.amount}
                               onChange={handleChange}

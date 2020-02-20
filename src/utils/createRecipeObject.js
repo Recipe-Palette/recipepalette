@@ -11,11 +11,32 @@ const createRecipeObject = (
 ) => {
   const { tags } = values
   const instructions = values.instructions.split('\n')
-  const prep_time_minutes = parseTime(values.prep_time)
-  const cook_time_minutes = parseTime(values.cook_time)
+  let prep_time_minutes = parseTime(values.prep_time)
+  let cook_time_minutes = parseTime(values.cook_time)
+
+  if (!prep_time_minutes) {
+    prep_time_minutes = 0
+  }
+
+  if (!cook_time_minutes) {
+    cook_time_minutes = 0
+  }
+
   const latest_version = version + 1
   const ingredients = {
-    data: values.ingredients,
+    data: values.ingredients.map(ingredient => {
+      if (ingredient.amount.toString().includes('/')) {
+        let pre = 0
+        let post = ingredient.amount
+        if (ingredient.amount.toString().includes(' ')) {
+          ;[pre, post] = ingredient.amount.toString().split(' ')
+        }
+        const [a, b] = post.toString().split('/')
+        ingredient.amount = Number(pre)
+        ingredient.amount += Number(a / b)
+      }
+      return ingredient
+    }),
   }
 
   const on_conflict = {

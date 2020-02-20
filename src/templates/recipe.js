@@ -235,7 +235,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               }
               sx={{ variant: `buttons.link`, width: `48%` }}
             >
-              Create new variant
+              Create New Variant
             </Button>
             {isOwner && (
               <Button
@@ -246,7 +246,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
                 }
                 sx={{ variant: `buttons.link`, width: `48%` }}
               >
-                Edit recipe
+                Edit Recipe
               </Button>
             )}
           </Flex>
@@ -278,20 +278,24 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
       <Divider />
       <div>
         <h2 sx={{ width: `100%`, my: `2` }}>Ingredients</h2>
-        <h3
-          sx={{
-            width: `100%`,
-            mt: `0`,
-            mb: `2`,
-          }}
-        >
-          Servings: {recipe.version && recipe.version.servings}
-        </h3>
-
+        {recipe.version.servings !== 0 && (
+          <h3
+            sx={{
+              width: `100%`,
+              mt: `0`,
+              mb: `2`,
+            }}
+          >
+            Servings: {recipe.version && recipe.version.servings}
+          </h3>
+        )}
         <ul sx={{ columnCount: 2, listStyle: `none`, pl: `0` }}>
           {recipe.version.ingredients.map((ingredient, index) => {
-            let amount = new Fraction(ingredient.amount)
-            amount = amount.toFraction(true)
+            let amount = ''
+            if (ingredient.amount !== 0) {
+              amount = new Fraction(ingredient.amount)
+              amount = amount.toFraction(true)
+            }
             return (
               <li
                 key={index}
