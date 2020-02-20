@@ -52,6 +52,8 @@ const RecipeSchema = Yup.object().shape({
           .matches(
             /^(\d$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[/]?\d+?$)/,
             'Enter a valid number or fraction'
+            //regex checks for one of the following: number with no decimal || number with decimal and at least one number after ||
+            //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
           ),
         unit: Yup.string(),
         name: Yup.string().required('Required'),
@@ -283,6 +285,7 @@ const RecipeForm = ({
                         <Fragment key={index}>
                           <div>
                             <Input
+                              type="text"
                               name={`ingredients.${index}.amount`}
                               value={ingredient.amount}
                               onChange={handleChange}

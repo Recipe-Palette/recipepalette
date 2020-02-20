@@ -43,8 +43,6 @@
     "gatsby-source-filesystem": "^2.1.40",
     "gatsby-transformer-sharp": "^2.3.6",
     "graphql-tag": "^2.10.1",
-    "hasura": "^2.0.1",
-    "heroku": "^7.38.1",
     "intersection-observer": "^0.7.0",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
