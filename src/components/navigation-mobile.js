@@ -78,7 +78,7 @@ const NavigationMobile = ({ location }) => {
             size="1.5rem"
           />
         </IconContainer>
-        <Link to="/account" sx={{ color: `initial`, width: `100%` }}>
+        <Link to="/palette/account" sx={{ color: `initial`, width: `100%` }}>
           <IconContainer>
             <Profile
               filled={isActiveLink(location.pathname, `account`)}

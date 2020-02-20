@@ -2,6 +2,7 @@
 import { jsx } from 'theme-ui'
 import { Router } from '@reach/router'
 
+import PrivateRoute from '../components/private-route'
 import Log from '../templates/log'
 import Recipe from '../templates/recipe'
 import RecipeForms from '../templates/recipe-forms'
@@ -18,6 +19,7 @@ const RecipeRoutes = () => {
         exact
         title="Edit Recipe"
         type="edit"
+        component={RecipeForms}
       />
       <RecipeForms
         path="/:recipeId/:versionNumber/variant"

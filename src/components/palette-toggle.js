@@ -3,7 +3,7 @@ import { jsx } from 'theme-ui'
 import { Flex } from '@theme-ui/components'
 import { alpha } from '@theme-ui/color'
 import { Link } from 'gatsby'
-import { FiBook, FiBookmark, FiHeart } from 'react-icons/fi'
+import { FiBook, FiBookmark, FiHeart, FiUser } from 'react-icons/fi'
 
 const PaletteToggle = ({ location }) => (
   <Flex
@@ -86,6 +86,30 @@ const PaletteToggle = ({ location }) => (
     >
       <FiBookmark sx={{ mr: `1` }} />
       Bookmarks
+    </Link>
+    <Link
+      to="/palette/account"
+      sx={{
+        px: `3`,
+        py: `2`,
+        display: `flex`,
+        alignItems: `center`,
+        textAlign: 'center',
+        textDecoration: `none`,
+        borderRadius: `2`,
+        transition: `0.15s all ease-in-out`,
+        color: location.pathname.includes('account') ? `primary` : `gray`,
+        fontWeight: location.pathname.includes('account') ? `bold` : `body`,
+        backgroundColor: location.pathname.includes('account')
+          ? alpha(`primary`, 0.2)
+          : `background`,
+        '&:hover': {
+          backgroundColor: alpha(`primary`, 0.15),
+        },
+      }}
+    >
+      <FiUser sx={{ mr: `1` }} />
+      Account
     </Link>
   </Flex>
 )

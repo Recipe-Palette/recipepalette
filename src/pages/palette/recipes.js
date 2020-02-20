@@ -33,10 +33,16 @@ const recipeQuery = gql`
 `
 
 export default ({ location }) => {
-  const { userId } = useAuth()
+  const { userId, isAuthenticated, login } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: { user_id: userId },
   })
+
+  if (typeof window === `undefined`) {
+    return null
+  }
+
+  if (!isAuthenticated()) login()
 
   return (
     <Fragment>
