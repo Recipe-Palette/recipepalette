@@ -64,12 +64,16 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
       if (
         ingredient.amount
           .toString()
-          .match(/^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[\s]?\d[/]\d+$)/)
+          .match(/^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+?[\s]?\d[/]\d+|\d[/]\d+$)/)
         //regex checks for one of the following: number with no decimal || number with decimal and at least one number after ||
         //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
       ) {
         const ingredAmount = new Fraction(ingredient.amount)
         ingredient.amount = ingredAmount.toFraction(true)
+      }
+
+      if (ingredient.amount === '0') {
+        ingredient.amount = ''
       }
 
       return {

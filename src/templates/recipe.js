@@ -290,8 +290,11 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
 
         <ul sx={{ columnCount: 2, listStyle: `none`, pl: `0` }}>
           {recipe.version.ingredients.map((ingredient, index) => {
-            let amount = new Fraction(ingredient.amount)
-            amount = amount.toFraction(true)
+            let amount = ''
+            if (ingredient.amount !== 0) {
+              amount = new Fraction(ingredient.amount)
+              amount = amount.toFraction(true)
+            }
             return (
               <li
                 key={index}

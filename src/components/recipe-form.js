@@ -52,7 +52,7 @@ const RecipeSchema = Yup.object().shape({
         amount: Yup.string()
           .max(2 ** 31 - 1, 'Too big')
           .matches(
-            /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+[\s]?\d[/]\d+$)/,
+            /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+?[\s]?\d[/]\d+|\d[/]\d+$)/,
             'Enter a valid number or fraction'
             //regex checks for one of the following: number with no decimal || number with decimal and at least one number after ||
             //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
@@ -131,7 +131,7 @@ const UnitDropdown = props => (
 const RecipeForm = ({
   recipe_id = null,
   name = '',
-  ingredients = [{ name: '', unit: '', amount: '' }],
+  ingredients = [{ name: '', unit: '', amount: 0 }],
   instructions = '',
   prep_time = '',
   cook_time = '',
@@ -196,6 +196,12 @@ const RecipeForm = ({
         addToast('No changes to save', { appearance: 'error' })
       } else {
         setSaving(true)
+
+        values.ingredients.forEach(ingredient => {
+          if (ingredient.amount == '') {
+            ingredient.amount = 0
+          }
+        })
 
         const recipeVersion = createRecipeObject(
           values,
