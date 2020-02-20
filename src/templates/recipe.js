@@ -22,7 +22,7 @@ import { RecipeLoader } from '../components/recipe-loader'
 
 const recipeQuery = gql`
   query($id: Int!) {
-    recipe: recipe_by_pk(id: $id) {
+    recipe: recipe(where: { id: { _eq: $id }, deleted: { _eq: false } }) {
       parent {
         latest {
           id
@@ -32,7 +32,9 @@ const recipeQuery = gql`
       }
       ...RecipeInformation
     }
-    variants: recipe(where: { parent_id: { _eq: $id } }) {
+    variants: recipe(
+      where: { parent_id: { _eq: $id }, deleted: { _eq: false } }
+    ) {
       id
       image_url
       latest {
@@ -132,6 +134,7 @@ const TimingSmall = ({ recipe }) => (
 )
 
 // used for all /recipe/* routes
+// eslint-disable-next-line complexity
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId, isAuthenticated, login } = useAuth()
   const { data: recipeData, loading, refetch } = useQuery(recipeQuery, {
@@ -146,8 +149,12 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     return <RecipeLoader location={location} />
   }
 
-  const recipe = loading ? null : recipeData.recipe
+  const recipe = loading ? null : recipeData.recipe[0]
   const variants = loading ? null : recipeData.variants
+
+  if (!loading && !recipe) {
+    return <div>Recipe Not Found</div>
+  }
 
   // intelligently assign the recipe.version to the correct version number
   recipe.version = findRecipeVersion(
@@ -198,18 +205,16 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             )}
           </div>
           {isVariant && (
-            <Fragment>
-              <div>
-                Variant of
-                <Link
-                  sx={{ variant: `buttons.secondary` }}
-                  to={`/recipe/${recipe.parent_id}/latest`}
-                  onClick={() => refetch()}
-                >
-                  {recipe.parent.latest.name}
-                </Link>
-              </div>
-            </Fragment>
+            <div>
+              Variant of
+              <Link
+                sx={{ variant: `buttons.secondary` }}
+                to={`/recipe/${recipe.parent_id}/latest`}
+                onClick={() => refetch()}
+              >
+                {recipe.parent.latest.name}
+              </Link>
+            </div>
           )}
         </div>
         <Icons recipe={recipe} />
