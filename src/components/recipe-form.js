@@ -198,7 +198,7 @@ const RecipeForm = ({
         setSaving(true)
 
         values.ingredients.forEach(ingredient => {
-          if (ingredient.amount == '') {
+          if (ingredient.amount === '') {
             ingredient.amount = 0
           }
         })
