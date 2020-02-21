@@ -142,6 +142,7 @@ export default () => {
           >
             <Title
               sx={{
+                color: `background`,
                 fontSize: [`5`, `6`],
                 width: `80%`,
                 mx: `auto`,
@@ -175,7 +176,7 @@ export default () => {
           </div>
         </HeroImage>
       </section>
-      <h2 sx={{ fontSize: `5` }}>Explore Categories</h2>
+      <h2 sx={{ color: `text`, fontSize: [`4`, `5`] }}>Explore Categories</h2>
       <section
         sx={{
           display: `grid`,

@@ -52,7 +52,7 @@ export default ({ location }) => {
         <RecipeCardGridLoader />
       ) : (
         <CardGrid recipes={recipeData.recipes}>
-          <NewCard />
+          <NewCard to="/recipe/new" />
         </CardGrid>
       )}
     </Fragment>

@@ -11,6 +11,7 @@ const versionInfoFragment = gql`
     version
     image_url
     ingredients {
+      id
       name
       amount
       unit
@@ -36,6 +37,7 @@ const recipeInformationFragment = gql`
     }
     tags {
       tag {
+        id
         name
       }
     }
@@ -62,6 +64,7 @@ const recipeCardInformationFragment = gql`
     id
     latest_version
     latest {
+      id
       cook_time_minutes
       prep_time_minutes
       name
