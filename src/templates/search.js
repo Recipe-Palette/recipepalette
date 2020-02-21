@@ -17,6 +17,7 @@ import CardGrid from '../components/card-grid'
 import { RecipeCardGridLoader } from '../components/recipe-card-loader'
 import SearchBar from '../components/search-bar'
 import { createSearchClause } from '../utils/createSearchClause'
+import SearchForm from '../components/search-form'
 
 const SEARCH_QUERY = gql`
   query SearchQuery($whereClause: recipe_bool_exp!, $user_id: String!) {
@@ -42,6 +43,39 @@ const TAGS_QUERY = gql`
   }
 `
 
+const generateValuesFromURL = parsedSearch => {
+  const { q, ingredients, tags } = parsedSearch
+  const values = { search: '', ingredients: [], tags: [] }
+
+  if (q) {
+    values.search = q
+  }
+
+  if (ingredients) {
+    if (typeof ingredients === 'object') {
+      values.ingredients = ingredients.map(ingredient => ({
+        value: ingredient,
+        label: ingredient,
+      }))
+    } else {
+      values.ingredients = [{ value: ingredients, label: ingredients }]
+    }
+  }
+
+  if (tags) {
+    if (typeof ingredients === 'object') {
+      values.tags = tags.map(tag => ({
+        value: tag,
+        label: tag,
+      }))
+    } else {
+      values.tags = [{ value: tags, label: tags }]
+    }
+  }
+
+  return values
+}
+
 const Search = ({ location }) => {
   const { userId } = useAuth()
   const parsedSearch = queryString.parse(location.search, {
@@ -49,6 +83,8 @@ const Search = ({ location }) => {
   })
   const { q } = parsedSearch
   const whereClause = createSearchClause(parsedSearch)
+  const values = generateValuesFromURL(parsedSearch)
+  console.log(values)
 
   const { data: searchData, loading } = useQuery(SEARCH_QUERY, {
     variables: {
@@ -99,7 +135,9 @@ const Search = ({ location }) => {
     </div>
   ) : (
     <div sx={{ py: `4` }}>
-      <Title>Search results for {q}</Title>
+      <Title>Search results{q ? ` for ${q}` : ''}</Title>
+      <SearchForm values={values} />
+      <hr />
       {loading ? (
         <RecipeCardGridLoader />
       ) : (

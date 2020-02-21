@@ -16,7 +16,7 @@ const createOption = label => ({
 const CreatableInputOnly = ({ value, onChange, onBlur }) => {
   const [inputValue, setInputValue] = useState('')
 
-  const handleChange = newValue => onChange('ingredients', newValue)
+  // const handleChange = newValue => onChange(newValue ? newValue : [])
   const handleInputChange = newInputValue => setInputValue(newInputValue)
 
   const handleKeyDown = e => {
@@ -38,7 +38,7 @@ const CreatableInputOnly = ({ value, onChange, onBlur }) => {
       isClearable
       isMulti
       menuIsOpen={false}
-      onChange={handleChange}
+      onChange={onChange}
       onInputChange={handleInputChange}
       onKeyDown={handleKeyDown}
       onBlur={onBlur}
