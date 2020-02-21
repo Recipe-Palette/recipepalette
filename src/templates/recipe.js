@@ -157,11 +157,11 @@ const TimingSmall = ({ recipe }) => (
 // eslint-disable-next-line complexity
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId, isAuthenticated, login } = useAuth()
-  const { data: recipeData, loading, refetch } = useQuery(recipeQuery, {
+  const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   })
 
   // stop gap loading solution
@@ -230,7 +230,6 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               <Link
                 sx={{ variant: `buttons.secondary` }}
                 to={`/recipe/${recipe.parent_id}/latest`}
-                onClick={() => refetch()}
               >
                 {recipe.parent.latest.name}
               </Link>
