@@ -133,7 +133,7 @@ const RecipeCard = ({
           </div>
           <Flex sx={{ flexDirection: `row` }}>
             <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
-              <UpvoteCardIcon recipeId={id} recipeName={name} />
+              <UpvoteCardIcon recipeId={id} />
             </div>
             <React.Fragment>
               <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
