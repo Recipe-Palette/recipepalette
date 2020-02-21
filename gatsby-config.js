@@ -36,5 +36,14 @@ module.exports = {
       },
     },
     `gatsby-plugin-offline`,
+    // prefetch google fonts
+    {
+      resolve: 'gatsby-plugin-web-font-loader',
+      options: {
+        google: {
+          families: ['Istok Web:300,400,700', 'Open Sans:300,400,700'],
+        },
+      },
+    },
   ],
 }

@@ -105,7 +105,7 @@ const Header = () => {
             }}
           >
             <Button
-              sx={{ variant: `buttons.link`, height: `39px` }}
+              sx={{ variant: `buttons.primary`, height: `39px` }}
               onClick={() => navigate('/palette/recipes')}
             >
               My Palette
