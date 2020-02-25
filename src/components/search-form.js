@@ -6,6 +6,7 @@ import { Label, Input, Button } from '@theme-ui/components'
 
 import TagsDropdown from './tags-dropdown'
 import IngredientsSelect from './ingredients-select'
+import { generateURLParams } from '../utils/search'
 
 const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
   return (
@@ -20,23 +21,8 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
         if (setDrawerIsOpen) {
           setDrawerIsOpen(false)
         }
-        let query = []
-        if (values.search.length > 0) {
-          query.push(`q=${values.search}`)
-        }
 
-        if (values.ingredients && values.ingredients.length > 0) {
-          const ingredients = values.ingredients
-            .map(({ value }) => value)
-            .join(',')
-          query.push(`ingredients=${ingredients}`)
-        }
-
-        if (values.tags && values.tags.length > 0) {
-          const tags = values.tags.map(({ value }) => value).join(',')
-          query.push(`tags=${tags}`)
-        }
-        query = query.length > 0 ? query.join('&') : ''
+        const query = generateURLParams(values)
 
         resetForm()
 

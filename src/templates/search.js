@@ -16,7 +16,7 @@ import {
 import CardGrid from '../components/card-grid'
 import { RecipeCardGridLoader } from '../components/recipe-card-loader'
 import SearchBar from '../components/search-bar'
-import { createSearchClause } from '../utils/createSearchClause'
+import { createSearchClause } from '../utils/search'
 import SearchForm from '../components/search-form'
 
 const SEARCH_QUERY = gql`

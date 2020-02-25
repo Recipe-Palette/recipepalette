@@ -5,12 +5,6 @@ export const createSearchClause = parsedSearch => {
 
   console.log(parsedSearch)
   if (q) {
-    // whereClause.latest = {
-    //   name: {
-    //     _ilike: `%${q}%`,
-    //   },
-    // }
-
     _and.push({
       latest: {
         name: {
@@ -25,11 +19,6 @@ export const createSearchClause = parsedSearch => {
     if (typeof ingredients === 'object') {
       ingredientQuery = ingredients.join('|')
     }
-    // whereClause.ingredients = {
-    //   name: {
-    //     _similar: `%(${ingredientQuery})%`,
-    //   },
-    // }
 
     _and.push({
       ingredients: {
@@ -71,4 +60,24 @@ export const createSearchClause = parsedSearch => {
   }
 
   return whereClause
+}
+
+export const generateURLParams = values => {
+  let query = []
+  if (values.search.length > 0) {
+    query.push(`q=${values.search}`)
+  }
+
+  if (values.ingredients && values.ingredients.length > 0) {
+    const ingredients = values.ingredients.map(({ value }) => value).join(',')
+    query.push(`ingredients=${ingredients}`)
+  }
+
+  if (values.tags && values.tags.length > 0) {
+    const tags = values.tags.map(({ value }) => value).join(',')
+    query.push(`tags=${tags}`)
+  }
+  query = query.length > 0 ? query.join('&') : ''
+
+  return query
 }

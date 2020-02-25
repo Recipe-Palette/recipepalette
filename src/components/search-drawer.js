@@ -9,7 +9,7 @@ import SearchForm from './search-form'
 const SearchDrawer = ({ setDrawerIsOpen, ...props }) => (
   <div
     sx={{
-      position: `absolute`,
+      position: [`fixed`, `absolute`],
       display: `flex`,
       zIndex: 1000,
       width: `100%`,
