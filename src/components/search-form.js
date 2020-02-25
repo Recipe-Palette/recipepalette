@@ -1,20 +1,13 @@
-/* eslint-disable no-unused-vars */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useState } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form } from 'formik'
 import { Label, Input, Button } from '@theme-ui/components'
 
-import { Search } from './icons'
 import TagsDropdown from './tags-dropdown'
 import IngredientsSelect from './ingredients-select'
 
 const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
-  const [isFocussed, setIsFocussed] = useState(false)
-
-  console.log('prevValues:', prevValues)
-
   return (
     <Formik
       initialValues={{
@@ -24,7 +17,6 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
         tags: prevValues && prevValues.tags ? prevValues.tags : [],
       }}
       onSubmit={(values, { resetForm }) => {
-        console.log('values', values)
         if (setDrawerIsOpen) {
           setDrawerIsOpen(false)
         }
@@ -62,7 +54,7 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
       }) => {
         console.log('formik values:', values)
         return (
-          <Form {...props}>
+          <Form sx={{ pb: `3` }} {...props}>
             <div
               sx={{
                 display: `grid`,
@@ -71,26 +63,10 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
                 pb: `3`,
               }}
             >
-              <Label
-                sx={{
-                  variant: `forms.input`,
-                  display: `flex`,
-                  alignItems: `center`,
-                  boxShadow: theme =>
-                    isFocussed
-                      ? `0px 0px 0px 3px ${theme.colors.accent}`
-                      : `none`,
-                  borderColor: `border`,
-                  p: `2`,
-                  borderRadius: `2`,
-                  my: `0`,
-                  transition: `0.15s all ease-in-out`,
-                  gridColumn: `1 / 3`,
-                }}
-              >
-                <div sx={{ ml: `1`, display: `flex`, alignItems: `center` }}>
-                  <Search size="1.25rem" sx={{ color: `gray` }} />
-                </div>
+              <div sx={{ gridColumn: `1 / 3` }}>
+                <Label htmlFor="search" sx={{ mt: `0` }}>
+                  Name
+                </Label>
                 <Input
                   type="text"
                   placeholder="Search for a recipe"
@@ -98,11 +74,10 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
                   value={values.search}
                   onChange={handleChange}
                   sx={{
+                    variant: `forms.input`,
                     color: `text`,
-                    border: `none`,
                     fontSize: `3`,
                     width: `100%`,
-                    marginLeft: `2`,
                     bg: `inherit`,
                     '&:focus': {
                       outline: `none`,
@@ -110,12 +85,9 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
                     '&::placeholder': {
                       color: `gray`,
                     },
-                    p: `0`,
                   }}
-                  onFocus={() => setIsFocussed(true)}
-                  onBlur={() => setIsFocussed(false)}
                 />
-              </Label>
+              </div>
               <div sx={{ gridColumn: 1 }}>
                 <Label htmlFor="ingredients">Ingredients</Label>
                 <IngredientsSelect

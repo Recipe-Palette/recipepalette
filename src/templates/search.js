@@ -137,7 +137,6 @@ const Search = ({ location }) => {
     <div sx={{ py: `4` }}>
       <Title>Search results{q ? ` for ${q}` : ''}</Title>
       <SearchForm values={values} />
-      <hr />
       {loading ? (
         <RecipeCardGridLoader />
       ) : (
