@@ -13,10 +13,9 @@ const createOption = label => ({
   value: label,
 })
 
-const CreatableInputOnly = ({ value, onChange, onBlur }) => {
+const CreatableInputOnly = ({ value, onChange, onBlur, ...props }) => {
   const [inputValue, setInputValue] = useState('')
 
-  // const handleChange = newValue => onChange(newValue ? newValue : [])
   const handleInputChange = newInputValue => setInputValue(newInputValue)
 
   const handleKeyDown = e => {
@@ -44,6 +43,7 @@ const CreatableInputOnly = ({ value, onChange, onBlur }) => {
       onBlur={onBlur}
       placeholder="Type something and press enter..."
       value={value}
+      {...props}
     />
   )
 }

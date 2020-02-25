@@ -12,7 +12,14 @@ const TAGS_QUERY = gql`
   }
 `
 
-const TagsDropdown = ({ value, onChange, onBlur, touched, error }) => {
+const TagsDropdown = ({
+  value,
+  onChange,
+  onBlur,
+  touched,
+  error,
+  ...props
+}) => {
   const { data: tagsData, loading } = useQuery(TAGS_QUERY)
   let tags = []
 
@@ -36,6 +43,7 @@ const TagsDropdown = ({ value, onChange, onBlur, touched, error }) => {
         onBlur={handleBlur}
         value={value}
         menuPosition="fixed"
+        {...props}
       />
       {!!error && touched && (
         <div style={{ color: 'red', marginTop: '.5rem' }}>{error}</div>

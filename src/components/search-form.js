@@ -5,12 +5,10 @@ import { useState } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form } from 'formik'
 import { Label, Input, Button } from '@theme-ui/components'
-import { lighten } from '@theme-ui/color'
 
 import { Search } from './icons'
 import TagsDropdown from './tags-dropdown'
 import IngredientsSelect from './ingredients-select'
-import CreatableInputOnly from './creatable-multi-input'
 
 const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
   const [isFocussed, setIsFocussed] = useState(false)
@@ -51,23 +49,16 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
         resetForm()
 
         navigate(`/search/?${query}`, { state: { values } })
-
-        // values.search = ''
       }}
       enableReinitialize={true}
     >
       {({
         values,
         touched,
-        dirty,
         errors,
         handleChange,
-        handleBlur,
-        handleSubmit,
-        handleReset,
         setFieldValue,
         setFieldTouched,
-        isSubmitting,
       }) => {
         console.log('formik values:', values)
         return (
@@ -82,19 +73,19 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
             >
               <Label
                 sx={{
+                  variant: `forms.input`,
                   display: `flex`,
                   alignItems: `center`,
                   boxShadow: theme =>
                     isFocussed
                       ? `0px 0px 0px 3px ${theme.colors.accent}`
                       : `none`,
-                  bg: lighten(`border`, 0.075),
+                  borderColor: `border`,
                   p: `2`,
                   borderRadius: `2`,
                   my: `0`,
                   transition: `0.15s all ease-in-out`,
                   gridColumn: `1 / 3`,
-                  // ...labelSx,
                 }}
               >
                 <div sx={{ ml: `1`, display: `flex`, alignItems: `center` }}>
@@ -134,21 +125,15 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
                   touched={touched.ingredients}
                   error={errors.ingredients}
                 />
-                {/* <Select
-                options={[{ value: 'ingredient 1', label: 'ingredient 1' }]}
-                sx={{ width: `100%` }}
-              /> */}
               </div>
               <div sx={{ gridColumn: [1, 2] }}>
                 <Label htmlFor="tags">Tags</Label>
                 <TagsDropdown
-                  // id="tags"
                   value={values.tags}
                   onChange={setFieldValue}
                   onBlur={setFieldTouched}
                   touched={touched.tags}
                   error={errors.tags}
-                  // options={tags.length > 0 ? tags : []}
                 />
               </div>
             </div>

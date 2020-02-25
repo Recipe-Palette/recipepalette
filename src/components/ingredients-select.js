@@ -2,7 +2,14 @@
 import { jsx } from 'theme-ui'
 import CreatableInputOnly from './creatable-multi-input'
 
-const IngredientsSelect = ({ value, onChange, onBlur, touched, error }) => {
+const IngredientsSelect = ({
+  value,
+  onChange,
+  onBlur,
+  touched,
+  error,
+  ...props
+}) => {
   console.log(value)
   const handleChange = newValue =>
     onChange('ingredients', newValue ? newValue : [])
@@ -15,6 +22,7 @@ const IngredientsSelect = ({ value, onChange, onBlur, touched, error }) => {
         onChange={handleChange}
         onBlur={handleBlur}
         value={value}
+        {...props}
       />
       {!!error && touched && (
         <div style={{ color: 'red', marginTop: '.5rem' }}>{error}</div>
