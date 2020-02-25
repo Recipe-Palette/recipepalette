@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Fragment } from 'react'
+import { Fragment, useState, useRef } from 'react'
 import { Flex, Divider, Badge } from '@theme-ui/components'
 import { Link, navigate } from 'gatsby'
 import { FiClock } from 'react-icons/fi'
@@ -9,6 +9,13 @@ import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
 import { useAuth } from 'react-use-auth'
+import {
+  AlertDialog,
+  AlertDialogLabel,
+  AlertDialogDescription,
+  // AlertDialogOverlay,
+  // AlertDialogContent,
+} from '@reach/alert-dialog'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
@@ -58,6 +65,11 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
     },
   })
 
+  const [showDialog, setShowDialog] = useState(false)
+  const cancelRef = useRef(0)
+  const open = () => setShowDialog(true)
+  const close = () => setShowDialog(false)
+
   return (
     <div
       sx={{
@@ -93,18 +105,55 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
         />
       </Flex>
       {isOwner && (
-        <Flex sx={{ justifyContent: `center`, ml: 4, mt: 1 }}>
-          <Trash
-            onClick={() =>
-              deleteRecipe({
-                variables: {
-                  recipe_id: recipe.id,
-                },
-              })
-            }
-            size={32}
-          />
+        <Flex
+          sx={{
+            ml: '3',
+            mt: '2',
+            justifyContent: `center`,
+            alignItems: 'center',
+          }}
+        >
+          <Trash onClick={open} size={29} />
         </Flex>
+      )}
+
+      {showDialog && (
+        <div sx={{ alignItems: `center` }}>
+          <AlertDialog leastDestructiveRef={cancelRef}>
+            <AlertDialogLabel sx={{ fontWeight: `bold`, textAlign: `center` }}>
+              Delete Recipe?
+            </AlertDialogLabel>
+            <AlertDialogDescription sx={{ textAlign: `center` }}>
+              This action will permamently delete this recipe. Do you wish to
+              continue?
+            </AlertDialogDescription>
+            <div className="alert-buttons">
+              <button
+                sx={{
+                  variant: `buttons.secondary`,
+                  height: `39px`,
+                  textAlign: `center`,
+                  alignSelf: `center`,
+                }}
+                onClick={close}
+              >
+                Cancel
+              </button>
+              <button
+                sx={{ variant: `buttons.primary`, height: `39px` }}
+                onClick={() =>
+                  deleteRecipe({
+                    variables: {
+                      recipe_id: recipe.id,
+                    },
+                  })
+                }
+              >
+                Confirm
+              </button>{' '}
+            </div>
+          </AlertDialog>
+        </div>
       )}
     </div>
   )
@@ -324,6 +373,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
           </Flex>
         </div>
       </div>
+
       <Divider />
       <div>
         <h2 sx={{ color: `text`, width: `100%`, my: `2` }}>Ingredients</h2>

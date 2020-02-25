@@ -41,7 +41,15 @@ const Copy = ({ filled, size, ...props }) => (
   />
 )
 
-const Trash = ({ size, ...props }) => <FiTrash2 size={size} {...props} />
+const Trash = ({ size, ...props }) => (
+  <FiTrash2
+    size={size}
+    sx={{
+      strokeWidth: STROKE_WIDTH,
+    }}
+    {...props}
+  />
+)
 
 const Book = ({ filled, size, ...props }) => (
   <FiBookOpen
