@@ -268,7 +268,9 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             <NewCard
               sx={{ minWidth: 175 }}
               to={`/recipe/${recipe.id}/${recipe.version.version}/variant`}
-            />
+            >
+              + Add New Variation
+            </NewCard>
             {variants.map((variant, index) => (
               <RecipeCard key={index} recipe={variant} mini={true} />
             ))}
@@ -325,6 +327,11 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
         {recipe.tags.map((recipe_tag, index) => (
           <TagBadge key={index} name={recipe_tag.tag.name} sx={{ mr: `2` }} />
         ))}
+        {recipe && recipe.tags && !recipe.tags.length && (
+          <span sx={{ fontSize: `1`, color: `gray` }}>
+            Looks like this recipe doesn't have any tags
+          </span>
+        )}
       </div>
     </div>
   )

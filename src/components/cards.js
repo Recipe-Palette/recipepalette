@@ -175,7 +175,7 @@ const RecipeCard = ({
   )
 }
 
-const NewCard = ({ to, ...props }) => (
+const NewCard = ({ to, children, ...props }) => (
   <Link
     to={to}
     sx={{
@@ -208,7 +208,7 @@ const NewCard = ({ to, ...props }) => (
         },
       }}
     >
-      + Add New
+      {children || `+ Add New`}
     </Card>
   </Link>
 )
