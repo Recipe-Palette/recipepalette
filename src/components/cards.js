@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Link } from 'gatsby'
+import { Flex, Card } from '@theme-ui/components'
 import { darken, lighten } from '@theme-ui/color'
 import { FiClock } from 'react-icons/fi'
 import { Copy } from './icons'
-import { Card } from '@theme-ui/components'
 import { convertTime } from '../utils/convertTime'
 import React from 'react'
 
@@ -114,28 +114,14 @@ const RecipeCard = ({
         </div>
         <div
           sx={{
+            color: `gray`,
             display: `flex`,
             flexDirection: `row`,
             justifyContent: `space-between`,
           }}
         >
           <div sx={{ display: `flex`, alignItems: `center` }}>
-            <UpvoteCardIcon recipeId={id} recipeName={name} />
-          </div>
-          <React.Fragment>
-            <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
-              <Copy size={20} filled={copied} />
-              <span
-                sx={{
-                  fontSize: `2`,
-                  ml: `2`,
-                }}
-              />
-              <VariationCount recipeId={id} />
-            </div>
-          </React.Fragment>
-          <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
-            <FiClock size={20} />
+            <FiClock size={20} sx={{ strokeWidth: 1.5 }} />
             <span
               sx={{
                 fontSize: `2`,
@@ -145,6 +131,23 @@ const RecipeCard = ({
               {time}
             </span>
           </div>
+          <Flex sx={{ flexDirection: `row` }}>
+            <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
+              <UpvoteCardIcon recipeId={id} />
+            </div>
+            <React.Fragment>
+              <div sx={{ display: `flex`, alignItems: `center`, ml: `3` }}>
+                <Copy size={20} filled={copied} />
+                <span
+                  sx={{
+                    fontSize: `2`,
+                    ml: `2`,
+                  }}
+                />
+                <VariationCount recipeId={id} />
+              </div>
+            </React.Fragment>
+          </Flex>
         </div>
         <div
           sx={{
@@ -172,9 +175,9 @@ const RecipeCard = ({
   )
 }
 
-const NewCard = () => (
+const NewCard = ({ to, ...props }) => (
   <Link
-    to="/recipe/new"
+    to={to}
     sx={{
       textDecoration: `none`,
       outline: `none`,
@@ -183,6 +186,7 @@ const NewCard = () => (
       },
       borderRadius: `1`,
     }}
+    {...props}
   >
     <Card
       sx={{

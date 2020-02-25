@@ -1,16 +1,11 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Location } from '@reach/router'
 import { useAuth } from 'react-use-auth'
 
-const PrivateRoute = ({ component: Component, authed, authUser, ...rest }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
   const { isAuthenticated, login } = useAuth()
 
-  return (
-    <Location>
-      {() => (isAuthenticated() === true ? <Component {...rest} /> : login())}
-    </Location>
-  )
+  return isAuthenticated() === true ? <Component {...rest} /> : login()
 }
 
 export default PrivateRoute

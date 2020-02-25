@@ -31,19 +31,23 @@ export default {
   },
   badges: {
     primary: {
-      color: `background`,
-      borderWidth: `1px`,
-      borderColor: `primary`,
-      borderStyle: `solid`,
-      marginRight: `5px`,
-      backgroundColor: `primary`,
-      transition: `0.2s all`,
-      textDecoration: `none`,
+      cursor: `pointer`,
+      color: `primary`,
+      backgroundColor: alpha(`primary`, 0.15),
       fontSize: `1`,
       px: `2`,
       py: `1`,
-      borderRadius: `1`,
+      borderRadius: `2`,
       textAlign: `center`,
+    },
+    secondary: {
+      py: `0`,
+      px: `2`,
+      ml: `2`,
+      color: `white`,
+      backgroundColor: alpha(`secondary`, 0.5),
+      borderRadius: `2`,
+      fontSize: `2`,
     },
   },
   buttons: {
@@ -76,9 +80,10 @@ export default {
       fontSize: `2`,
       px: `2`,
       py: `1`,
-      borderRadius: `1`,
+      borderRadius: `2`,
       textAlign: `center`,
       outline: 0,
+      boxShadow: `none`,
       '&:active, &:focus': {
         background: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
       },
@@ -87,9 +92,7 @@ export default {
       },
     },
     link: {
-      // backgroundColor: lighten(`primary`, 0.25),
-      // color: `text`,
-      // boxShadow: `0px 0px 4px 0px #a4a4a4`,
+      whiteSpace: `nowrap`,
       textAlign: `center`,
       '&:hover': {
         backgroundColor: lighten(`primary`, 0.1),
@@ -128,9 +131,7 @@ export default {
       },
     },
     recipeMini: {
-      my: `1`,
-      mr: `3`,
-      height: `calc(100% - 16px)`,
+      height: `100%`,
       outline: 0,
       '&:active, &:focus': {
         boxShadow: theme => `0 0 0 3px ${theme.colors.accent}`,
@@ -147,7 +148,7 @@ export default {
         justifyContent: `space-between`,
         alignItems: `center`,
         py: `3`,
-        '*+*': { marginLeft: `3` },
+        '*+*': { marginLeft: [`0`, `3`] },
       },
     },
   },
@@ -182,6 +183,12 @@ export default {
     },
     select: {
       borderColor: `border`,
+    },
+  },
+  styles: {
+    hr: {
+      color: `border`,
+      my: `4`,
     },
   },
 }
