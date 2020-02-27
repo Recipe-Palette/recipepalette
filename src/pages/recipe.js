@@ -2,7 +2,6 @@
 import { jsx } from 'theme-ui'
 import { Router } from '@reach/router'
 
-import PrivateRoute from '../components/private-route'
 import Log from '../templates/log'
 import Recipe from '../templates/recipe'
 import RecipeForms from '../templates/recipe-forms'

@@ -5,7 +5,7 @@ import { Flex } from '@theme-ui/components'
 import styled from '@emotion/styled'
 import { useAuth } from 'react-use-auth'
 
-import { Heart, Bookmark, Book, Profile } from './icons'
+import { Heart, Bookmark, Book, Profile, Search } from './icons'
 
 const IconContainer = styled.div`
   width: 100%;
@@ -24,7 +24,7 @@ const IconContainer = styled.div`
 
 const isActiveLink = (pathname, matchText) => pathname.includes(matchText)
 
-const NavigationMobile = ({ location }) => {
+const NavigationMobile = ({ location, toggleDrawer, mobileSearchToggle }) => {
   const { isAuthenticated, login } = useAuth()
   return (
     <div
@@ -86,6 +86,12 @@ const NavigationMobile = ({ location }) => {
             />
           </IconContainer>
         </Link>
+        <IconContainer onClick={toggleDrawer} ref={mobileSearchToggle}>
+          <Search
+            filled={isActiveLink(location.pathname, `search`)}
+            size="1.5rem"
+          />
+        </IconContainer>
       </Flex>
     </div>
   )
