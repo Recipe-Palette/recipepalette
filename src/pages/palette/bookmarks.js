@@ -47,7 +47,10 @@ export default ({ location }) => {
       {loading ? (
         <RecipeCardGridLoader />
       ) : (
-        <CardGrid recipes={recipeData.recipes} />
+        <CardGrid
+          recipes={recipeData.recipes}
+          emptyTitle="No bookmarks found"
+        />
       )}
     </Fragment>
   )

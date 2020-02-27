@@ -2,15 +2,13 @@
 import { jsx } from 'theme-ui'
 import { Fragment } from 'react'
 import { Button, Container } from '@theme-ui/components'
-import { lighten } from '@theme-ui/color'
 import { Link, navigate } from 'gatsby'
 import { useAuth } from 'react-use-auth'
 import { FiSearch } from 'react-icons/fi'
 
 import { Logo, HorizontalType, Monogram } from '../components/logo'
-import SearchBar from './search-bar'
 
-const Header = () => {
+const Header = ({ toggleDrawer, headerSearchToggle }) => {
   const { isAuthenticated, login } = useAuth()
 
   return (
@@ -67,74 +65,69 @@ const Header = () => {
             <HorizontalType sx={{ width: 200 }} />
           </Link>
         </div>
-        <div
-          sx={{
-            display: [`none`, `flex`],
-            width: `100%`,
-          }}
-        >
-          <SearchBar sx={{ width: `100%` }} />
-        </div>
-        <button
-          sx={{
-            display: [`flex`, `none`],
-            alignItems: `center`,
-            justifyContent: `center`,
-            borderRadius: `2`,
-            height: `39px`,
-            width: `39px`,
-            cursor: `pointer`,
-            outline: 0,
-            border: 0,
-            backgroundColor: lighten(`border`, 0.075),
-            '&:active, &:focus': {
-              boxShadow: theme => `0px 0px 0px 3px ${theme.colors.accent}`,
-            },
-          }}
-          onClick={() => navigate(`search`)}
-        >
-          <FiSearch size={20} />
-        </button>
-        {isAuthenticated() ? (
-          <div
-            sx={{
-              display: [`none`, `flex`],
-              alignItems: `center`,
-              width: `max-content`,
-              whiteSpace: `nowrap`,
-            }}
-          >
-            <Button
-              sx={{ variant: `buttons.primary`, height: `39px` }}
-              onClick={() => navigate('/palette/recipes')}
+        <div sx={{ display: `flex` }}>
+          {isAuthenticated() ? (
+            <div
+              sx={{
+                display: [`none`, `flex`],
+                alignItems: `center`,
+                width: `max-content`,
+                whiteSpace: `nowrap`,
+              }}
             >
-              My Palette
+              <Button
+                sx={{ variant: `buttons.primary`, height: `39px` }}
+                onClick={() => navigate('/palette/recipes')}
+              >
+                My Palette
+              </Button>
+            </div>
+          ) : (
+            <Fragment>
+              <div>
+                <Button
+                  sx={{
+                    variant: `buttons.secondary`,
+                    backgroundColor: `background`,
+                    height: `39px`,
+                  }}
+                  onClick={() => login()}
+                >
+                  Login
+                </Button>
+              </div>
+              <div sx={{ display: [`none`, `flex`], height: `39px` }}>
+                <Button
+                  sx={{
+                    px: `10px`,
+                    width: `max-content`,
+                    whiteSpace: `nowrap`,
+                  }}
+                  onClick={() => login()}
+                >
+                  Sign Up
+                </Button>
+              </div>
+            </Fragment>
+          )}
+          <div sx={{ display: [`none`, `initial`] }}>
+            <Button
+              sx={{
+                variant: `buttons.secondary`,
+                backgroundColor: `background`,
+                height: `39px`,
+                display: `flex`,
+              }}
+              onClick={toggleDrawer}
+              ref={headerSearchToggle}
+            >
+              <FiSearch
+                size={20}
+                sx={{ cursor: `pointer`, stroke: 3, strokeWidth: 3 }}
+              />
             </Button>
           </div>
-        ) : (
-          <Fragment>
-            <div>
-              <Button
-                sx={{
-                  variant: `buttons.secondary`,
-                  backgroundColor: `background`,
-                  height: `39px`,
-                }}
-                onClick={() => login()}
-              >
-                Login
-              </Button>
-            </div>
-            <div sx={{ display: [`none`, `flex`], height: `39px` }}>
-              <Button
-                sx={{ px: `10px`, width: `max-content`, whiteSpace: `nowrap` }}
-                onClick={() => login()}
-              >
-                Sign Up
-              </Button>
-            </div>
-          </Fragment>
-        )}
+        </div>
       </Container>
     </header>
   )

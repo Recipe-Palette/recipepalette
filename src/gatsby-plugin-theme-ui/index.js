@@ -148,7 +148,7 @@ export default {
         justifyContent: `space-between`,
         alignItems: `center`,
         py: `3`,
-        '*+*': { marginLeft: `3` },
+        '*+*': { marginLeft: [`0`, `3`] },
       },
     },
   },

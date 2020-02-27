@@ -4,6 +4,7 @@ import queryString from 'query-string'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
+import { isEmpty } from 'lodash'
 
 import Title from '../components/title'
 import {
@@ -12,7 +13,8 @@ import {
 } from '../graphql/fragments'
 import CardGrid from '../components/card-grid'
 import { RecipeCardGridLoader } from '../components/recipe-card-loader'
-import SearchBar from '../components/search-bar'
+import { createSearchClause } from '../utils/search'
+import SearchForm from '../components/search-form'
 
 const SEARCH_QUERY = gql`
   query SearchQuery($whereClause: recipe_bool_exp!, $user_id: String!) {
@@ -22,36 +24,45 @@ const SEARCH_QUERY = gql`
         ...BookmarkInformation
       }
     }
+    tags: tag {
+      name
+    }
   }
   ${bookmarkInformationFragment}
   ${recipeCardInformationFragment}
 `
 
-// Function to dynamically create where clause based on query string inputs
-const createWhereClase = parsedSearch => {
-  const { q, ingredients } = parsedSearch
-  const whereClause = {}
+const generateValuesFromURL = parsedSearch => {
+  const { q, ingredients, tags } = parsedSearch
+  const values = { search: '', ingredients: [], tags: [] }
+
   if (q) {
-    whereClause.latest = {
-      name: {
-        _ilike: `%${q}%`,
-      },
-    }
+    values.search = q
   }
 
   if (ingredients) {
-    let ingredientQuery = ingredients
     if (typeof ingredients === 'object') {
-      ingredientQuery = ingredients.join('|')
-    }
-    whereClause.ingredients = {
-      name: {
-        _similar: `%(${ingredientQuery})%`,
-      },
+      values.ingredients = ingredients.map(ingredient => ({
+        value: ingredient,
+        label: ingredient,
+      }))
+    } else {
+      values.ingredients = [{ value: ingredients, label: ingredients }]
     }
   }
 
-  return whereClause
+  if (tags) {
+    if (typeof ingredients === 'object') {
+      values.tags = tags.map(tag => ({
+        value: tag,
+        label: tag,
+      }))
+    } else {
+      values.tags = [{ value: tags, label: tags }]
+    }
+  }
+
+  return values
 }
 
 const Search = ({ location }) => {
@@ -60,7 +71,8 @@ const Search = ({ location }) => {
     arrayFormat: 'comma',
   })
   const { q } = parsedSearch
-  const whereClause = createWhereClase(parsedSearch)
+  const whereClause = createSearchClause(parsedSearch)
+  const values = generateValuesFromURL(parsedSearch)
 
   const { data: searchData, loading } = useQuery(SEARCH_QUERY, {
     variables: {
@@ -69,24 +81,22 @@ const Search = ({ location }) => {
     },
   })
 
-  return q ? (
+  if (!loading && isEmpty(parsedSearch)) {
+    searchData.recipes = []
+  }
+
+  return (
     <div sx={{ py: `4` }}>
-      <Title>Search results for {q}</Title>
+      <Title>Search results{q ? ` for ${q}` : ''}</Title>
+      <SearchForm values={values} />
       {loading ? (
         <RecipeCardGridLoader />
       ) : (
-        <CardGrid recipes={searchData.recipes} />
+        <CardGrid
+          recipes={searchData.recipes}
+          emptyNote={`It seems we can't find any results for ${q}`}
+        />
       )}
-    </div>
-  ) : (
-    <div sx={{ py: `4` }}>
-      <Title>Search for Recipes</Title>
-      <p>
-        You can try searching "Chocolate Chip Cookies", or just "Cookies",
-        recipe titles across our entire database will be returned to browse,
-        bookmark, and edit.
-      </p>
-      <SearchBar />
     </div>
   )
 }
