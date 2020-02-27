@@ -22,6 +22,7 @@
     "@emotion/styled": "^10.0.22",
     "@mdx-js/react": "^1.5.1",
     "@reach/alert-dialog": "^0.8.5",
+    "@reach/dialog": "^0.8.5",
     "@reach/router": "^1.2.1",
     "@theme-ui/color": "^0.2.49",
     "@theme-ui/components": "^0.2.50",

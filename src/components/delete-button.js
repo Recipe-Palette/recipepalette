@@ -5,9 +5,15 @@ import { Trash } from './icons'
 
 const DeleteButton = ({ size = 24, ...props }) => {
   return (
-    <IconButton sx={{ height: size + 14, width: size + 14 }} {...props}>
+    <IconButton
+      sx={{
+        height: size + 14,
+        width: size + 14,
+      }}
+      {...props}
+    >
       <div sx={{ display: `flex`, alignItems: `center` }}>
-        <Trash size={size} />
+        <Trash size={size} sx={{ color: `#c13c3c` }} />
       </div>
     </IconButton>
   )

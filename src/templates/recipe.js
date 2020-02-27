@@ -13,9 +13,8 @@ import {
   AlertDialog,
   AlertDialogLabel,
   AlertDialogDescription,
-  // AlertDialogOverlay,
-  // AlertDialogContent,
 } from '@reach/alert-dialog'
+import '@reach/dialog/styles.css'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
@@ -83,6 +82,11 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
       }}
     >
       {isOwner && (
+        <Flex sx={{ mr: '3', justifyContent: `center`, alignItems: 'center' }}>
+          <DeleteButton onClick={open} size={29} />
+        </Flex>
+      )}
+      {isOwner && (
         <Flex sx={{ mr: `3`, justifyContent: `center`, alignItems: `center` }}>
           <EditButton
             size={29}
@@ -105,23 +109,39 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
           recipeName={recipe.version.name}
         />
       </Flex>
-      {isOwner && (
-        <Flex sx={{ ml: '3', justifyContent: `center`, alignItems: 'center' }}>
-          <DeleteButton onClick={open} size={29} />
-        </Flex>
-      )}
 
       {showDialog && (
         <div sx={{ alignItems: `center` }}>
-          <AlertDialog leastDestructiveRef={cancelRef}>
-            <AlertDialogLabel sx={{ fontWeight: `bold`, textAlign: `center` }}>
+          <AlertDialog
+            leastDestructiveRef={cancelRef}
+            sx={{ maxWidth: 500, minWidth: 360, borderRadius: `2` }}
+          >
+            <AlertDialogLabel
+              sx={{
+                fontWeight: `bold`,
+                textAlign: `center`,
+                fontSize: `3`,
+                mb: `3`,
+              }}
+            >
               Delete Recipe?
             </AlertDialogLabel>
             <AlertDialogDescription sx={{ textAlign: `center` }}>
-              This action will permamently delete this recipe. Do you wish to
-              continue?
+              This action will permamently delete this recipe from your palette{' '}
+              <b>and is not recoverable</b>.
+              <br />
+              <br />
+              Do you wish to continue?
             </AlertDialogDescription>
-            <div className="alert-buttons">
+            <div
+              className="alert-buttons"
+              sx={{
+                display: `flex`,
+                justifyContent: `center`,
+                mt: `4`,
+                '*+*': { ml: `2` },
+              }}
+            >
               <button
                 sx={{
                   variant: `buttons.secondary`,
@@ -284,7 +304,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
             )}
           </div>
           {isVariant && !recipe.parent.deleted && (
-            <div>
+            <div sx={{ mb: `2` }}>
               Variant of
               <Link
                 sx={{ variant: `buttons.secondary` }}
