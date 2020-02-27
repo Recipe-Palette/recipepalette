@@ -24,7 +24,7 @@ const IconContainer = styled.div`
 
 const isActiveLink = (pathname, matchText) => pathname.includes(matchText)
 
-const NavigationMobile = ({ location, toggleDrawer }) => {
+const NavigationMobile = ({ location, toggleDrawer, mobileSearchToggle }) => {
   const { isAuthenticated, login } = useAuth()
   return (
     <div
@@ -86,7 +86,7 @@ const NavigationMobile = ({ location, toggleDrawer }) => {
             />
           </IconContainer>
         </Link>
-        <IconContainer onClick={toggleDrawer}>
+        <IconContainer onClick={toggleDrawer} ref={mobileSearchToggle}>
           <Search
             filled={isActiveLink(location.pathname, `search`)}
             size="1.5rem"

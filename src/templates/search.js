@@ -84,7 +84,6 @@ const Search = ({ location }) => {
   const { q } = parsedSearch
   const whereClause = createSearchClause(parsedSearch)
   const values = generateValuesFromURL(parsedSearch)
-  console.log(values)
 
   const { data: searchData, loading } = useQuery(SEARCH_QUERY, {
     variables: {

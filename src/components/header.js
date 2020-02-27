@@ -8,7 +8,7 @@ import { FiSearch } from 'react-icons/fi'
 
 import { Logo, HorizontalType, Monogram } from '../components/logo'
 
-const Header = ({ toggleDrawer }) => {
+const Header = ({ toggleDrawer, headerSearchToggle }) => {
   const { isAuthenticated, login } = useAuth()
 
   return (
@@ -120,7 +120,8 @@ const Header = ({ toggleDrawer }) => {
                 height: `39px`,
                 display: `flex`,
               }}
-              onClick={() => toggleDrawer()}
+              onClick={toggleDrawer}
+              ref={headerSearchToggle}
             >
               <FiSearch
                 size={20}

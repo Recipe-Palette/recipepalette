@@ -6,7 +6,7 @@ import { Container } from '@theme-ui/components'
 import Title from './title'
 import SearchForm from './search-form'
 
-const SearchDrawer = ({ setDrawerIsOpen, ...props }) => (
+const SearchDrawer = ({ toggleDrawer, ...props }) => (
   <div
     sx={{
       position: [`fixed`, `absolute`],
@@ -23,7 +23,7 @@ const SearchDrawer = ({ setDrawerIsOpen, ...props }) => (
   >
     <Container>
       <Title>Search</Title>
-      <SearchForm setDrawerIsOpen={setDrawerIsOpen} />
+      <SearchForm toggleDrawer={toggleDrawer} />
     </Container>
   </div>
 )

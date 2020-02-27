@@ -8,7 +8,7 @@ import TagsDropdown from './tags-dropdown'
 import IngredientsSelect from './ingredients-select'
 import { generateURLParams } from '../utils/search'
 
-const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
+const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
   return (
     <Formik
       initialValues={{
@@ -18,14 +18,10 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
         tags: prevValues && prevValues.tags ? prevValues.tags : [],
       }}
       onSubmit={(values, { resetForm }) => {
-        if (setDrawerIsOpen) {
-          setDrawerIsOpen(false)
-        }
-
         const query = generateURLParams(values)
 
+        toggleDrawer()
         resetForm()
-
         navigate(`/search/?${query}`, { state: { values } })
       }}
       enableReinitialize={true}
@@ -38,7 +34,6 @@ const SearchForm = ({ setDrawerIsOpen, values: prevValues, ...props }) => {
         setFieldValue,
         setFieldTouched,
       }) => {
-        console.log('formik values:', values)
         return (
           <Form sx={{ pb: `3` }} {...props}>
             <div

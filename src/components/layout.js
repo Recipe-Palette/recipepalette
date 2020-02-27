@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Container } from '@theme-ui/components'
 
 import Header from './header'
@@ -8,13 +8,19 @@ import Footer from './footer'
 import NavigationMobile from './navigation-mobile'
 import SearchDrawer from './search-drawer'
 
+import { useOnClickOutside } from '../hooks/useOnClickOutside'
+
 const Layout = ({ children, location }) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false)
+  const searchDrawer = useRef(null)
+  const headerSearchToggle = useRef(null)
+  const mobileSearchToggle = useRef(null)
 
-  const toggleDrawer = () => {
-    setDrawerIsOpen(!drawerIsOpen)
-  }
+  const toggleDrawer = () => setDrawerIsOpen(!drawerIsOpen)
 
+  useOnClickOutside(searchDrawer, headerSearchToggle, mobileSearchToggle, () =>
+    setDrawerIsOpen(false)
+  )
   return (
     <div
       sx={{
@@ -22,16 +28,21 @@ const Layout = ({ children, location }) => {
         backgroundColor: `background`,
       }}
     >
-      <Header toggleDrawer={toggleDrawer} />
-      <SearchDrawer
-        sx={{
-          height: `auto`,
-          maxHeight: drawerIsOpen ? `500px` : 0,
-          overflow: drawerIsOpen ? `auto` : `hidden`,
-          py: drawerIsOpen ? `3` : `0`,
-        }}
-        setDrawerIsOpen={setDrawerIsOpen}
+      <Header
+        toggleDrawer={toggleDrawer}
+        headerSearchToggle={headerSearchToggle}
       />
+      <div ref={searchDrawer}>
+        <SearchDrawer
+          sx={{
+            height: `auto`,
+            maxHeight: drawerIsOpen ? `500px` : 0,
+            overflow: drawerIsOpen ? `auto` : `hidden`,
+            py: drawerIsOpen ? `3` : `0`,
+          }}
+          toggleDrawer={toggleDrawer}
+        />
+      </div>
       <main
         sx={{
           position: `relative`,
@@ -49,7 +60,11 @@ const Layout = ({ children, location }) => {
           {children}
         </Container>
       </main>
-      <NavigationMobile location={location} toggleDrawer={toggleDrawer} />
+      <NavigationMobile
+        location={location}
+        toggleDrawer={toggleDrawer}
+        mobileSearchToggle={mobileSearchToggle}
+      />
       <Footer />
     </div>
   )

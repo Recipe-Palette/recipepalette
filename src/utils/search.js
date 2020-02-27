@@ -3,7 +3,6 @@ export const createSearchClause = parsedSearch => {
   const whereClause = {}
   const _and = []
 
-  console.log(parsedSearch)
   if (q) {
     _and.push({
       latest: {
@@ -52,8 +51,6 @@ export const createSearchClause = parsedSearch => {
       },
     })
   }
-
-  console.log(JSON.stringify(whereClause))
 
   if (_and.length > 0) {
     whereClause._and = _and

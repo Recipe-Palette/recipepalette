@@ -10,7 +10,6 @@ const IngredientsSelect = ({
   error,
   ...props
 }) => {
-  console.log(value)
   const handleChange = newValue =>
     onChange('ingredients', newValue ? newValue : [])
   const handleBlur = () => onBlur('ingredients', true)
