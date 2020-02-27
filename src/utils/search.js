@@ -53,6 +53,7 @@ export const createSearchClause = parsedSearch => {
   }
 
   if (_and.length > 0) {
+    _and.deleted = { _eq: false }
     whereClause._and = _and
   }
 

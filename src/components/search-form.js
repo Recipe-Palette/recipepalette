@@ -19,8 +19,9 @@ const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
       }}
       onSubmit={(values, { resetForm }) => {
         const query = generateURLParams(values)
-
-        toggleDrawer()
+        if (toggleDrawer) {
+          toggleDrawer()
+        }
         resetForm()
         navigate(`/search/?${query}`, { state: { values } })
       }}

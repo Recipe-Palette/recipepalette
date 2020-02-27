@@ -5,8 +5,6 @@ import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { useAuth } from 'react-use-auth'
 import { isEmpty } from 'lodash'
-import { Input } from '@theme-ui/components'
-import Select from 'react-select'
 
 import Title from '../components/title'
 import {
@@ -15,7 +13,6 @@ import {
 } from '../graphql/fragments'
 import CardGrid from '../components/card-grid'
 import { RecipeCardGridLoader } from '../components/recipe-card-loader'
-import SearchBar from '../components/search-bar'
 import { createSearchClause } from '../utils/search'
 import SearchForm from '../components/search-form'
 
@@ -33,14 +30,6 @@ const SEARCH_QUERY = gql`
   }
   ${bookmarkInformationFragment}
   ${recipeCardInformationFragment}
-`
-
-const TAGS_QUERY = gql`
-  query TagsQuery {
-    tags: tag {
-      name
-    }
-  }
 `
 
 const generateValuesFromURL = parsedSearch => {
@@ -92,47 +81,11 @@ const Search = ({ location }) => {
     },
   })
 
-  const { data: tagsData, loading: tagsLoading } = useQuery(TAGS_QUERY)
-
-  let tags = []
-
-  if (!tagsLoading) {
-    tags = tagsData.tags.map(tag => ({ value: tag.name, label: tag.name }))
+  if (!loading && isEmpty(parsedSearch)) {
+    searchData.recipes = []
   }
 
-  return isEmpty(parsedSearch) ? (
-    <div sx={{ py: `4` }}>
-      <Title>Search for Recipes</Title>
-      <div sx={{ display: `flex` }}>
-        <div sx={{ width: `100%`, display: `flex`, alignItems: `center` }}>
-          <h3 sx={{ margin: 0 }}>Ingredients</h3>
-          <Input />
-        </div>
-        <div sx={{ width: `100%`, display: `flex`, alignItems: `center` }}>
-          <h3 sx={{ margin: 0 }}>Tags</h3>
-          <Select
-            name="tags"
-            isMulti
-            options={tags.length > 0 ? tags : []}
-            className="basic-multi-select"
-            classNamePrefix="select"
-            sx={{ width: `100%` }}
-          />
-        </div>
-        <div sx={{ width: `100%`, display: `flex`, alignItems: `center` }}>
-          <h3 sx={{ margin: 0 }}>Time</h3>
-          <Input />
-        </div>
-      </div>
-      <hr />
-      <p>
-        You can try searching "Chocolate Chip Cookies", or just "Cookies",
-        recipe titles across our entire database will be returned to browse,
-        bookmark, and edit.
-      </p>
-      <SearchBar />
-    </div>
-  ) : (
+  return (
     <div sx={{ py: `4` }}>
       <Title>Search results{q ? ` for ${q}` : ''}</Title>
       <SearchForm values={values} />
