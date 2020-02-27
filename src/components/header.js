@@ -65,9 +65,7 @@ const Header = ({ toggleDrawer, headerSearchToggle }) => {
             <HorizontalType sx={{ width: 200 }} />
           </Link>
         </div>
-        <div
-          sx={{ width: `max-content`, alignSelf: `flex-end`, display: `flex` }}
-        >
+        <div sx={{ display: `flex` }}>
           {isAuthenticated() ? (
             <div
               sx={{
