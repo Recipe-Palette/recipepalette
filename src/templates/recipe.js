@@ -19,10 +19,11 @@ import {
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
-import { Copy, Trash } from '../components/icons'
+import { Copy } from '../components/icons'
 import { NewCard, RecipeCard } from '../components/cards'
 import TagBadge from '../components/tag'
 import BookmarkButton from '../components/bookmark-button'
+import DeleteButton from '../components/delete-button'
 import EditButton from '../components/edit-button'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
@@ -105,15 +106,8 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
         />
       </Flex>
       {isOwner && (
-        <Flex
-          sx={{
-            ml: '3',
-            mt: '2',
-            justifyContent: `center`,
-            alignItems: 'center',
-          }}
-        >
-          <Trash onClick={open} size={29} />
+        <Flex sx={{ ml: '3', justifyContent: `center`, alignItems: 'center' }}>
+          <DeleteButton onClick={open} size={29} />
         </Flex>
       )}
 
