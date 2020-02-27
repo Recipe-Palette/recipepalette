@@ -92,7 +92,10 @@ const Search = ({ location }) => {
       {loading ? (
         <RecipeCardGridLoader />
       ) : (
-        <CardGrid recipes={searchData.recipes} />
+        <CardGrid
+          recipes={searchData.recipes}
+          emptyNote={`It seems we can't find any results for ${q}`}
+        />
       )}
     </div>
   )
