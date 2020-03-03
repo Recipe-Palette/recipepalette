@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Fragment } from 'react'
@@ -266,12 +267,14 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               minHeight: [120, 260],
             }}
           >
-            <NewCard
-              sx={{ minWidth: 175 }}
-              to={`/recipe/${recipe.id}/${recipe.version.version}/variant`}
-            >
-              + Add New Variation
-            </NewCard>
+            {userId && (
+              <NewCard
+                sx={{ minWidth: 175 }}
+                to={`/recipe/${recipe.id}/${recipe.version.version}/variant`}
+              >
+                + Add New Variation
+              </NewCard>
+            )}
             {variants.map((variant, index) => (
               <RecipeCard key={index} recipe={variant} mini={true} />
             ))}

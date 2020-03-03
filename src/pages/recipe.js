@@ -5,7 +5,6 @@ import { Router } from '@reach/router'
 import Log from '../templates/log'
 import Recipe from '../templates/recipe'
 import RecipeForms from '../templates/recipe-forms'
-import PrivateRoute from '../components/private-route'
 
 const RecipeRoutes = () => {
   return (
@@ -21,11 +20,11 @@ const RecipeRoutes = () => {
         type="edit"
         component={RecipeForms}
       />
-      <PrivateRoute
-        component={
-          <RecipeForms exact title="Create New Recipe Variant" type="variant" />
-        }
+      <RecipeForms
         path="/:recipeId/:versionNumber/variant"
+        exact
+        title="Create New Recipe Variant"
+        type="variant"
       />
     </Router>
   )
