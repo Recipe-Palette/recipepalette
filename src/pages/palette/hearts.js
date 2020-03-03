@@ -38,6 +38,7 @@ export default ({ location }) => {
   const { userId } = useAuth()
   const { data: recipeData, loading } = useQuery(heartedQuery, {
     variables: { user_id: userId },
+    fetchPolicy: 'network-only',
   })
 
   return (
