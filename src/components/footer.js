@@ -21,20 +21,22 @@ const Footer = () => (
           justifyContent: `space-between`,
         }}
       >
-        <div>
+        <div sx={{ minWidth: 100 }}>
           <Link to="/">
             <Monogram height={36} />
           </Link>
         </div>
         <div sx={{ fontSize: `1`, color: `gray` }}>
-          Copyright 2020 &copy; Recipe Palette
+          &copy; 2020 Recipe Palette
         </div>
         <div>
           <a
             sx={{ variant: `buttons.secondary` }}
-            href="mailto:admin@recipepalette.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://marriottschool.byu.edu/cet/"
           >
-            Contact Us
+            Rollins Center
           </a>
         </div>
       </Flex>
