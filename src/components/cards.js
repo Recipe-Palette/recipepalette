@@ -15,33 +15,38 @@ import VariationCount from './variation-count'
 
 const CategoryCard = ({ image, name }) => {
   return (
-    <BackgroundImage
-      fluid={[
-        `linear-gradient(rgba(255,255,255,.25), rgba(128,65,13,.5))`,
-        image.childImageSharp.fluid,
-      ]}
-      sx={{
-        '&::before, &::after': {
-          borderRadius: `3`,
-        },
-      }}
+    <Link
+      to={`/search/?tags=${name.toLowerCase()}`}
+      sx={{ textDecoration: `none` }}
     >
-      <Card
+      <BackgroundImage
+        fluid={[
+          `linear-gradient(rgba(255,255,255,.25), rgba(128,65,13,.5))`,
+          image.childImageSharp.fluid,
+        ]}
         sx={{
-          color: `background`,
-          fontSize: `3`,
-          py: `5`,
-          display: `flex`,
-          justifyContent: `center`,
-          cursor: `pointer`,
-          border: `none`,
-          fontWeight: `bold`,
-          textShadow: `0px 2px 12px #444`,
+          '&::before, &::after': {
+            borderRadius: `3`,
+          },
         }}
       >
-        {name}
-      </Card>
-    </BackgroundImage>
+        <Card
+          sx={{
+            color: `background`,
+            fontSize: `3`,
+            py: `5`,
+            display: `flex`,
+            justifyContent: `center`,
+            cursor: `pointer`,
+            border: `none`,
+            fontWeight: `bold`,
+            textShadow: `0px 2px 12px #444`,
+          }}
+        >
+          {name}
+        </Card>
+      </BackgroundImage>
+    </Link>
   )
 }
 

@@ -28,12 +28,13 @@ const recipeQuery = gql`
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
       id
-      image_url
+
       latest {
         id
         name
         cook_time_minutes
         prep_time_minutes
+        image_url
       }
     }
   }

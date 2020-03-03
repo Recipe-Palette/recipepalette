@@ -23,7 +23,7 @@ const RecipeRoutes = () => {
       <RecipeForms
         path="/:recipeId/:versionNumber/variant"
         exact
-        title="Create New Recipe Version"
+        title="Create New Recipe Variant"
         type="variant"
       />
     </Router>
