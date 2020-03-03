@@ -181,7 +181,6 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
 
   const isOwner = userId && recipe.user.id === userId
   const isVariant = recipe.parent_id
-
   return (
     <div>
       <Flex sx={{ flexDirection: [`column`, `row`] }}>
