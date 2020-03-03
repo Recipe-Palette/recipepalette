@@ -25,11 +25,18 @@ import { RecipeLoader } from '../components/recipe-loader'
 const recipeQuery = gql`
   query($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
+      parent {
+        deleted
+        latest {
+          id
+          recipe_id
+          name
+        }
+      }
       ...RecipeInformation
     }
     variants: recipe(where: { parent_id: { _eq: $id } }) {
       id
-
       latest {
         id
         name
