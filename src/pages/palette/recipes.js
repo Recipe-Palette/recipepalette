@@ -36,6 +36,7 @@ export default ({ location }) => {
   const { userId, isAuthenticated, login } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: { user_id: userId },
+    fetchPolicy: 'no-cache',
   })
 
   if (typeof window === `undefined`) {

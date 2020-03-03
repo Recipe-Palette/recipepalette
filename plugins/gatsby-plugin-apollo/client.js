@@ -12,7 +12,6 @@ export const client = new ApolloClient({
         'https://recipe-palette-dev.herokuapp.com/v1/graphql',
       headers: {
         'content-type': 'application/json',
-        'x-hasura-admin-secret': 'Something 2 think about!',
         Authorization: `Bearer ${token}`,
       },
       fetch,

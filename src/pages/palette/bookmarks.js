@@ -37,6 +37,7 @@ export default ({ location }) => {
   const { userId } = useAuth()
   const { data: recipeData, loading } = useQuery(bookmarkedQuery, {
     variables: { user_id: userId },
+    fetchPolicy: 'network-only',
   })
 
   return (
