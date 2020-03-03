@@ -13,6 +13,11 @@ export const client = new ApolloClient({
       headers: {
         'content-type': 'application/json',
         Authorization: `Bearer ${token}`,
+        // this auth header allows public database read access to hasura,
+        // specific database level permissions are configured for other
+        // CRUD operations, this is a solution for db access as we store
+        // no sensitive information at the time of writing
+        'x-hasura-admin-secret': 'Something 2 think about!',
       },
       fetch,
     })
