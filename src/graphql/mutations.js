@@ -1,5 +1,13 @@
 import gql from 'graphql-tag'
 
+const DELETE_RECIPE = gql`
+  mutation DeleteRecipe($recipe_id: Int!) {
+    update_recipe(where: { id: { _eq: $recipe_id } }, _set: { deleted: true }) {
+      affected_rows
+    }
+  }
+`
+
 const UPSERT_BOOKMARK = gql`
   mutation UpsertBookmark(
     $user_id: String!
@@ -72,4 +80,4 @@ const UPSERT_RECIPE = gql`
   }
 `
 
-export { UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }
+export { DELETE_RECIPE, UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }

@@ -1,0 +1,9 @@
+- args:
+    sql: ALTER TABLE "public"."recipe" ALTER COLUMN "deleted" TYPE bool;
+  type: run_sql
+- args:
+    sql: ALTER TABLE ONLY "public"."recipe" ALTER COLUMN "deleted" SET DEFAULT False;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."recipe"."deleted" IS E''
+  type: run_sql

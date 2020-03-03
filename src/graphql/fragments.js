@@ -24,6 +24,7 @@ const recipeInformationFragment = gql`
     id
     image_url
     private
+    parent_id
     latest_version
     latest {
       ...VersionInformation

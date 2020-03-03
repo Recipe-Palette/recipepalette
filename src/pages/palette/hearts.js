@@ -19,7 +19,10 @@ const heartedQuery = gql`
   query MyQuery($user_id: String!) {
     recipes: recipe(
       order_by: { latest: { created_at: desc } }
-      where: { ups: { user_id: { _eq: $user_id }, upvoted: { _eq: true } } }
+      where: {
+        ups: { user_id: { _eq: $user_id }, upvoted: { _eq: true } }
+        deleted: { _eq: false }
+      }
     ) {
       ...RecipeCardInformation
       bookmarks(where: { user_id: { _eq: $user_id } }) {
