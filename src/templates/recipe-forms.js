@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Spinner } from '@theme-ui/components'
 import { Fragment } from 'react'
 import Fraction from 'fraction.js'
+import { isEmpty } from 'lodash'
 
 import { findRecipeVersion } from '../utils/findRecipeVersion'
 import Title from '../components/title'
@@ -15,7 +16,7 @@ import { formatTime } from '../utils/parseTime'
 
 const recipeFormQuery = gql`
   query RecipeFormQuery($id: Int!) {
-    recipe: recipe_by_pk(id: $id) {
+    recipe: recipe(where: { id: { _eq: $id }, deleted: { _eq: false } }) {
       latest_version
       tags {
         tag {
@@ -48,7 +49,7 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
 
   let recipe = {}
   if (!loading && recipeData) {
-    recipe = { ...recipeData.recipe }
+    recipe = { ...recipeData.recipe[0] }
     // intelligently assign the recipe.version to the correct version number
     recipe.version = findRecipeVersion(
       recipe.versions,
@@ -57,6 +58,10 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
     )
   } else {
     recipe.version = {}
+  }
+
+  if (!loading && isEmpty(recipeData.recipe)) {
+    return <div>Recipe Not Found</div>
   }
 
   if (recipe.version && recipe.version.servings === 0) {

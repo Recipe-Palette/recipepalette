@@ -1,0 +1,5 @@
+- args:
+    sql:
+      ALTER TABLE "public"."recipe" ADD COLUMN "deleted" boolean NOT NULL DEFAULT
+      false;
+  type: run_sql
