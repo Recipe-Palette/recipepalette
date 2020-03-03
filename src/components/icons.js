@@ -9,6 +9,7 @@ import {
   FiBookOpen,
   FiUser,
   FiSearch,
+  FiTrash2,
 } from 'react-icons/fi'
 
 const STROKE_WIDTH = 1.5
@@ -34,6 +35,16 @@ const Copy = ({ filled, size, ...props }) => (
     size={size}
     sx={{
       '& rect': { fill: filled ? `copied` : `none` },
+      strokeWidth: STROKE_WIDTH,
+    }}
+    {...props}
+  />
+)
+
+const Trash = ({ size, ...props }) => (
+  <FiTrash2
+    size={size}
+    sx={{
       strokeWidth: STROKE_WIDTH,
     }}
     {...props}
@@ -84,4 +95,4 @@ const Edit = ({ size, filled, ...props }) => (
   />
 )
 
-export { Bookmark, Edit, Heart, Copy, Book, Profile, Search }
+export { Bookmark, Edit, Heart, Trash, Copy, Book, Profile, Search }

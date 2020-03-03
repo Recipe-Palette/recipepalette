@@ -1,14 +1,20 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Fragment } from 'react'
+import { Fragment, useState, useRef } from 'react'
 import { Flex, Divider, Badge } from '@theme-ui/components'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { FiClock } from 'react-icons/fi'
 import Fraction from 'fraction.js'
 import gql from 'graphql-tag'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { isEmpty } from 'lodash'
 import { useAuth } from 'react-use-auth'
+import {
+  AlertDialog,
+  AlertDialogLabel,
+  AlertDialogDescription,
+} from '@reach/alert-dialog'
+import '@reach/dialog/styles.css'
 
 import { convertTime } from '../utils/convertTime'
 import { findRecipeVersion } from '../utils/findRecipeVersion'
@@ -16,17 +22,29 @@ import { Copy } from '../components/icons'
 import { NewCard, RecipeCard } from '../components/cards'
 import TagBadge from '../components/tag'
 import BookmarkButton from '../components/bookmark-button'
+import DeleteButton from '../components/delete-button'
 import EditButton from '../components/edit-button'
 import UpvoteButton from '../components/upvote-button'
 import { recipeInformationFragment } from '../graphql/fragments'
 import { RecipeLoader } from '../components/recipe-loader'
+import { DELETE_RECIPE } from '../graphql/mutations'
 
 const recipeQuery = gql`
   query($id: Int!) {
-    recipe: recipe_by_pk(id: $id) {
+    recipe: recipe(where: { id: { _eq: $id }, deleted: { _eq: false } }) {
+      parent {
+        deleted
+        latest {
+          id
+          recipe_id
+          name
+        }
+      }
       ...RecipeInformation
     }
-    variants: recipe(where: { parent_id: { _eq: $id } }) {
+    variants: recipe(
+      where: { parent_id: { _eq: $id }, deleted: { _eq: false } }
+    ) {
       id
 
       latest {
@@ -42,6 +60,17 @@ const recipeQuery = gql`
 `
 
 const Icons = ({ recipe, isOwner, versionNumber }) => {
+  const [deleteRecipe] = useMutation(DELETE_RECIPE, {
+    onCompleted() {
+      navigate(`/palette/recipes`)
+    },
+  })
+
+  const [showDialog, setShowDialog] = useState(false)
+  const cancelRef = useRef(0)
+  const open = () => setShowDialog(true)
+  const close = () => setShowDialog(false)
+
   return (
     <div
       sx={{
@@ -53,6 +82,11 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
         mb: `2`,
       }}
     >
+      {isOwner && (
+        <Flex sx={{ mr: '3', justifyContent: `center`, alignItems: 'center' }}>
+          <DeleteButton onClick={open} size={29} />
+        </Flex>
+      )}
       {isOwner && (
         <Flex sx={{ mr: `3`, justifyContent: `center`, alignItems: `center` }}>
           <EditButton
@@ -76,6 +110,66 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
           recipeName={recipe.version.name}
         />
       </Flex>
+
+      {showDialog && (
+        <div sx={{ alignItems: `center` }}>
+          <AlertDialog
+            leastDestructiveRef={cancelRef}
+            sx={{ maxWidth: 500, minWidth: 360, borderRadius: `2` }}
+          >
+            <AlertDialogLabel
+              sx={{
+                fontWeight: `bold`,
+                textAlign: `center`,
+                fontSize: `3`,
+                mb: `3`,
+              }}
+            >
+              Delete Recipe?
+            </AlertDialogLabel>
+            <AlertDialogDescription sx={{ textAlign: `center` }}>
+              This action will permamently delete this recipe from your palette{' '}
+              <b>and is not recoverable</b>.
+              <br />
+              <br />
+              Do you wish to continue?
+            </AlertDialogDescription>
+            <div
+              className="alert-buttons"
+              sx={{
+                display: `flex`,
+                justifyContent: `center`,
+                mt: `4`,
+                '*+*': { ml: `2` },
+              }}
+            >
+              <button
+                sx={{
+                  variant: `buttons.secondary`,
+                  height: `39px`,
+                  textAlign: `center`,
+                  alignSelf: `center`,
+                }}
+                onClick={close}
+              >
+                Cancel
+              </button>
+              <button
+                sx={{ variant: `buttons.primary`, height: `39px` }}
+                onClick={() =>
+                  deleteRecipe({
+                    variables: {
+                      recipe_id: recipe.id,
+                    },
+                  })
+                }
+              >
+                Confirm
+              </button>{' '}
+            </div>
+          </AlertDialog>
+        </div>
+      )}
     </div>
   )
 }
@@ -140,13 +234,14 @@ const TimingSmall = ({ recipe }) => (
 )
 
 // used for all /recipe/* routes
+// eslint-disable-next-line complexity
 const Recipe = ({ location, recipeId, versionNumber }) => {
   const { userId } = useAuth()
   const { data: recipeData, loading } = useQuery(recipeQuery, {
     variables: {
       id: recipeId,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   })
 
   // stop gap loading solution
@@ -154,8 +249,12 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     return <RecipeLoader location={location} />
   }
 
-  const recipe = loading ? null : recipeData.recipe
+  const recipe = loading ? null : recipeData.recipe[0]
   const variants = loading ? null : recipeData.variants
+
+  if (!loading && !recipe) {
+    return <div>Recipe Not Found</div>
+  }
 
   // intelligently assign the recipe.version to the correct version number
   recipe.version = findRecipeVersion(
@@ -172,6 +271,8 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
   const isOwner = userId && recipe.user.id === userId
+  const isVariant = recipe.parent_id
+
   return (
     <div>
       <Flex sx={{ flexDirection: [`column`, `row`] }}>
@@ -203,6 +304,17 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </Fragment>
             )}
           </div>
+          {isVariant && !recipe.parent.deleted && (
+            <div sx={{ mb: `2` }}>
+              Variant of
+              <Link
+                sx={{ variant: `buttons.secondary` }}
+                to={`/recipe/${recipe.parent_id}/latest`}
+              >
+                {recipe.parent.latest.name}
+              </Link>
+            </div>
+          )}
         </div>
         <Icons
           recipe={recipe}
@@ -278,6 +390,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
           </Flex>
         </div>
       </div>
+
       <Divider />
       <div>
         <h2 sx={{ color: `text`, width: `100%`, my: `2` }}>Ingredients</h2>
