@@ -125,6 +125,8 @@ const RecipeFormTemplate = ({ title, type, recipeId, versionNumber }) => {
           recipeOwnerId={recipe.user && recipe.user.id}
           parent_id={type === 'variant' ? parseInt(recipeId) : null}
           location={location}
+          version={recipe.version && recipe.version.version}
+          previousRecipeId={recipeId}
         />
       )}
     </Fragment>
