@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Fragment } from 'react'
@@ -146,7 +147,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     variables: {
       id: recipeId,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'no-cache',
   })
 
   // stop gap loading solution
@@ -172,6 +173,8 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
     'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
 
   const isOwner = userId && recipe.user.id === userId
+  const isVariant = recipe.parent_id
+
   return (
     <div>
       <Flex sx={{ flexDirection: [`column`, `row`] }}>
@@ -203,6 +206,17 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
               </Fragment>
             )}
           </div>
+          {isVariant /*&& !recipe.parent.deleted*/ && (
+            <div sx={{ mb: `2` }}>
+              Variant of
+              <Link
+                sx={{ variant: `buttons.secondary` }}
+                to={`/recipe/${recipe.parent_id}/latest`}
+              >
+                {recipe.parent.latest.name}
+              </Link>
+            </div>
+          )}
         </div>
         <Icons
           recipe={recipe}
