@@ -20,7 +20,7 @@ const recipeQuery = gql`
   query MyQuery($user_id: String!) {
     recipes: recipe(
       order_by: { latest: { created_at: desc } }
-      where: { user_id: { _eq: $user_id }, deleted: { _eq: false } }
+      where: { user_id: { _eq: $user_id } }
     ) {
       ...RecipeCardInformation
       bookmarks(where: { user_id: { _eq: $user_id } }) {
