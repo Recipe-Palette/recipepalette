@@ -21,7 +21,6 @@ const bookmarkedQuery = gql`
       order_by: { latest: { created_at: desc } }
       where: {
         bookmarks: { user_id: { _eq: $user_id }, bookmarked: { _eq: true } }
-        deleted: { _eq: false }
       }
     ) {
       ...RecipeCardInformation
