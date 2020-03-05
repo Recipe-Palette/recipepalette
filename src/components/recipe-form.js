@@ -61,6 +61,7 @@ const RecipeSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         amount: Yup.string()
+          .trim()
           .max(2 ** 31 - 1, 'Too big')
           .matches(
             /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+?[\s]?\d[/]\d+|\d[/]\d+$)/,
@@ -175,13 +176,23 @@ const RecipeForm = ({
 
   const handleSubmit = async values => {
     const submitMutation = imageUrl => {
+      values.name = values.name.trim()
       if (name != values.name) {
         log.push('Name')
       }
+
+      values.ingredients.forEach(ingredient => {
+        ingredient.amount = ingredient.amount.trim()
+        ingredient.name = ingredient.name.trim()
+      })
       if (JSON.stringify(ingredients) != JSON.stringify(values.ingredients)) {
         log.push('Ingredients')
       }
-      if (instructions != values.instructions) {
+
+      if (
+        JSON.stringify(instructions.split('\n').filter(Boolean)) !=
+        JSON.stringify(values.instructions.split('\n').filter(Boolean))
+      ) {
         log.push('Instructions')
       }
       if (prep_time != values.prep_time) {
@@ -196,6 +207,11 @@ const RecipeForm = ({
       if (image_url != values.image_url) {
         log.push('Image')
       }
+
+      values.tags = values.tags.map(tag => {
+        tag = tag.trim()
+        return tag
+      })
       if (JSON.stringify(tags) != JSON.stringify(values.tags)) {
         log.push('Tags')
       }

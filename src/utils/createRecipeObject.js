@@ -10,7 +10,7 @@ const createRecipeObject = (
   parent_id
 ) => {
   const { tags } = values
-  const instructions = values.instructions.split('\n')
+  const instructions = values.instructions.split('\n').filter(Boolean)
   let prep_time_minutes = parseTime(values.prep_time)
   let cook_time_minutes = parseTime(values.cook_time)
 
