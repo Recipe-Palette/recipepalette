@@ -73,6 +73,7 @@ const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
               <div sx={{ gridColumn: 1 }}>
                 <Label htmlFor="ingredients">Ingredients</Label>
                 <IngredientsSelect
+                  name="ingredients"
                   value={values.ingredients}
                   onChange={setFieldValue}
                   onBlur={setFieldTouched}
@@ -83,6 +84,7 @@ const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
               <div sx={{ gridColumn: [1, 2] }}>
                 <Label htmlFor="tags">Tags</Label>
                 <TagsDropdown
+                  name="tags"
                   value={values.tags}
                   onChange={setFieldValue}
                   onBlur={setFieldTouched}

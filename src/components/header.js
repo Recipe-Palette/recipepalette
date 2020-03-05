@@ -118,6 +118,7 @@ const Header = ({ toggleDrawer, headerSearchToggle }) => {
                 height: `39px`,
                 display: `flex`,
               }}
+              aria-label="Search button"
               onClick={toggleDrawer}
               ref={headerSearchToggle}
             >

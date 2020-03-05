@@ -36,6 +36,7 @@ const SearchBar = ({ labelSx, ...props }) => {
               transition: `0.15s all ease-in-out`,
               ...labelSx,
             }}
+            htmlFor="search"
           >
             <div sx={{ ml: `1`, display: `flex`, alignItems: `center` }}>
               <Search size="1.25rem" sx={{ color: `gray` }} />
