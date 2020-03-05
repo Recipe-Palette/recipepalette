@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef, useEffect } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray, useField } from 'formik'
 import { useToasts } from 'react-toast-notifications'
@@ -168,6 +168,14 @@ const RecipeForm = ({
     },
   })
 
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
+
   const isOwner = userId && recipeOwnerId === userId
   const isEdit = location.pathname.includes('edit')
   const handleImageDrop = imageFile => {
@@ -297,6 +305,7 @@ const RecipeForm = ({
               id="name"
               value={values.name}
               onChange={handleChange}
+              ref={inputRef}
             />
             {errors.name && touched.name ? (
               <div sx={{ color: `error` }}>{errors.name}</div>
