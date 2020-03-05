@@ -7,6 +7,7 @@ import Header from './header'
 import Footer from './footer'
 import NavigationMobile from './navigation-mobile'
 import SearchDrawer from './search-drawer'
+import SEO from './SEO'
 
 import { useOnClickOutside } from '../hooks/useOnClickOutside'
 
@@ -28,6 +29,7 @@ const Layout = ({ children, location }) => {
         backgroundColor: `background`,
       }}
     >
+      <SEO />
       <Header
         toggleDrawer={toggleDrawer}
         headerSearchToggle={headerSearchToggle}
