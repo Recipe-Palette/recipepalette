@@ -1,5 +1,19 @@
 import gql from 'graphql-tag'
 
+const TOGGLE_PRIVATE = gql`
+  mutation TogglePrivate($recipe_id: Int!, $private: Boolean!) {
+    update_recipe(
+      where: { id: { _eq: $recipe_id } }
+      _set: { private: $private }
+    ) {
+      affected_rows
+      returning {
+        private
+      }
+    }
+  }
+`
+
 const UPSERT_BOOKMARK = gql`
   mutation UpsertBookmark(
     $user_id: String!
@@ -72,4 +86,4 @@ const UPSERT_RECIPE = gql`
   }
 `
 
-export { UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }
+export { TOGGLE_PRIVATE, UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }

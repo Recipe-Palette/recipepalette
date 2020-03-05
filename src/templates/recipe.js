@@ -19,6 +19,7 @@ import TagBadge from '../components/tag'
 import BookmarkButton from '../components/bookmark-button'
 import EditButton from '../components/edit-button'
 import UpvoteButton from '../components/upvote-button'
+import PrivateButton from '../components/private-button'
 import { recipeInformationFragment } from '../graphql/fragments'
 import { RecipeLoader } from '../components/recipe-loader'
 
@@ -54,6 +55,15 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
         mb: `2`,
       }}
     >
+      {isOwner && (
+        <Flex sx={{ mr: `3`, justifyContent: `center`, alignItems: `center` }}>
+          <PrivateButton
+            size={31}
+            recipeId={recipe.id}
+            recipeName={recipe.version.name}
+          />
+        </Flex>
+      )}
       {isOwner && (
         <Flex sx={{ mr: `3`, justifyContent: `center`, alignItems: `center` }}>
           <EditButton

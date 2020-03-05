@@ -9,6 +9,8 @@ import {
   FiBookOpen,
   FiUser,
   FiSearch,
+  FiLock,
+  FiUnlock,
 } from 'react-icons/fi'
 
 const STROKE_WIDTH = 1.5
@@ -25,6 +27,28 @@ const Heart = ({ filled, size, ...props }) => (
   <FiHeart
     size={size}
     sx={{ fill: filled ? `hearted` : `none`, strokeWidth: STROKE_WIDTH }}
+    {...props}
+  />
+)
+
+const Lock = ({ filled, size, ...props }) => (
+  <FiLock
+    size={size}
+    sx={{
+      fill: filled ? `copied` : `none`,
+      strokeWidth: STROKE_WIDTH,
+    }}
+    {...props}
+  />
+)
+
+const Unlock = ({ filled, size, ...props }) => (
+  <FiUnlock
+    size={size}
+    sx={{
+      fill: filled ? `copied` : `none`,
+      strokeWidth: STROKE_WIDTH,
+    }}
     {...props}
   />
 )
@@ -84,4 +108,4 @@ const Edit = ({ size, filled, ...props }) => (
   />
 )
 
-export { Bookmark, Edit, Heart, Copy, Book, Profile, Search }
+export { Bookmark, Edit, Heart, Lock, Unlock, Copy, Book, Profile, Search }
