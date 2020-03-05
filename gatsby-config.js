@@ -1,4 +1,9 @@
 module.exports = {
+  siteMetadata: {
+    title: `Recipe Palette`,
+    description: `The best way to discover and keep track of recipes`,
+    siteUrl: `https://recipepalette.com`,
+  },
   plugins: [
     // image optimization
     {
