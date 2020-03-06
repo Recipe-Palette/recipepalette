@@ -1,5 +1,16 @@
 import gql from 'graphql-tag'
 
+const UPSERT_USERNAME = gql`
+  mutation UpsertUsername($userId: String!, $name: String!) {
+    update_user(where: { id: { _eq: $userId } }, _set: { name: $name }) {
+      affected_rows
+      returning {
+        name
+      }
+    }
+  }
+`
+
 const UPSERT_BOOKMARK = gql`
   mutation UpsertBookmark(
     $user_id: String!
@@ -72,4 +83,4 @@ const UPSERT_RECIPE = gql`
   }
 `
 
-export { UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }
+export { UPSERT_USERNAME, UPSERT_BOOKMARK, UPSERT_UPVOTE, UPSERT_RECIPE }
