@@ -116,32 +116,30 @@ export default function Account() {
                   {errors.name && touched.name ? (
                     <div sx={{ color: `error` }}>{errors.name}</div>
                   ) : null}
-                  <div sx={{ mt: `3` }}>
-                    <Spinner
-                      size="30"
-                      sx={{
-                        display: saving ? `initial` : `none`,
-                        mr: `4`,
-                      }}
-                    />
-                    <IconButton
-                      // sx={{ height: 20, width: 20 }}
-                      onClick={() => toggleEditing}
-                    >
-                      <div>
-                        <Cancel size={14} />
-                      </div>
-                    </IconButton>
+                  <div sx={{ mt: `3`, display: `flex` }}>
+                    {saving && (
+                      <Spinner
+                        size="32"
+                        sx={{
+                          display: saving ? `initial` : `none`,
+                          mr: `4`,
+                        }}
+                      />
+                    )}
+                    {!saving && (
+                      <div sx={{ display: `flex` }}>
+                        <IconButton onClick={() => toggleEditing}>
+                          <Cancel size={14} />
+                        </IconButton>
 
-                    <IconButton
-                      type="submit"
-                      // sx={{ height: 20, width: 20 }}
-                      onClick={() => setEditing(true)}
-                    >
-                      <div>
-                        <Check size={14} />
+                        <IconButton
+                          type="submit"
+                          onClick={() => setEditing(true)}
+                        >
+                          <Check size={14} />
+                        </IconButton>
                       </div>
-                    </IconButton>
+                    )}
                   </div>
                 </Form>
               )}
