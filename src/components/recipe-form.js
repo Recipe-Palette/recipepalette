@@ -525,6 +525,11 @@ const RecipeForm = ({
                     backgroundColor: `background`,
                     color: `primary`,
                     mr: `3`,
+                    '&:hover': {
+                      backgroundColor: `background`,
+                      boxShadow: theme =>
+                        `0px 0px 0px 3px ${theme.colors.accent}`,
+                    },
                   }}
                   onClick={() => {
                     window.history.back()
