@@ -53,6 +53,7 @@ const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
                   type="text"
                   placeholder="Search for a recipe"
                   name="search"
+                  id="search"
                   value={values.search}
                   onChange={handleChange}
                   sx={{
@@ -74,6 +75,7 @@ const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
                 <Label htmlFor="ingredients">Ingredients</Label>
                 <IngredientsSelect
                   name="ingredients"
+                  id="ingredients"
                   value={values.ingredients}
                   onChange={setFieldValue}
                   onBlur={setFieldTouched}
@@ -85,6 +87,7 @@ const SearchForm = ({ toggleDrawer, values: prevValues, ...props }) => {
                 <Label htmlFor="tags">Tags</Label>
                 <TagsDropdown
                   name="tags"
+                  id="tags"
                   value={values.tags}
                   onChange={setFieldValue}
                   onBlur={setFieldTouched}

@@ -27,9 +27,11 @@ const Header = ({ toggleDrawer, headerSearchToggle }) => {
             whiteSpace: `nowrap`,
           }}
         >
-          <Link to="/">
-            <Logo sx={{ width: 150, height: 50 }} />
-          </Link>
+          <Logo
+            sx={{ width: 150, height: 50 }}
+            onClick={() => navigate('/')}
+            aria-label="Recipe Palette Logo"
+          />
         </div>
         <div
           sx={{
@@ -38,15 +40,18 @@ const Header = ({ toggleDrawer, headerSearchToggle }) => {
             ml: 0,
           }}
         >
-          <Link
-            to="/"
+          <div
             sx={{
               display: `flex`,
               alignItems: `center`,
             }}
           >
-            <Monogram sx={{ width: 45 }} />
-          </Link>
+            <Monogram
+              sx={{ width: 45 }}
+              onClick={() => navigate('/')}
+              aria-label="Recipe Palette"
+            />
+          </div>
         </div>
         <div
           sx={{

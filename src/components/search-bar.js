@@ -44,6 +44,7 @@ const SearchBar = ({ labelSx, ...props }) => {
             <Input
               type="text"
               placeholder="Search for a recipe"
+              id="search"
               name="search"
               value={values.search}
               onChange={handleChange}

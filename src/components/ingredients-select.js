@@ -18,6 +18,7 @@ const IngredientsSelect = ({
     <div>
       <CreatableInputOnly
         id="ingredients"
+        name="ingredients"
         onChange={handleChange}
         onBlur={handleBlur}
         value={value}

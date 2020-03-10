@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import { Flex, Container } from '@theme-ui/components'
-import { Link } from 'gatsby'
+import { navigate } from 'gatsby'
 import { Monogram } from '../components/logo'
 
 const Footer = () => (
@@ -22,9 +22,7 @@ const Footer = () => (
         }}
       >
         <div sx={{ minWidth: 100 }}>
-          <Link to="/">
-            <Monogram height={36} />
-          </Link>
+          <Monogram height={36} onClick={() => navigate('/')} />
         </div>
         <div sx={{ fontSize: `1`, color: `gray` }}>
           &copy; 2020 Recipe Palette

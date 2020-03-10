@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Link, navigate } from 'gatsby'
+import { navigate } from 'gatsby'
 import { Flex } from '@theme-ui/components'
 import styled from '@emotion/styled'
 import { useAuth } from 'react-use-auth'
@@ -78,14 +78,15 @@ const NavigationMobile = ({ location, toggleDrawer, mobileSearchToggle }) => {
             size="1.5rem"
           />
         </IconContainer>
-        <Link to="/palette/account" sx={{ color: `initial`, width: `100%` }}>
-          <IconContainer>
-            <Profile
-              filled={isActiveLink(location.pathname, `account`)}
-              size="1.5rem"
-            />
-          </IconContainer>
-        </Link>
+        <IconContainer
+          onClick={() => navigate('/palette/account')}
+          sx={{ color: `initial`, width: `100%`, cursor: `pointer` }}
+        >
+          <Profile
+            filled={isActiveLink(location.pathname, `account`)}
+            size="1.5rem"
+          />
+        </IconContainer>
         <IconContainer onClick={toggleDrawer} ref={mobileSearchToggle}>
           <Search
             filled={isActiveLink(location.pathname, `search`)}
