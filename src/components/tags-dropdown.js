@@ -23,7 +23,7 @@ const TagsDropdown = ({
   const { data: tagsData, loading } = useQuery(TAGS_QUERY)
   let tags = []
 
-  if (!loading) {
+  if (!loading && tagsData) {
     tags = tagsData.tags.map(({ name }) => ({ value: name, label: name }))
   }
 

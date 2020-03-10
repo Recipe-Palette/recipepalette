@@ -150,13 +150,18 @@ const Icons = ({ recipe, isOwner, versionNumber }) => {
                   height: `39px`,
                   textAlign: `center`,
                   alignSelf: `center`,
+                  border: `none`,
                 }}
                 onClick={close}
               >
                 Cancel
               </button>
               <button
-                sx={{ variant: `buttons.primary`, height: `39px` }}
+                sx={{
+                  variant: `buttons.primary`,
+                  height: `39px`,
+                  border: `none`,
+                }}
                 onClick={() =>
                   deleteRecipe({
                     variables: {
