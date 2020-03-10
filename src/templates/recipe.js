@@ -26,7 +26,6 @@ const recipeQuery = gql`
   query($id: Int!) {
     recipe: recipe_by_pk(id: $id) {
       parent {
-        deleted
         latest {
           id
           recipe_id
