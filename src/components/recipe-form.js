@@ -155,8 +155,6 @@ const RecipeForm = ({
   recipeOwnerId,
   parent_id,
   location,
-  version,
-  previousRecipeId,
 }) => {
   const { userId } = useAuth()
   const { addToast } = useToasts()
@@ -524,12 +522,7 @@ const RecipeForm = ({
                   type="button"
                   sx={{ variant: `buttons.primary`, mr: `3` }}
                   onClick={() => {
-                    navigate(
-                      typeof { previousRecipeId } !== 'undefined' &&
-                        previousRecipeId
-                        ? `/recipe/${previousRecipeId}/${version}`
-                        : `palette/recipes`
-                    )
+                    window.history.back()
                   }}
                 >
                   Cancel
