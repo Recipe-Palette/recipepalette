@@ -521,15 +521,10 @@ const RecipeForm = ({
                 <Button
                   type="button"
                   sx={{
-                    variant: `buttons.primary`,
+                    variant: `buttons.secondary`,
                     backgroundColor: `background`,
-                    color: `primary`,
                     mr: `3`,
-                    '&:hover': {
-                      backgroundColor: `background`,
-                      boxShadow: theme =>
-                        `0px 0px 0px 3px ${theme.colors.accent}`,
-                    },
+                    height: `40px`,
                   }}
                   onClick={() => {
                     window.history.back()
