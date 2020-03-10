@@ -520,7 +520,12 @@ const RecipeForm = ({
               {!saving && (
                 <Button
                   type="button"
-                  sx={{ variant: `buttons.primary`, mr: `3` }}
+                  sx={{
+                    variant: `buttons.primary`,
+                    backgroundColor: `background`,
+                    color: `primary`,
+                    mr: `3`,
+                  }}
                   onClick={() => {
                     window.history.back()
                   }}
