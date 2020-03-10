@@ -95,7 +95,7 @@ export default function Account() {
       </div>
       <div>
         {editing && (
-          <div sx={{ diplay: `flex` }}>
+          <div sx={{ display: `flex` }}>
             <span sx={{ color: `gray` }}>Username:</span>{' '}
             <Formik
               initialValues={{
@@ -105,24 +105,30 @@ export default function Account() {
               onSubmit={handleSubmit}
             >
               {({ values, handleChange, errors, touched }) => (
-                <Form sx={{ width: `40%` }}>
+                <Form sx={{ width: `40%`, display: `flex` }}>
                   <Input
                     name="name"
                     type="text"
                     id="name"
                     value={values.name}
                     onChange={handleChange}
+                    sx={{
+                      paddingTop: `0`,
+                      paddingBottom: `0`,
+                      paddingLeft: `0`,
+                      mb: `2`,
+                      ml: `1`,
+                    }}
                   />
                   {errors.name && touched.name ? (
                     <div sx={{ color: `error` }}>{errors.name}</div>
                   ) : null}
-                  <div sx={{ mt: `3`, display: `flex` }}>
+                  <div sx={{ display: `flex` }}>
                     {saving && (
                       <Spinner
-                        size="32"
+                        size="25"
                         sx={{
                           display: saving ? `initial` : `none`,
-                          mr: `4`,
                         }}
                       />
                     )}
