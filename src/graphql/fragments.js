@@ -23,6 +23,7 @@ const recipeInformationFragment = gql`
   fragment RecipeInformation on recipe {
     id
     image_url
+    parent_id
     private
     latest_version
     latest {
