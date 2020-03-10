@@ -9,6 +9,8 @@ import {
   FiBookOpen,
   FiUser,
   FiSearch,
+  FiX,
+  FiCheck,
 } from 'react-icons/fi'
 
 const STROKE_WIDTH = 1.5
@@ -84,4 +86,24 @@ const Edit = ({ size, filled, ...props }) => (
   />
 )
 
-export { Bookmark, Edit, Heart, Copy, Book, Profile, Search }
+const Cancel = ({ size, filled, ...props }) => (
+  <FiX
+    size={size}
+    sx={{
+      strokeWidth: STROKE_WIDTH,
+    }}
+    {...props}
+  />
+)
+
+const Check = ({ size, filled, ...props }) => (
+  <FiCheck
+    size={size}
+    sx={{
+      strokeWidth: STROKE_WIDTH,
+    }}
+    {...props}
+  />
+)
+
+export { Bookmark, Edit, Heart, Copy, Book, Profile, Search, Cancel, Check }

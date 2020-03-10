@@ -4,7 +4,7 @@ import { jsx } from 'theme-ui'
 import gql from 'graphql-tag'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Fragment, useState } from 'react'
-import { Label, IconButton, Input, Button, Spinner } from '@theme-ui/components'
+import { IconButton, Input, Button, Spinner } from '@theme-ui/components'
 import { useAuth } from 'react-use-auth'
 import { Formik, Form } from 'formik'
 import { useToasts } from 'react-toast-notifications'
@@ -15,7 +15,7 @@ import Title from '../../components/title'
 import { useCustomAuth } from '../../hooks/useCustomAuth'
 import PaletteToggle from '../../components/palette-toggle'
 import { UPSERT_USERNAME } from '../../graphql/mutations'
-import { Edit } from '../../components/icons'
+import { Edit, Cancel, Check } from '../../components/icons'
 
 export default function Account() {
   const { customLogout } = useCustomAuth()
@@ -71,7 +71,7 @@ export default function Account() {
     values.name = values.name.trim()
 
     if (values.name === get(accountData, 'user_by_pk.name', '')) {
-      addToast('Username is the same', { appearance: 'error' })
+      // addToast('Username is the same', { appearance: 'error' })
       setSaving(false)
       setEditing(false)
     } else {
@@ -95,56 +95,65 @@ export default function Account() {
       </div>
       <div>
         {editing && (
-          <Formik
-            initialValues={{
-              name: get(accountData, 'user_by_pk.name', ''),
-            }}
-            validationSchema={AccountSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ values, handleChange, errors, touched }) => (
-              <Form>
-                <Label htmlFor="name">Username</Label>
-                <Input
-                  name="name"
-                  type="text"
-                  id="name"
-                  value={values.name}
-                  onChange={handleChange}
-                />
-                {errors.name && touched.name ? (
-                  <div sx={{ color: `error` }}>{errors.name}</div>
-                ) : null}
-                <div sx={{ mt: `3` }}>
-                  <Spinner
-                    size="30"
-                    sx={{
-                      display: saving ? `initial` : `none`,
-                      mr: `4`,
-                    }}
+          <div sx={{ diplay: `flex` }}>
+            <span sx={{ color: `gray` }}>Username:</span>{' '}
+            <Formik
+              initialValues={{
+                name: get(accountData, 'user_by_pk.name', ''),
+              }}
+              validationSchema={AccountSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ values, handleChange, errors, touched }) => (
+                <Form sx={{ width: `40%` }}>
+                  <Input
+                    name="name"
+                    type="text"
+                    id="name"
+                    value={values.name}
+                    onChange={handleChange}
                   />
-                  <Button
-                    type="button"
-                    sx={{ variant: `buttons.primary`, mr: `3` }}
-                    onClick={toggleEditing}
-                  >
-                    Cancel
-                  </Button>
+                  {errors.name && touched.name ? (
+                    <div sx={{ color: `error` }}>{errors.name}</div>
+                  ) : null}
+                  <div sx={{ mt: `3` }}>
+                    <Spinner
+                      size="30"
+                      sx={{
+                        display: saving ? `initial` : `none`,
+                        mr: `4`,
+                      }}
+                    />
+                    <IconButton
+                      // sx={{ height: 20, width: 20 }}
+                      onClick={() => toggleEditing}
+                    >
+                      <div>
+                        <Cancel size={14} />
+                      </div>
+                    </IconButton>
 
-                  <Button type="submit" sx={{ variant: `buttons.submit` }}>
-                    Update
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                    <IconButton
+                      type="submit"
+                      // sx={{ height: 20, width: 20 }}
+                      onClick={() => setEditing(true)}
+                    >
+                      <div>
+                        <Check size={14} />
+                      </div>
+                    </IconButton>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         )}
         {!editing && !loading && (
-          <div>
-            <span sx={{ color: `gray` }}>Username:</span>{' '}
+          <div sx={{ display: `flex` }}>
+            <span sx={{ color: `gray`, mr: `1` }}>Username:</span>
             {accountData && get(accountData, 'user_by_pk.name', '')}
             <IconButton
-              // sx={{ height: 20, width: 20 }}
+              sx={{ paddingBottom: `2`, ml: `2` }}
               onClick={() => setEditing(true)}
             >
               <div>
