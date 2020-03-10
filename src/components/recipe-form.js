@@ -524,7 +524,8 @@ const RecipeForm = ({
                     variant: `buttons.secondary`,
                     backgroundColor: `background`,
                     mr: `3`,
-                    height: `40px`,
+                    px: `3`,
+                    py: `2`,
                   }}
                   onClick={() => {
                     window.history.back()
