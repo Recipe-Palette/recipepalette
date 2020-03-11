@@ -166,11 +166,15 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
   const variants = loading ? null : recipeData.variants
 
   // intelligently assign the recipe.version to the correct version number
-  recipe.version = findRecipeVersion(
-    recipe.versions,
-    recipe.latest,
-    versionNumber
-  )
+  if (recipe) {
+    recipe.version = findRecipeVersion(
+      recipe.versions,
+      recipe.latest,
+      versionNumber
+    )
+  } else {
+    return 'Recipe not found'
+  }
 
   // stop gap solution to display error if no version is found
   if (isEmpty(recipe.version)) return 'Version not found'
