@@ -542,6 +542,23 @@ const RecipeForm = ({
                 alignItems: `center`,
               }}
             >
+              {!saving && (
+                <Button
+                  type="button"
+                  sx={{
+                    variant: `buttons.secondary`,
+                    backgroundColor: `background`,
+                    mr: `3`,
+                    px: `3`,
+                    py: `2`,
+                  }}
+                  onClick={() => {
+                    window.history.back()
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
               <Spinner
                 size="30"
                 sx={{
