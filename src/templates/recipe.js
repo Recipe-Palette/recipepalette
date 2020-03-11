@@ -177,7 +177,7 @@ const Recipe = ({ location, recipeId, versionNumber }) => {
 
   const image =
     recipe.version.image_url ||
-    'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'
+    'https://recipepaletteimages.s3-us-west-2.amazonaws.com/missing-image.png'
 
   const isOwner = userId && recipe.user.id === userId
   const isVariant = recipe.parent_id
