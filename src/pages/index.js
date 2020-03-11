@@ -218,11 +218,12 @@ export default () => {
           </div>
           <div sx={{ textAlign: [`center`, `left`], mb: `3` }}>
             <h3 sx={{ mt: `1`, mb: `1`, fontSize: `4` }}>
-              Automatic Version Control
+              Automatic Recipe Tracking
             </h3>
             <p>
-              Store recipes digitally, no more cryptic in margins of recipe
-              books or note cards because every edit is tracked and recorded
+              Store recipes digitally, no need for cryptic notes in margins of
+              recipe books or note cards because every edit is tracked and
+              recorded for you
             </p>
           </div>
         </div>
@@ -245,7 +246,9 @@ export default () => {
             />
           </div>
           <div sx={{ textAlign: [`center`, `left`], mb: `3` }}>
-            <h3 sx={{ mt: `1`, mb: `1`, fontSize: `4` }}>Available Anywhere</h3>
+            <h3 sx={{ mt: `1`, mb: `1`, fontSize: `4` }}>
+              Access Recipes Anywhere
+            </h3>
             <p>
               Optimized for usage on any device and screen size, keep your
               recipe collection stored in tiny bytes instead of binders
