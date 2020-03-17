@@ -94,9 +94,9 @@ export default function Account() {
         {user.email_verified ? 'Yes' : 'No'}
       </div>
       <div>
-        {editing && (
-          <div sx={{ display: `flex` }}>
-            <span sx={{ color: `gray` }}>Username:</span>{' '}
+        <div sx={{ display: `flex` }}>
+          <span sx={{ color: `gray` }}>Username:</span>
+          {editing && (
             <Formik
               initialValues={{
                 name: get(accountData, 'user_by_pk.name', ''),
@@ -134,15 +134,19 @@ export default function Account() {
                     )}
                     {!saving && (
                       <div sx={{ display: `flex` }}>
-                        <IconButton onClick={() => toggleEditing}>
-                          <Cancel size={14} />
+                        <IconButton
+                          sx={{ size: 24 }}
+                          onClick={() => toggleEditing}
+                        >
+                          <Cancel size={16} />
                         </IconButton>
 
                         <IconButton
                           type="submit"
+                          sx={{ size: 24 }}
                           onClick={() => setEditing(true)}
                         >
-                          <Check size={14} />
+                          <Check size={16} />
                         </IconButton>
                       </div>
                     )}
@@ -150,22 +154,23 @@ export default function Account() {
                 </Form>
               )}
             </Formik>
-          </div>
-        )}
-        {!editing && !loading && (
-          <div sx={{ display: `flex` }}>
-            <span sx={{ color: `gray`, mr: `1` }}>Username:</span>
-            {accountData && get(accountData, 'user_by_pk.name', '')}
-            <IconButton
-              sx={{ paddingBottom: `2`, ml: `2` }}
-              onClick={() => setEditing(true)}
-            >
-              <div>
-                <Edit size={14} />
-              </div>
-            </IconButton>
-          </div>
-        )}
+          )}
+          {!editing && !loading && (
+            <div sx={{ display: `flex` }}>
+              <span sx={{ ml: `1` }}>
+                {accountData && get(accountData, 'user_by_pk.name', '')}
+              </span>
+              <IconButton
+                sx={{ paddingBottom: `2`, ml: `3`, size: 10 }}
+                onClick={() => setEditing(true)}
+              >
+                <div>
+                  <Edit size={14} />
+                </div>
+              </IconButton>
+            </div>
+          )}
+        </div>
       </div>
       <div>
         <Button sx={{ mt: `3` }} onClick={() => customLogout()}>
