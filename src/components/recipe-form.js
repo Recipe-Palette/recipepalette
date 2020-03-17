@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useRef, useEffect } from 'react'
 import { navigate } from 'gatsby'
 import { Formik, Form, FieldArray, useField } from 'formik'
 import { useToasts } from 'react-toast-notifications'
@@ -36,8 +36,9 @@ const UNITS = [
   'cup',
   'dl',
   'fl oz',
-  'gill',
   'g',
+  'gallon',
+  'gill',
   'inch',
   'kg',
   'l',
@@ -61,6 +62,7 @@ const RecipeSchema = Yup.object().shape({
     .of(
       Yup.object().shape({
         amount: Yup.string()
+          .trim()
           .max(2 ** 31 - 1, 'Too big')
           .matches(
             /^(\d+$|\d+[.]\d+?$|\d*[.]\d+?$|\d+?[\s]?\d[/]\d+|\d[/]\d+$)/,
@@ -69,12 +71,16 @@ const RecipeSchema = Yup.object().shape({
             //decimal with 0 or many numbers before, and at least one number after || a forward slash with numbers on both sides
           ),
         unit: Yup.string(),
-        name: Yup.string().required('Required'),
+        name: Yup.string()
+          .trim()
+          .required('Required'),
       })
     )
     .required('Ingredients are required')
     .min(1, 'Minimum one ingredient'),
-  instructions: Yup.string().required('Instructions are required'),
+  instructions: Yup.string()
+    .trim()
+    .required('Instructions are required'),
   servings: Yup.number()
     .max(2 ** 31 - 1, 'Too big')
     .positive('Enter a positive number'),
@@ -167,6 +173,14 @@ const RecipeForm = ({
     },
   })
 
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
+
   const isOwner = userId && recipeOwnerId === userId
   const isEdit = location.pathname.includes('edit')
   const handleImageDrop = imageFile => {
@@ -175,29 +189,50 @@ const RecipeForm = ({
 
   const handleSubmit = async values => {
     const submitMutation = imageUrl => {
-      if (name != values.name) {
-        log.push('Name')
-      }
-      if (JSON.stringify(ingredients) != JSON.stringify(values.ingredients)) {
-        log.push('Ingredients')
-      }
-      if (instructions != values.instructions) {
-        log.push('Instructions')
-      }
-      if (prep_time != values.prep_time) {
-        log.push('Prep Time')
-      }
-      if (cook_time != values.cook_time) {
-        log.push('Cook Time')
-      }
-      if (servings != values.servings) {
-        log.push('Servings')
-      }
-      if (image_url != values.image_url) {
-        log.push('Image')
-      }
-      if (JSON.stringify(tags) != JSON.stringify(values.tags)) {
-        log.push('Tags')
+      if (recipe_id) {
+        values.name = values.name.trim()
+        if (name != values.name) {
+          log.push('Name')
+        }
+
+        values.ingredients.forEach(ingredient => {
+          ingredient.amount = ingredient.amount.trim()
+          ingredient.name = ingredient.name.trim()
+        })
+        if (
+          JSON.stringify(ingredients) !== JSON.stringify(values.ingredients)
+        ) {
+          log.push('Ingredients')
+        }
+
+        if (
+          JSON.stringify(instructions.split('\n').filter(Boolean)) !==
+          JSON.stringify(values.instructions.split('\n').filter(Boolean))
+        ) {
+          log.push('Instructions')
+        }
+        if (prep_time !== values.prep_time) {
+          log.push('Prep Time')
+        }
+        if (cook_time !== values.cook_time) {
+          log.push('Cook Time')
+        }
+        if (servings !== values.servings) {
+          log.push('Servings')
+        }
+        if (image_url !== values.image_url) {
+          log.push('Image')
+        }
+
+        values.tags = values.tags.map(tag => {
+          tag = tag.trim()
+          return tag
+        })
+        if (JSON.stringify(tags) !== JSON.stringify(values.tags)) {
+          log.push('Tags')
+        }
+      } else {
+        log.push('Recipe Created')
       }
 
       log = log.length > 0 ? log.join(', ') : ''
@@ -281,6 +316,7 @@ const RecipeForm = ({
               id="name"
               value={values.name}
               onChange={handleChange}
+              ref={inputRef}
             />
             {errors.name && touched.name ? (
               <div sx={{ color: `error` }}>{errors.name}</div>
